@@ -2,15 +2,18 @@ package dto;
 
 public class ClientDTO {
 
+	private int id;
 	private String cuit;
 	private String name;
 	private String address;
 	private String phoneNumber;
 	private String email;
-	private int zone;
+	private String zone;
 	
 	
-	public ClientDTO(String cuit, String name, String address, String phoneNumber, String email, int zone) {
+	public ClientDTO(int id, String cuit, String name, String address, String phoneNumber, String email, String zone) {
+		
+		this.id = id;
 		this.cuit = cuit;
 		this.name = name;
 		this.address = address;
@@ -19,7 +22,7 @@ public class ClientDTO {
 		this.zone = zone;
 	}
 	
-	public String getClientId() {
+	public String getCuit() {
 		return cuit;
 	}
 	public String getName() {
@@ -34,8 +37,11 @@ public class ClientDTO {
 	public String getEmail() {
 		return email;
 	}
-	public int getZone() {
+	public String getZone() {
 		return zone;
+	}
+	public int getId() {
+		return id;
 	}
 	
 }

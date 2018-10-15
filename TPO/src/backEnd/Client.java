@@ -10,12 +10,14 @@ import exceptions.InvalidZoneException;
 
 public class Client {
 	
+	private int id;
 	private String cuit;
 	private String name;
 	private String address;
 	private String phoneNumber;
 	private String email;
 	private Zone zone;
+	private boolean activeClient;
 	
 	
 	public Client(String cuit, String name, String address, String phoneNumber, String email, Zone zone) throws InvalidNameException, InvalidAddressException, InvalidPhoneNumberException, InvalidEmailException, InvalidZoneException, InvalidCuitException {
@@ -26,6 +28,7 @@ public class Client {
 		this.email = email;
 		this.zone = zone;
 		this.cuit = cuit;
+		activeClient = true;
 	}
 	
 	public String getCuit() {
@@ -43,12 +46,28 @@ public class Client {
 		this.zone = zone;
 	}
 	
+	public boolean isActive() {
+		return activeClient;
+	}
+	
+	public void deactivateClient() {
+		activeClient = false;
+	}
+	
 	public Zone getZone() {
 		return zone;
 	}
 	
 	public ClientDTO toDTO(){
-		return new ClientDTO(cuit, name, address, phoneNumber, email, zone.getZoneId());
+		return new ClientDTO(id, cuit, name, address, phoneNumber, email, zone.getName());
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public int getId() {
+		return id;
 	}
 	
 	public void save() {

@@ -1,15 +1,13 @@
 package dto;
 
-import backEnd.Roles;
-
 public class UserDTO {
 
 	private int userId;
 	private String name;
-	private Roles principalRole;
-	private Roles secondaryRole;
+	private String principalRole;
+	private String secondaryRole;
 	
-	public UserDTO(int userId, String name, Roles principalRole, Roles secondaryRole) {
+	public UserDTO(int userId, String name, String principalRole, String secondaryRole) {
 		this.userId = userId;
 		this.name = name;
 		this.principalRole = principalRole;
@@ -22,10 +20,10 @@ public class UserDTO {
 	public String getName() {
 		return name;
 	}
-	public Roles getPrincipalRole() {
+	public String getPrincipalRole() {
 		return principalRole;
 	}
-	public Roles getSecondaryRole() {
+	public String getSecondaryRole() {
 		return secondaryRole;
 	}
 	

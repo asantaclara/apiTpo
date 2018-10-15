@@ -12,12 +12,14 @@ public class User {
 	private String name;
 	private Roles principalRole;
 	private Roles secondaryRole;
+	private boolean activeUser;
 	
 	public User(String name, Roles principalRole) {
 		this.userId = userCount++;
 		this.name = name;
 		this.principalRole = principalRole;
 		this.secondaryRole = principalRole;
+		this.activeUser = true;
 	}
 	
 	public void modifyUser(String name, Roles principalRole) {
@@ -48,7 +50,15 @@ public class User {
 	}
 	
 	public UserDTO toDTO() {
-		return new UserDTO(userId, name, principalRole, secondaryRole);
+		return new UserDTO(userId, name, principalRole.name(), secondaryRole.name());
+	}
+	
+	public boolean isActive() {
+		return activeUser;
+	}
+	
+	public void deactivateUser() {
+		activeUser = false;
 	}
 	
 	public void save() throws ConnectionException, AccessException {

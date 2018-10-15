@@ -1,5 +1,6 @@
 package backEnd;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import dto.BoardDTO;
@@ -8,13 +9,15 @@ import exceptions.ConnectionException;
 
 public class UserBoard {
 
-	private static int boardId;
+	private int boardId;
 	private List<Claim> claims;
 	private Role role;
 	private List<String> boardToShow;
 	
 	public UserBoard(Role role, List<String> boardToShow) {
 		this.role = role;
+		claims = new LinkedList<>();
+		boardToShow = new LinkedList<>();
 	}
 	
 	public void addBoardToShow(String board) {

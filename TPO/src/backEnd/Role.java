@@ -1,5 +1,6 @@
 package backEnd;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import dto.RoleDTO;
@@ -8,7 +9,7 @@ import exceptions.ConnectionException;
 
 public class Role {
 
-	private static int roleId;
+	private int roleId;
 	private Roles description;
 	private List<User> users;
 	private List<String> boardToShow;
@@ -16,6 +17,7 @@ public class Role {
 	public Role(Roles description, List<String> boardToShow) {
 		this.description = description;
 		this.boardToShow = boardToShow;
+		users = new LinkedList<>();
 	}
 	
 	public void addUser(User user) {
@@ -35,4 +37,9 @@ public class Role {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public void setRoleId(int roleId) {
+		this.roleId = roleId;
+	}
+
 }
