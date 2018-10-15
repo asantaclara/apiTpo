@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import dto.ClaimDTO;
+import exceptions.AccessException;
+import exceptions.ConnectionException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidDateException;
 import exceptions.InvalidDescriptionException;
@@ -39,6 +41,12 @@ public class CompositeClaim extends Claim{
 	public ClaimDTO toDTO() {
 		// No entiendo como hacer para usar la claim compuesta.
 		return null;
+	}
+
+	@Override
+	public void save() throws ConnectionException, AccessException {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

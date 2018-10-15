@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import dto.WrongInvoicingClaimDTO;
+import exceptions.AccessException;
+import exceptions.ConnectionException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidDateException;
 import exceptions.InvalidDescriptionException;
@@ -29,13 +31,19 @@ public class WrongInvoicingClaim extends IndividualClaim {
 
 	@Override
 	public WrongInvoicingClaimDTO toDTO() {
-		WrongInvoicingClaimDTO aux = new WrongInvoicingClaimDTO(claimId, client.getId(), description);
+		WrongInvoicingClaimDTO aux = new WrongInvoicingClaimDTO(claimId, client.getCuit(), description);
 		
 		for (InvoiceItem i : invoices) {
 			aux.addInvoiceItemDTO(i.toDTO());
 		}
 		
 		return aux;
+	}
+
+	@Override
+	public void save() throws ConnectionException, AccessException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

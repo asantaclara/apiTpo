@@ -4,8 +4,8 @@ public class IncompatibleZoneClaimDTO extends ClaimDTO {
 
 	private int zoneId;
 	
-	public IncompatibleZoneClaimDTO(int claimId, int clientId, String description, int zoneId) {
-		super(claimId, clientId, description);
+	public IncompatibleZoneClaimDTO(int claimId, String clientCuit, String description, int zoneId) {
+		super(claimId, clientCuit, description);
 		this.zoneId = zoneId;
 	}
 

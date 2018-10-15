@@ -1,6 +1,8 @@
 package backEnd;
 
 import dto.ProductDTO;
+import exceptions.AccessException;
+import exceptions.ConnectionException;
 
 public class Product {
 
@@ -37,5 +39,10 @@ public class Product {
 	
 	public ProductDTO toDTO() {
 		return new ProductDTO(productId, title, description, price);
+	}
+	
+	public void save() throws ConnectionException, AccessException {
+		// TODO Auto-generated method stub
+		
 	}
 }

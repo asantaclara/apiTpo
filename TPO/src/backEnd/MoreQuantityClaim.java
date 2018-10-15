@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import dto.MoreQuantityClaimDTO;
+import exceptions.AccessException;
+import exceptions.ConnectionException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidDateException;
 import exceptions.InvalidDescriptionException;
@@ -30,13 +32,19 @@ public class MoreQuantityClaim extends IndividualClaim {
 
 	@Override
 	public MoreQuantityClaimDTO toDTO() {
-		MoreQuantityClaimDTO aux = new MoreQuantityClaimDTO(claimId, client.getId(), description, claimType.name(), invoice.getId());
+		MoreQuantityClaimDTO aux = new MoreQuantityClaimDTO(claimId, client.getCuit(), description, claimType.name(), invoice.getId());
 		
 		for (ProductItem p : products) {
 			aux.addProductItemDTO(p.toDTO());
 		}
 		
 		return aux;
+	}
+
+	@Override
+	public void save() throws ConnectionException, AccessException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

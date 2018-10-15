@@ -8,8 +8,8 @@ public class WrongInvoicingClaimDTO extends ClaimDTO {
 
 	private List<InvoiceItemDTO> invoices;
 	
-	public WrongInvoicingClaimDTO(int claimId, int clientId, String description) {
-		super(claimId, clientId, description);
+	public WrongInvoicingClaimDTO(int claimId, String clientCuit, String description) {
+		super(claimId, clientCuit, description);
 		invoices = new LinkedList<>();
 	}
 

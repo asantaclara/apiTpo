@@ -3,6 +3,8 @@ package backEnd;
 import java.util.Date;
 
 import dto.ClaimDTO;
+import exceptions.AccessException;
+import exceptions.ConnectionException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidDateException;
 import exceptions.InvalidDescriptionException;
@@ -33,6 +35,7 @@ public abstract class Claim {
 	public abstract State getActualState();
 	public abstract void treatClaim(User responsable, State newState, String description);
 	public abstract ClaimDTO toDTO();
+	public abstract void save() throws ConnectionException, AccessException;
 	
 	public boolean validateClient(Client client) {
 		return (client.equals(this.client));

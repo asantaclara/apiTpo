@@ -1,6 +1,8 @@
 package backEnd;
 
 import dto.InvoiceItemDTO;
+import exceptions.AccessException;
+import exceptions.ConnectionException;
 
 public class InvoiceItem {
 
@@ -22,5 +24,10 @@ public class InvoiceItem {
 	
 	public InvoiceItemDTO toDTO() {
 		return new InvoiceItemDTO(invoice.getId(), inconsistency);
+	}
+	
+	public void save() throws ConnectionException, AccessException {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -3,6 +3,8 @@ package backEnd;
 import java.util.Date;
 
 import dto.TransitionDTO;
+import exceptions.AccessException;
+import exceptions.ConnectionException;
 
 public class Transition {
 
@@ -25,7 +27,12 @@ public class Transition {
 	}
 	
 	public TransitionDTO toDTO() {
-		return new TransitionDTO(claimId, date, responsable.getUserId(), previousState.getState(), newState.getState(), description);
+		return new TransitionDTO(claimId, date, responsable.getUserId(), previousState.name(), newState.name(), description);
+	}
+	
+	public void save() throws ConnectionException, AccessException {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

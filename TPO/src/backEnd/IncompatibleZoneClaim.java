@@ -3,6 +3,8 @@ package backEnd;
 import java.util.Date;
 
 import dto.IncompatibleZoneClaimDTO;
+import exceptions.AccessException;
+import exceptions.ConnectionException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidDateException;
 import exceptions.InvalidDescriptionException;
@@ -24,7 +26,13 @@ public class IncompatibleZoneClaim extends IndividualClaim {
 
 	@Override
 	public IncompatibleZoneClaimDTO toDTO() {
-		return new IncompatibleZoneClaimDTO(claimId, client.getId(), description, zone.getZoneId());
+		return new IncompatibleZoneClaimDTO(claimId, client.getCuit(), description, zone.getZoneId());
+	}
+
+	@Override
+	public void save() throws ConnectionException, AccessException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

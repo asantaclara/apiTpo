@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import dto.ClaimDTO;
+import exceptions.AccessException;
+import exceptions.ConnectionException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidDateException;
 import exceptions.InvalidDescriptionException;
@@ -28,6 +30,7 @@ public abstract class IndividualClaim extends Claim {
 	}
 
 	public abstract void treatClaim(User responsable, State newState, String description);
-	public abstract  ClaimDTO toDTO();
+	public abstract ClaimDTO toDTO();
+	public abstract void save() throws ConnectionException, AccessException; 
 
 }

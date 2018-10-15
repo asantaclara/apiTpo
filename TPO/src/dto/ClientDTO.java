@@ -2,7 +2,7 @@ package dto;
 
 public class ClientDTO {
 
-	private int clientId;
+	private String cuit;
 	private String name;
 	private String address;
 	private String phoneNumber;
@@ -10,8 +10,8 @@ public class ClientDTO {
 	private int zone;
 	
 	
-	public ClientDTO(int clientId, String name, String address, String phoneNumber, String email, int zone) {
-		this.clientId = clientId;
+	public ClientDTO(String cuit, String name, String address, String phoneNumber, String email, int zone) {
+		this.cuit = cuit;
 		this.name = name;
 		this.address = address;
 		this.phoneNumber = phoneNumber;
@@ -19,8 +19,8 @@ public class ClientDTO {
 		this.zone = zone;
 	}
 	
-	public int getClientId() {
-		return clientId;
+	public String getClientId() {
+		return cuit;
 	}
 	public String getName() {
 		return name;

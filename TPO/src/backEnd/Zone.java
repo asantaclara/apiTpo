@@ -1,5 +1,8 @@
 package backEnd;
 
+import exceptions.AccessException;
+import exceptions.ConnectionException;
+
 public class Zone {
 	
 	private String name;
@@ -15,5 +18,10 @@ public class Zone {
 	
 	public int getZoneId() {
 		return zoneId;
+	}
+	
+	public void save() throws ConnectionException, AccessException {
+		// TODO Auto-generated method stub
+		
 	}
 }

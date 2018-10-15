@@ -9,8 +9,8 @@ public class MoreQuantityClaimDTO extends ClaimDTO {
 	private List<ProductItemDTO> products;
 	private String claimType;
 	
-	public MoreQuantityClaimDTO(int claimId, int clientId, String description, String claimType, int invoiceId) {
-		super(claimId, clientId, description);
+	public MoreQuantityClaimDTO(int claimId, String clientCuit, String description, String claimType, int invoiceId) {
+		super(claimId, clientCuit, description);
 		this.invoiceId = invoiceId;
 		products = new LinkedList<>();
 		

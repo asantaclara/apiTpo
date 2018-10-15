@@ -7,11 +7,11 @@ public class TransitionDTO {
 	private int claimId;
 	private Date date;
 	private int userId;
-	private int previousState;
-	private int newState;
+	private String previousState;
+	private String newState;
 	private String description;
 	
-	public TransitionDTO(int claimId, Date date, int userId, int previousState, int newState, String description) {
+	public TransitionDTO(int claimId, Date date, int userId, String previousState, String newState, String description) {
 		super();
 		this.claimId = claimId;
 		this.date = date;
@@ -30,10 +30,10 @@ public class TransitionDTO {
 	public int getUserId() {
 		return userId;
 	}
-	public int getPreviousState() {
+	public String getPreviousState() {
 		return previousState;
 	}
-	public int getNewState() {
+	public String getNewState() {
 		return newState;
 	}
 	public String getDescription() {

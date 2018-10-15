@@ -3,22 +3,22 @@ package dto;
 public abstract class ClaimDTO {
 
 	protected int claimId;
-	protected int clientId;
+	protected String clientCuit;
 	protected String description;
 	protected int claimType;
 	
 	
-	public ClaimDTO(int claimId, int clientId, String description) {
+	public ClaimDTO(int claimId, String clientCuit, String description) {
 		this.claimId = claimId;
-		this.clientId = clientId;
+		this.clientCuit = clientCuit;
 		this.description = description;
 	}
 	
 	public int getClaimId() {
 		return claimId;
 	}
-	public int getClientId() {
-		return clientId;
+	public String getClientCuit() {
+		return clientCuit;
 	}
 	public String getDescription() {
 		return description;

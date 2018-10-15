@@ -3,6 +3,8 @@ package backEnd;
 import java.util.List;
 
 import dto.BoardDTO;
+import exceptions.AccessException;
+import exceptions.ConnectionException;
 
 public class UserBoard {
 
@@ -48,6 +50,11 @@ public class UserBoard {
 	
 	public void addClaim(Claim claim) {
 		claims.add(claim);
+	}
+	
+	public void save() throws ConnectionException, AccessException {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

@@ -1,6 +1,8 @@
 package backEnd;
 
 import dto.ProductItemDTO;
+import exceptions.AccessException;
+import exceptions.ConnectionException;
 
 public class ProductItem {
 
@@ -24,5 +26,9 @@ public class ProductItem {
 		return new ProductItemDTO(product.getProductId(), quantity);
 	}
 	
-	//Tengo que implementar el comparador
+	public void save() throws ConnectionException, AccessException {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }

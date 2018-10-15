@@ -1,6 +1,8 @@
 package backEnd;
 
 import dto.UserDTO;
+import exceptions.AccessException;
+import exceptions.ConnectionException;
 
 public class User {
 
@@ -47,5 +49,10 @@ public class User {
 	
 	public UserDTO toDTO() {
 		return new UserDTO(userId, name, principalRole, secondaryRole);
+	}
+	
+	public void save() throws ConnectionException, AccessException {
+		// TODO Auto-generated method stub
+		
 	}
 }

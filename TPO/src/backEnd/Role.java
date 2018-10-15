@@ -3,6 +3,8 @@ package backEnd;
 import java.util.List;
 
 import dto.RoleDTO;
+import exceptions.AccessException;
+import exceptions.ConnectionException;
 
 public class Role {
 
@@ -27,5 +29,10 @@ public class Role {
 	public RoleDTO toDTO() {
 		return new RoleDTO(description, -1);
 		//Chequear que onda con este constructor
+	}
+	
+	public void save() throws ConnectionException, AccessException {
+		// TODO Auto-generated method stub
+		
 	}
 }

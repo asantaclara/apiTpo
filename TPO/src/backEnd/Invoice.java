@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 import dto.InvoiceDTO;
+import exceptions.AccessException;
+import exceptions.ConnectionException;
 
 public class Invoice {
 
@@ -42,12 +44,17 @@ public class Invoice {
 	}
 	
 	public InvoiceDTO toDTO() {
-		InvoiceDTO aux = new InvoiceDTO(invoiceId, client.getId(), date);
+		InvoiceDTO aux = new InvoiceDTO(invoiceId, client.getCuit(), date);
 		
 		for (ProductItem p : items) {
 			aux.addProductItemDTO(p.getProduct().getProductId(), p.getQuantity());
 		}
 		
 		return aux;
+	}
+	
+	public void save() throws ConnectionException, AccessException {
+		// TODO Auto-generated method stub
+		
 	}
 }

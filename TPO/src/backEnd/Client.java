@@ -2,6 +2,7 @@ package backEnd;
 
 import dto.ClientDTO;
 import exceptions.InvalidAddressException;
+import exceptions.InvalidCuitException;
 import exceptions.InvalidEmailException;
 import exceptions.InvalidNameException;
 import exceptions.InvalidPhoneNumberException;
@@ -9,7 +10,7 @@ import exceptions.InvalidZoneException;
 
 public class Client {
 	
-	private int clientId;
+	private String cuit;
 	private String name;
 	private String address;
 	private String phoneNumber;
@@ -17,27 +18,24 @@ public class Client {
 	private Zone zone;
 	
 	
-	public Client(String name, String address, String phoneNumber, String email, Zone zone) throws InvalidNameException, InvalidAddressException, InvalidPhoneNumberException, InvalidEmailException, InvalidZoneException {
-		parameterChecker(name, address, phoneNumber, email, zone);
+	public Client(String cuit, String name, String address, String phoneNumber, String email, Zone zone) throws InvalidNameException, InvalidAddressException, InvalidPhoneNumberException, InvalidEmailException, InvalidZoneException, InvalidCuitException {
+		parameterChecker(cuit, name, address, phoneNumber, email, zone);
 		this.name = name;
 		this.address = address;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 		this.zone = zone;
-		this.clientId = 0;
+		this.cuit = cuit;
 	}
 	
-	public void setId(int clientId) {
-		this.clientId = clientId;
+	public String getCuit() {
+		return cuit;
 	}
 	
-	public int getId() {
-		return clientId;
-	}
-	
-	public void modify(String name, String address, String phoneNumber, String email, Zone zone) throws InvalidNameException, InvalidAddressException, InvalidPhoneNumberException, InvalidEmailException, InvalidZoneException {
+	public void modify(String cuit, String name, String address, String phoneNumber, String email, Zone zone) throws InvalidNameException, InvalidAddressException, InvalidPhoneNumberException, InvalidEmailException, InvalidZoneException, InvalidCuitException {
 		
-		parameterChecker(name, address, phoneNumber, email, zone);
+		parameterChecker(cuit, name, address, phoneNumber, email, zone);
+		this.cuit = cuit;
 		this.name = name;
 		this.address = address;
 		this.phoneNumber = phoneNumber;
@@ -50,10 +48,14 @@ public class Client {
 	}
 	
 	public ClientDTO toDTO(){
-		return new ClientDTO(clientId, name, address, phoneNumber, email, zone.getZoneId());
+		return new ClientDTO(cuit, name, address, phoneNumber, email, zone.getZoneId());
 	}
 	
-	private void parameterChecker(String name, String address, String phoneNumber, String email, Zone zone) throws InvalidNameException, InvalidAddressException, InvalidPhoneNumberException, InvalidEmailException, InvalidZoneException {
+	public void save() {
+		
+	}
+	
+	private void parameterChecker(String cuit, String name, String address, String phoneNumber, String email, Zone zone) throws InvalidNameException, InvalidAddressException, InvalidPhoneNumberException, InvalidEmailException, InvalidZoneException, InvalidCuitException {
 		if(name == null || name.length() < 1) {
 			throw new InvalidNameException();
 		} else if(address == null || address.length() < 1) {
@@ -64,6 +66,8 @@ public class Client {
 			throw new InvalidEmailException();
 		} else if(zone == null) {
 			throw new InvalidZoneException();
+		} else if(cuit == null) {
+			throw new InvalidCuitException();
 		}
 	}
 
