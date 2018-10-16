@@ -29,7 +29,7 @@ public class Role {
 	}
 	
 	public RoleDTO toDTO() {
-		return new RoleDTO(description, -1);
+		return new RoleDTO(description.name(), -1);
 		//Chequear que onda con este constructor
 	}
 	

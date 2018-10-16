@@ -4,15 +4,15 @@ import backEnd.Roles;
 
 public class RoleDTO {
 
-	private Roles role;
+	private String role;
 	private int userId;
 	
-	public RoleDTO(Roles role, int userId) {
+	public RoleDTO(String role, int userId) {
 		this.role = role;
 		this.userId = userId;
 	}
 	
-	public Roles getRole() {
+	public String getRole() {
 		return role;
 	}
 	public int getUserId() {

@@ -1,22 +1,47 @@
 package controller;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import backEnd.ClaimType;
 import backEnd.Client;
+import backEnd.CompositeClaim;
+import backEnd.IncompatibleZoneClaim;
+import backEnd.Invoice;
+import backEnd.MoreQuantityClaim;
+import backEnd.Product;
 import backEnd.Role;
 import backEnd.Roles;
+import backEnd.State;
 import backEnd.User;
+import backEnd.UserBoard;
+import backEnd.WrongInvoicingClaim;
 import backEnd.Zone;
+import dto.ClaimDTO;
 import dto.ClientDTO;
+import dto.IncompatibleZoneClaimDTO;
+import dto.InvoiceDTO;
+import dto.InvoiceItemDTO;
+import dto.MoreQuantityClaimDTO;
+import dto.ProductDTO;
+import dto.ProductItemDTO;
+import dto.RoleDTO;
+import dto.TransitionDTO;
 import dto.UserDTO;
+import dto.WrongInvoicingClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidAddressException;
+import exceptions.InvalidClaimNumberException;
+import exceptions.InvalidClientException;
 import exceptions.InvalidCuitException;
+import exceptions.InvalidDateException;
+import exceptions.InvalidDescriptionException;
 import exceptions.InvalidEmailException;
 import exceptions.InvalidNameException;
 import exceptions.InvalidPhoneNumberException;
+import exceptions.InvalidProductItemException;
 import exceptions.InvalidZoneException;
 
 public class Controller {
@@ -35,7 +60,6 @@ public class Controller {
 		
 	}
 	//------------------------------------------------------------ START CLIENT ------------------------------------------------------------
-	
 	public int addClient(ClientDTO dto) throws InvalidNameException, InvalidAddressException, InvalidPhoneNumberException, InvalidEmailException, InvalidZoneException, InvalidCuitException {
 	
 		Client newClient = new Client(dto.getCuit(), dto.getName(), dto.getAddress(), dto.getPhoneNumber(), dto.getEmail(), new Zone(dto.getZone()));
@@ -53,10 +77,16 @@ public class Controller {
 		}
 		
 	}
-	
-	
-	
+	public void removeClient(ClientDTO dto) throws InvalidNameException, InvalidAddressException, InvalidPhoneNumberException, InvalidEmailException, InvalidZoneException, InvalidCuitException {
+		
+		int clientId = dto.getId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
+		Client existingClient =  new Client("cuit", "name", "address", "phoneNumber", "email", new Zone("zone")); //Este seria el client que me trae la BD
+		
+		existingClient.deactivateClient();
+		
+	}
 	//------------------------------------------------------------ END CLIENT ------------------------------------------------------------
+	
 	//------------------------------------------------------------ START USER ------------------------------------------------------------
 	public int addUser(UserDTO dto) throws ConnectionException, AccessException {
 		
@@ -66,7 +96,6 @@ public class Controller {
 		
 		return newUser.getUserId();
 	}
-	
 	public void modifyUser(UserDTO dto) {
 		
 		int userId = dto.getUserId(); //Con este userId tengo que traer al user desde la BD y lo llamo existingUser.
@@ -77,7 +106,6 @@ public class Controller {
 		}
 		
 	}
-	
 	public void removeUser(UserDTO dto) {
 		
 		int userId = dto.getUserId(); //Con este id me traigo el user de la DB.
@@ -91,10 +119,207 @@ public class Controller {
 		userToRemove.deactivateUser(); //Aca desactivo al usuario para que no se pueda usar mas en el programa.
 		
 	}
-	
 	//------------------------------------------------------------ END USER ------------------------------------------------------------
 	
+	//------------------------------------------------------------ START PRODUCT ------------------------------------------------------------
+	public int addProduct(ProductDTO dto) throws ConnectionException, AccessException {
+		Product newProduct = new Product(dto.getTitle(), dto.getDescription(), dto.getPrice());
+		newProduct.save();
+		
+		return newProduct.getProductId();
+	}
+	public void modifyProduct(ProductDTO dto) {
+		int productId = dto.getProductId(); //Este es el id que voy a usar para obtener el producto de la BD.
+		Product existingProduct = new Product("title", "description", 0); //Este es el producto que sacaria de la BD.
+		
+		if(existingProduct != null) {
+			existingProduct.modify(dto.getTitle(), dto.getDescription(), dto.getPrice());
+		}
+			
+	}
+	public void removeProduct(ProductDTO dto) {
+		int productId = dto.getProductId(); //Con este id me traigo el product de la DB.
+		Product productToRemove = new Product("title", "description", 0); // Este es el product que me estaria trayendo de la base de datos con el userId.
+		
+		productToRemove.deactivateProduct(); //Aca desactivo al product para que no se pueda usar mas en el programa.
+		
+	}
+	//------------------------------------------------------------ END PRODUCT ------------------------------------------------------------
 	
+	//------------------------------------------------------------ START ROLE ------------------------------------------------------------
+	public void addRole(RoleDTO dto) {
+		int userId = dto.getUserId(); //Con este userId agarro el user de la base de datos.
+		User existingUser =  new User("Test", Roles.ADMINISTRATOR); //Este es el user que voy a agarrar de la base de datos.
+		
+		if(existingUser != null) {
+			
+			Roles existingRole = Roles.valueOf(dto.getRole()); //Con este role lo voy a buscar a la BD
+			Role existingRoleObjeto = new Role(existingRole, new LinkedList<>()); //Y me traigo este Role.
+			
+			existingUser.addRole(existingRole);
+			existingRoleObjeto.addUser(existingUser);
+			
+		}
+		
+	}
+	public void removeRole(RoleDTO dto) {
 	
+		int userId = dto.getUserId(); //Con este userId agarro el user de la base de datos.
+		User existingUser =  new User("Test", Roles.ADMINISTRATOR); //Este es el user que voy a agarrar de la base de datos.
+		
+		Roles existingRole = Roles.valueOf(dto.getRole()); //Con este role lo voy a buscar a la BD
+		Role existingRoleObjeto = new Role(existingRole, new LinkedList<>()); //Y me traigo este Role.
+		
+		if(existingRole != null && existingRoleObjeto != null) {
+			existingUser.removeRole();
+			existingRoleObjeto.removeUser(existingUser);
+		}
+	}
+	//------------------------------------------------------------ END ROLE ------------------------------------------------------------
 	
+	//------------------------------------------------------------ START INVOICE ------------------------------------------------------------
+	public int addInvoice(InvoiceDTO dto) throws InvalidNameException, InvalidAddressException, InvalidPhoneNumberException, InvalidEmailException, InvalidZoneException, InvalidCuitException, ConnectionException, AccessException {
+		List<ProductItemDTO> itemsDTO = dto.getProductItems(); //Esta lista de ProductItemDTO la tengo para despues traerme los product de la BD.
+		int clientId = dto.getClientId(); //Este es el id que uso para traerme al cliente de la BD.
+		Client existingClient =  new Client("cuit", "name", "address", "phoneNumber", "email", new Zone("zone")); //Este seria el client que me trae la BD
+		
+		Invoice newInvoice = new Invoice(existingClient);
+		
+		for (ProductItemDTO productItemDTO : itemsDTO) {
+			int productId = productItemDTO.getProductId();
+			Product existingProduct = new Product("title", "description", 0); //Este es el producto que sacaria de la BD.
+			
+			int productQuantity = productItemDTO.getQuantity();
+			
+			newInvoice.addProductItem(existingProduct, productQuantity);
+		}
+		
+		newInvoice.save();
+		
+		return newInvoice.getId();
+		
+	}
+	public void removeInvoice(InvoiceDTO dto) {
+		int inoviceId = dto.getInvoiceId();
+		Invoice existingInvoice = new Invoice(null); // Aca traigo la Invoice de la BD con el idInvoice de arriba.
+		
+		existingInvoice.deactivateInvoice();
+	}
+	//------------------------------------------------------------ END INVOICE ------------------------------------------------------------
+	
+	public String getClaimState(int claimNumber) throws InvalidClaimNumberException {
+		//Me voy contra la BD de composite claims y me traigo la compositeClaim que corresponde con el claimNumber, me puede venir llena o null
+		CompositeClaim compositeClaim = null;
+		if(compositeClaim != null) {
+			return compositeClaim.getActualState().name(); //Si no es null la compositeClaim directamente le pido el estado a ella.
+		} else {
+			List<UserBoard> boards = new LinkedList<>(); //Esta lista esta compuesta por todos los diferentes boards del sistema.
+			
+			for (UserBoard userBoard : boards) {
+				String claimStatus = userBoard.getClaimState(claimNumber).name();
+				if (claimStatus.length() > 0) {
+					return claimStatus;
+				}
+			}
+			
+		}
+		throw new InvalidClaimNumberException();
+	}
+	public void treatClaim(TransitionDTO dto) {
+		int userId = dto.getUserId(); //Con este userId tengo que traer al user desde la BD y lo llamo existingUser.
+		User existingUser =  new User("Test", Roles.ADMINISTRATOR);
+		
+		UserBoard existingUserBoard = new UserBoard(new Role(null, null), null); //Este userBoard lo tomo en base al existingUser.actualRole();
+		
+		existingUserBoard.treatClaim(dto.getClaimId(), existingUser, State.valueOf(dto.getNewState()), dto.getDescription());
+		
+		
+	}
+	public int addWrongInvoicingClaim(WrongInvoicingClaimDTO dto) throws InvalidNameException, InvalidAddressException, InvalidPhoneNumberException, InvalidEmailException, InvalidZoneException, InvalidCuitException, InvalidClientException, InvalidDateException, InvalidDescriptionException {
+		
+		int clientId = dto.getClientId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
+		Client existingClient =  new Client("cuit", "name", "address", "phoneNumber", "email", new Zone("zone")); //Este seria el client que me trae la BD
+		
+		WrongInvoicingClaim newClaim = new WrongInvoicingClaim(existingClient, new Date(), dto.getDescription());
+		
+		List<InvoiceItemDTO> invoiceItems = dto.getInvoices();
+		
+		for (InvoiceItemDTO invoiceItemDTO : invoiceItems) {
+			int invoiceId = invoiceItemDTO.getInvoiceId();
+			Invoice existingInvoice = new Invoice(null); // Aca traigo la Invoice de la BD con el idInvoice de arriba.
+			
+			if(existingInvoice.validateClient(existingClient)) { //Si el cliente pertenece a la factura que me mandaron
+				String inconsistency = invoiceItemDTO.getInconsistency();
+				
+				newClaim.addInovice(existingInvoice, inconsistency);
+			}
+		}
+		
+		UserBoard existingUserBoard = new UserBoard(new Role(null, null), null); //Este userBoard es el que guarda todas las WrongInvoicingClaims
+		
+		existingUserBoard.addClaim(newClaim);
+		
+		return newClaim.getClaimId();
+		
+		
+	}
+	public int addMoreQuantityClaim(MoreQuantityClaimDTO dto) throws InvalidNameException, InvalidAddressException, InvalidPhoneNumberException, InvalidEmailException, InvalidZoneException, InvalidCuitException, InvalidClientException, InvalidDateException, InvalidDescriptionException, InvalidProductItemException {
+		
+		int clientId = dto.getClientId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
+		Client existingClient =  new Client("cuit", "name", "address", "phoneNumber", "email", new Zone("zone")); //Este seria el client que me trae la BD
+		
+		List<ProductItemDTO> productItemsDTO = dto.getProducts();
+		
+		ClaimType claimType = ClaimType.valueOf(dto.getClaimType());
+		
+		int invoiceId = dto.getInvoiceId();
+		Invoice existingInvoice = new Invoice(null); // Aca traigo la Invoice de la BD con el idInvoice de arriba.
+		
+		String description = dto.getDescription();
+		
+		MoreQuantityClaim newClaim = new MoreQuantityClaim(existingClient, new Date(), description, claimType, existingInvoice);
+		
+		for (ProductItemDTO productItemDTO : productItemsDTO) {
+			int productId = productItemDTO.getProductId();
+			Product existingProduct = new Product("title", "description", 0); //Este es el producto que sacaria de la BD.
+			
+			int quantity = productItemDTO.getQuantity();
+			
+			if(claimType == ClaimType.MISSING_PRODUCT) {		
+				if(existingInvoice.validateClient(existingClient) != true)
+					throw new InvalidClientException();
+				if(existingInvoice.validateProductItem(existingProduct, quantity) != true)
+					throw new InvalidProductItemException();
+			}
+		
+			newClaim.addProductItem(existingProduct, quantity);
+		}
+		
+		UserBoard existingUserBoard = new UserBoard(new Role(null, null), null); //Este userBoard es el que guarda todas las MoreQuantityClaim
+		
+		existingUserBoard.addClaim(newClaim);
+		
+		return newClaim.getClaimId();
+	}
+	public int addIncompatibleZoneClaim(IncompatibleZoneClaimDTO dto) throws InvalidClientException, InvalidDateException, InvalidDescriptionException, InvalidNameException, InvalidAddressException, InvalidPhoneNumberException, InvalidEmailException, InvalidZoneException, InvalidCuitException {
+		int clientId = dto.getClientId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
+		Client existingClient =  new Client("cuit", "name", "address", "phoneNumber", "email", new Zone("zone")); //Este seria el client que me trae la BD
+		
+		if(existingClient != null) {
+			String description = dto.getDescription();
+			
+			IncompatibleZoneClaim newClaim = new IncompatibleZoneClaim(existingClient, new Date(), description, existingClient.getZone());
+		
+			UserBoard existingUserBoard = new UserBoard(new Role(null, null), null); //Este userBoard es el que guarda todas las IncompatibleZoneClaim
+		
+			existingUserBoard.addClaim(newClaim);
+		
+			return newClaim.getClaimId();
+		
+		}
+		throw new InvalidClientException();
+	}
+	public int addCompositeClaim(List<ClaimDTO> listDTO) {
+		return 1;
+	}
 }

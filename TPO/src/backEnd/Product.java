@@ -12,12 +12,14 @@ public class Product {
 	private String description;
 	private float price;
 	private int productId;
+	private boolean activeProduct;
 	
 	public Product(String title, String description, float price) {
 		this.productId = productCount++;
 		this.title = title;
 		this.description = description;
 		this.price = price;
+		activeProduct = true;
 	}
 	
 	public int getProductId() {
@@ -44,5 +46,14 @@ public class Product {
 	public void save() throws ConnectionException, AccessException {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void deactivateProduct() {
+		activeProduct = false;
+		
+	}
+	
+	public boolean isActive() {
+		return activeProduct;
 	}
 }

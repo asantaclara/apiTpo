@@ -7,12 +7,12 @@ public class InvoiceDTO {
 
 	private int invoiceId;
 	private List<ProductItemDTO> productItems;
-	private String clientCuit;
+	private int clientId;
 	private Date date;
 	
-	public InvoiceDTO(int invoiceId, String clientCuit, Date date) {
+	public InvoiceDTO(int invoiceId, int clientId, Date date) {
 		this.invoiceId = invoiceId;
-		this.clientCuit = clientCuit;
+		this.clientId = clientId;
 		this.date = date;
 	}
 
@@ -26,8 +26,8 @@ public class InvoiceDTO {
 	public List<ProductItemDTO> getProductItems() {
 		return productItems;
 	}
-	public String getClientCuit() {
-		return clientCuit;
+	public int getClientId() {
+		return clientId;
 	}
 	public Date getDate() {
 		return date;

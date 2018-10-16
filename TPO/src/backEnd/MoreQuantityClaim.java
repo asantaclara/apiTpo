@@ -30,9 +30,13 @@ public class MoreQuantityClaim extends IndividualClaim {
 
 	}
 
+	public void addProductItem(Product product, int quantity) {
+		products.add(new ProductItem(product, quantity));
+	}
+	
 	@Override
 	public MoreQuantityClaimDTO toDTO() {
-		MoreQuantityClaimDTO aux = new MoreQuantityClaimDTO(claimId, client.getCuit(), description, claimType.name(), invoice.getId());
+		MoreQuantityClaimDTO aux = new MoreQuantityClaimDTO(claimId, client.getId(), description, claimType.name(), invoice.getId());
 		
 		for (ProductItem p : products) {
 			aux.addProductItemDTO(p.toDTO());
