@@ -7,9 +7,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import backEnd.Client;
+import backEnd.Zone;
 import exceptions.AccessException;
 import exceptions.ClientNotFoundException;
 import exceptions.ConnectionException;
+import exceptions.InvalidClientException;
 
 
 public class ClienteDAO {
@@ -17,22 +19,20 @@ public class ClienteDAO {
 	 * Dado un id de cliente: busca en la BD, y en caso de encontrarlo devuelve el mismo
 	 * @param clientId
 	 * @return Client
+	 * @throws ConnectionException 
 	 * @throws ConnectException
 	 * @throws AccessException
+	 * @throws InvalidClientException 
+	 * @throws ClientNotFoundException 
 	 * @throws ClientException
 	 */
-	static public Client getClient(int clientId) throws ConnectionException, AccessException {
-		Connection con = null;  
+	
+
+	
+	static public Client getClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, ClientNotFoundException {
+		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
-		ResultSet rs = null; 
-		
-		try {    
-			con = ConnectionFactory.getInstance().getConection();
-		}
-		catch (ClassNotFoundException | SQLException e) {
-			System.out.println(e.getMessage());
-			throw new ConnectionException("Server not available");
-		}
+		ResultSet rs = null;
 		
 		try {
 			stmt = con.createStatement();
@@ -40,7 +40,7 @@ public class ClienteDAO {
 			throw new AccessException("Access error");
 		}
 		
-		String SQL = "SELECT  * FROM clientes where clientId = " + clientId;
+		String SQL = "SELECT  * FROM clientes where clientId = " + clientId; // Aca tengo que hacer un join entre el cliente y la zona para que lo que me devuelva sea el cliente con el nombre de la zona
 		try {
 			rs = stmt.executeQuery(SQL);
 		} catch (SQLException e1) {
@@ -49,9 +49,9 @@ public class ClienteDAO {
 		try {
 			
 			if(rs.next()){
-				//GetString(5) deberia de devolver una ZONA: debo crear la zona una vez que recibo?
-				Client client = new Client(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),rs.getString(5));
-				return client;
+				Zone zone = new Zone(rs.getString(99)); //Aca en vez del 99 tengo que tomar el numero con el nombre de zona que se me crea en el join de arriba
+				Client newClient = new Client(rs.getString(3), rs.getString(2), rs.getString(4), rs.getString(5), rs.getString(6), zone);
+				return newClient;
 			}
 			else{
 				throw new ClientNotFoundException(); //El cliente con el id "clientId" no existe
@@ -67,14 +67,7 @@ public class ClienteDAO {
 	 * @throws AccessException
 	 */
 	static public void saveClient(Client c) throws ConnectionException, AccessException{
-		Connection con;
-		
-		try {
-			con = ConnectionFactory.getInstance().getConection();
-		} catch (ClassNotFoundException | SQLException e) {
-			throw new ConnectionException(); //No esta disponible el acceso al servidor
-		} 
-		
+		Connection con = SqlUtils.getConnection();
 		PreparedStatement stm;
 		try {
 			stm = con.prepareStatement("insert into clientes values(?,?,?,?,?)");
@@ -86,13 +79,13 @@ public class ClienteDAO {
 			stm.executeUpdate();
 			
 		} catch (SQLException e) {
-			throw new AccessException(); //Error de acceso
+			throw new AccessException("Access error");
 		}
 		
 		try {
 			stm.execute();
 		} catch (SQLException e) {
-			throw new AccessException(); //No se pudo guardar
+			throw new AccessException("Save error");
 		}
 	}
 }
