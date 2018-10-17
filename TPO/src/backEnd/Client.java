@@ -30,6 +30,26 @@ public class Client {
 		return cuit;
 	}
 	
+	public String getName() {
+		return name;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public boolean isActiveClient() {
+		return activeClient;
+	}
+
 	public void modify(String cuit, String name, String address, String phoneNumber, String email, Zone zone) throws InvalidClientException {
 		
 		parameterChecker(cuit, name, address, phoneNumber, email, zone);

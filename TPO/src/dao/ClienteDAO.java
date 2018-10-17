@@ -21,7 +21,7 @@ public class ClienteDAO {
 	 * @throws AccessException
 	 * @throws ClientException
 	 */
-	static public Client getClientThroughId(int clientId) throws ConnectionException, AccessException {
+	static public Client getClient(int clientId) throws ConnectionException, AccessException {
 		Connection con = null;  
 		Statement stmt = null;  
 		ResultSet rs = null; 
@@ -31,20 +31,20 @@ public class ClienteDAO {
 		}
 		catch (ClassNotFoundException | SQLException e) {
 			System.out.println(e.getMessage());
-			throw new ConnectionException(); //Esto me lo tira si el acceso al servidor no esta disponible
+			throw new ConnectionException("Server not available");
 		}
 		
 		try {
 			stmt = con.createStatement();
 		} catch (SQLException e1) {
-			throw new AccessException();//Error de acceso
+			throw new AccessException("Access error");
 		}
 		
 		String SQL = "SELECT  * FROM clientes where clientId = " + clientId;
 		try {
 			rs = stmt.executeQuery(SQL);
 		} catch (SQLException e1) {
-			throw new AccessException();//Error de consulta
+			throw new AccessException("Query error");
 		}
 		try {
 			
@@ -57,7 +57,7 @@ public class ClienteDAO {
 				throw new ClientNotFoundException(); //El cliente con el id "clientId" no existe
 			}
 		} catch (SQLException e) {
-			throw new ConnectionException();//No es posible acceder a los datos
+			throw new ConnectionException("Data not reachable");
 		}
 	}
 	/**

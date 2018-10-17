@@ -33,7 +33,6 @@ import dto.WrongInvoicingClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
-import exceptions.InvalidClaimNumberException;
 import exceptions.InvalidClientException;
 
 public class Controller {
