@@ -6,10 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import Exceptions.AccessException;
-import Exceptions.ConnectException;
-import Exceptions.InvoiceException;
-import Models.Invoice;
+import exceptions.AccessException;
+import exceptions.ConnectionException;
+import exceptions.InvalidInvoiceException;
 
 
 public class InvoiceDAO {
@@ -21,23 +20,15 @@ public class InvoiceDAO {
 	 * @throws AccessException
 	 * @throws InvoiceException
 	 */
-	static public Invoice getInvoiceThroughId(int invoiceId) throws ConnectException, AccessException, InvoiceException{
-		Connection con = null;  
+	static public Invoice getInvoiceThroughId(int invoiceId){
+		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null; 
-		
-		try {    
-			con = ConnectionFactory.getInstance().getConection();
-		}
-		catch (ClassNotFoundException | SQLException e) {
-			System.out.println(e.getMessage());
-			throw new ConnectException("No esta disponible el acceso al Servidor");
-		}
 		
 		try {
 			stmt = con.createStatement();
 		} catch (SQLException e1) {
-			throw new AccessException("Error de acceso");
+			throw new AccessException("Access error");
 		}
 		
 		String SQL = "SELECT  * FROM invoices where invoiceId = " + invoiceId;
@@ -53,10 +44,10 @@ public class InvoiceDAO {
 				return invoice;
 			}
 			else{
-				throw new ClientException("El cliente con id: " + clientId + " no existe");
+				throw new InvalidInvoiceException("Invoice number: " + invoiceId + " doesn't exist");
 			}
 		} catch (SQLException e) {
-			throw new ConnectException("No es posible acceder a los datos");
+			throw new ConnectionException("No es posible acceder a los datos");
 		}
 	}
 	/**
@@ -65,14 +56,8 @@ public class InvoiceDAO {
 	 * @throws ConnectException
 	 * @throws AccessException
 	 */
-	static public void saveInvoice(Invoice i) throws ConnectException, AccessException{
-		Connection con;
-		
-		try {
-			con = ConnectionFactory.getInstance().getConection();
-		} catch (ClassNotFoundException | SQLException e) {
-			throw new ConnectException("No esta disponible el acceso al Servidor");
-		} 
+	static public void saveInvoice(Invoice i){
+		Connection con = SqlUtils.getConnection();
 		
 		PreparedStatement stm;
 		try {
@@ -84,13 +69,13 @@ public class InvoiceDAO {
 			stm.executeUpdate();
 			
 		} catch (SQLException e) {
-			throw new AccessException("Error de acceso");
+			throw new AccessException("Access error");
 		}
 		
 		try {
 			stm.execute();
 		} catch (SQLException e) {
-			throw new AccessException("No se pudo guardar");
+			throw new AccessException("Imposible to save");
 		}
 	}
 }

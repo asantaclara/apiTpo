@@ -21,18 +21,10 @@ public class ProductDAO {
 	 * @throws ProductException
 	 */
 	static public Product getProductThroughId(int productId) throws ConnectException, AccessException, ProductException{
-		Connection con = null;  
+		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null; 
-		
-		try {    
-			con = ConnectionFactory.getInstance().getConection();
-		}
-		catch (ClassNotFoundException | SQLException e) {
-			System.out.println(e.getMessage());
-			throw new ConnectException("No esta disponible el acceso al Servidor");
-		}
-		
+
 		try {
 			stmt = con.createStatement();
 		} catch (SQLException e1) {
@@ -65,14 +57,8 @@ public class ProductDAO {
 	 * @throws AccessException
 	 */
 	static public void saveProduct(Product p) throws ConnectException, AccessException{
-		Connection con;
-		
-		try {
-			con = ConnectionFactory.getInstance().getConection();
-		} catch (ClassNotFoundException | SQLException e) {
-			throw new ConnectException("No esta disponible el acceso al Servidor");
-		} 
-		
+		Connection con = SqlUtils.getConnection();
+
 		PreparedStatement stm;
 		try {
 			stm = con.prepareStatement("insert into products values(?,?,?,?)");

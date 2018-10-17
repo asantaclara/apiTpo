@@ -29,6 +29,31 @@ public class Invoice {
 		items.add(new ProductItem(product, quantity));
 	}
 	
+	
+	public static int getInvoiceCount() {
+		return invoiceCount;
+	}
+
+	public int getInvoiceId() {
+		return invoiceId;
+	}
+
+	public List<ProductItem> getItems() {
+		return items;
+	}
+
+	public Client getClient() {
+		return client;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public boolean isActiveInvoice() {
+		return activeInvoice;
+	}
+
 	public int getId() {
 		return invoiceId;
 	}

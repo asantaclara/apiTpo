@@ -22,18 +22,10 @@ public class UserDAO {
 	 * @throws UserException
 	 */
 	static public User getUserThroughId(int userId) throws ConnectException, AccessException, UserException{
-		Connection con = null;  
+		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null; 
-		
-		try {    
-			con = ConnectionFactory.getInstance().getConection();
-		}
-		catch (ClassNotFoundException | SQLException e) {
-			System.out.println(e.getMessage());
-			throw new ConnectException("No esta disponible el acceso al Servidor");
-		}
-		
+
 		try {
 			stmt = con.createStatement();
 		} catch (SQLException e1) {
@@ -66,14 +58,8 @@ public class UserDAO {
 	 * @throws AccessException
 	 */
 	static public void saveUser(User u) throws ConnectException, AccessException{
-		Connection con;
-		
-		try {
-			con = ConnectionFactory.getInstance().getConection();
-		} catch (ClassNotFoundException | SQLException e) {
-			throw new ConnectException("No esta disponible el acceso al Servidor");
-		} 
-		
+		Connection con = SqlUtils.getConnection();
+
 		PreparedStatement stm;
 		try {
 			stm = con.prepareStatement("insert into users values(?,?,?,?)");

@@ -24,18 +24,10 @@ public class RoleDAO {
 	 * @throws RoleException
 	 */
 	static public Role getRoleThroughId(int roleId) throws ConnectException, AccessException, RoleException{
-		Connection con = null;  
+		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null; 
-		
-		try {    
-			con = ConnectionFactory.getInstance().getConection();
-		}
-		catch (ClassNotFoundException | SQLException e) {
-			System.out.println(e.getMessage());
-			throw new ConnectException("No esta disponible el acceso al Servidor");
-		}
-		
+
 		try {
 			stmt = con.createStatement();
 		} catch (SQLException e1) {
@@ -68,14 +60,8 @@ public class RoleDAO {
 	 * @throws AccessException
 	 */
 	static public void saveRole(Role r) throws ConnectException, AccessException{
-		Connection con;
-		
-		try {
-			con = ConnectionFactory.getInstance().getConection();
-		} catch (ClassNotFoundException | SQLException e) {
-			throw new ConnectException("No esta disponible el acceso al Servidor");
-		} 
-		
+		Connection con = SqlUtils.getConnection();
+
 		PreparedStatement stm;
 		try {
 			stm = con.prepareStatement("insert into roles values(?,?,?,?)");

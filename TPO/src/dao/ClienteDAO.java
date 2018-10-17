@@ -9,7 +9,6 @@ import java.sql.Statement;
 import backEnd.Client;
 import backEnd.Zone;
 import exceptions.AccessException;
-import exceptions.ClientNotFoundException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClientException;
 
@@ -27,9 +26,7 @@ public class ClienteDAO {
 	 * @throws ClientException
 	 */
 	
-
-	
-	static public Client getClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, ClientNotFoundException {
+	static public Client getClient(int clientId) throws ConnectionException, AccessException, InvalidClientException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -40,7 +37,7 @@ public class ClienteDAO {
 			throw new AccessException("Access error");
 		}
 		
-		String SQL = "SELECT  * FROM clientes where clientId = " + clientId; // Aca tengo que hacer un join entre el cliente y la zona para que lo que me devuelva sea el cliente con el nombre de la zona
+		String SQL = "SELECT * FROM Clients JOIN Zones ON Clients.ZoneId = Zones.ZoneId where clientId = " + clientId; 
 		try {
 			rs = stmt.executeQuery(SQL);
 		} catch (SQLException e1) {
@@ -54,7 +51,7 @@ public class ClienteDAO {
 				return newClient;
 			}
 			else{
-				throw new ClientNotFoundException(); //El cliente con el id "clientId" no existe
+				throw new InvalidClientException("Client not found");
 			}
 		} catch (SQLException e) {
 			throw new ConnectionException("Data not reachable");

@@ -23,18 +23,10 @@ public class UserBoardDAO {
 	 * @throws UserBoardException
 	 */
 	static public UserBoard getUserBoardThroughId(int boardId) throws ConnectException, AccessException, UserBoardException{
-		Connection con = null;  
+		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null; 
-		
-		try {    
-			con = ConnectionFactory.getInstance().getConection();
-		}
-		catch (ClassNotFoundException | SQLException e) {
-			System.out.println(e.getMessage());
-			throw new ConnectException("No esta disponible el acceso al Servidor");
-		}
-		
+
 		try {
 			stmt = con.createStatement();
 		} catch (SQLException e1) {
@@ -68,14 +60,7 @@ public class UserBoardDAO {
 	 * @throws AccessException
 	 */
 	static public void saveUserBoard(UserBoard u) throws ConnectException, AccessException{
-		Connection con;
-		
-		try {
-			con = ConnectionFactory.getInstance().getConection();
-		} catch (ClassNotFoundException | SQLException e) {
-			throw new ConnectException("No esta disponible el acceso al Servidor");
-		} 
-		
+		Connection con = SqlUtils.getConnection();
 		PreparedStatement stm;
 		try {
 			stm = con.prepareStatement("insert into userBoards values(?,?,?,?)");
