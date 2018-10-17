@@ -1,16 +1,16 @@
 package exceptions;
 
-public class InvalidAddressException extends Exception {
+public class ClientNotFoundException extends Exception {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public InvalidAddressException() {
+	public ClientNotFoundException() {
 		new Exception();
 	}
 
 	public String getMessage() {
-		return "Invalid address";
+		return "Client not found";
 	}
 }

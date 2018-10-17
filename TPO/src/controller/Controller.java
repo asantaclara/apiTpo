@@ -32,17 +32,9 @@ import dto.UserDTO;
 import dto.WrongInvoicingClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
-import exceptions.InvalidAddressException;
+import exceptions.InvalidClaimException;
 import exceptions.InvalidClaimNumberException;
 import exceptions.InvalidClientException;
-import exceptions.InvalidCuitException;
-import exceptions.InvalidDateException;
-import exceptions.InvalidDescriptionException;
-import exceptions.InvalidEmailException;
-import exceptions.InvalidNameException;
-import exceptions.InvalidPhoneNumberException;
-import exceptions.InvalidProductItemException;
-import exceptions.InvalidZoneException;
 
 public class Controller {
 	
@@ -60,14 +52,14 @@ public class Controller {
 		
 	}
 	//------------------------------------------------------------ START CLIENT ------------------------------------------------------------
-	public int addClient(ClientDTO dto) throws InvalidNameException, InvalidAddressException, InvalidPhoneNumberException, InvalidEmailException, InvalidZoneException, InvalidCuitException {
+	public int addClient(ClientDTO dto) throws InvalidClientException{
 	
 		Client newClient = new Client(dto.getCuit(), dto.getName(), dto.getAddress(), dto.getPhoneNumber(), dto.getEmail(), new Zone(dto.getZone()));
 		newClient.save();
 		
 		return newClient.getId();
 	}
-	public void modifyClient(ClientDTO dto) throws InvalidNameException, InvalidAddressException, InvalidPhoneNumberException, InvalidEmailException, InvalidZoneException, InvalidCuitException {
+	public void modifyClient(ClientDTO dto) throws InvalidClientException{
 		
 		int clientId = dto.getId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
 		Client existingClient =  new Client("cuit", "name", "address", "phoneNumber", "email", new Zone("zone")); //Este seria el client que me trae la BD
@@ -77,7 +69,7 @@ public class Controller {
 		}
 		
 	}
-	public void removeClient(ClientDTO dto) throws InvalidNameException, InvalidAddressException, InvalidPhoneNumberException, InvalidEmailException, InvalidZoneException, InvalidCuitException {
+	public void removeClient(ClientDTO dto) throws InvalidClientException {
 		
 		int clientId = dto.getId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
 		Client existingClient =  new Client("cuit", "name", "address", "phoneNumber", "email", new Zone("zone")); //Este seria el client que me trae la BD
@@ -178,7 +170,7 @@ public class Controller {
 	//------------------------------------------------------------ END ROLE ------------------------------------------------------------
 	
 	//------------------------------------------------------------ START INVOICE ------------------------------------------------------------
-	public int addInvoice(InvoiceDTO dto) throws InvalidNameException, InvalidAddressException, InvalidPhoneNumberException, InvalidEmailException, InvalidZoneException, InvalidCuitException, ConnectionException, AccessException {
+	public int addInvoice(InvoiceDTO dto) throws InvalidClientException, ConnectionException, AccessException {
 		List<ProductItemDTO> itemsDTO = dto.getProductItems(); //Esta lista de ProductItemDTO la tengo para despues traerme los product de la BD.
 		int clientId = dto.getClientId(); //Este es el id que uso para traerme al cliente de la BD.
 		Client existingClient =  new Client("cuit", "name", "address", "phoneNumber", "email", new Zone("zone")); //Este seria el client que me trae la BD
@@ -207,7 +199,7 @@ public class Controller {
 	}
 	//------------------------------------------------------------ END INVOICE ------------------------------------------------------------
 	
-	public String getClaimState(int claimNumber) throws InvalidClaimNumberException {
+	public String getClaimState(int claimNumber) throws InvalidClaimException {
 		//Me voy contra la BD de composite claims y me traigo la compositeClaim que corresponde con el claimNumber, me puede venir llena o null
 		CompositeClaim compositeClaim = null;
 		if(compositeClaim != null) {
@@ -223,7 +215,7 @@ public class Controller {
 			}
 			
 		}
-		throw new InvalidClaimNumberException();
+		throw new InvalidClaimException("Claim not found");
 	}
 	public void treatClaim(TransitionDTO dto) {
 		int userId = dto.getUserId(); //Con este userId tengo que traer al user desde la BD y lo llamo existingUser.
@@ -235,7 +227,7 @@ public class Controller {
 		
 		
 	}
-	public int addWrongInvoicingClaim(WrongInvoicingClaimDTO dto) throws InvalidNameException, InvalidAddressException, InvalidPhoneNumberException, InvalidEmailException, InvalidZoneException, InvalidCuitException, InvalidClientException, InvalidDateException, InvalidDescriptionException {
+	public int addWrongInvoicingClaim(WrongInvoicingClaimDTO dto) throws InvalidClaimException, InvalidClientException {
 		
 		int clientId = dto.getClientId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
 		Client existingClient =  new Client("cuit", "name", "address", "phoneNumber", "email", new Zone("zone")); //Este seria el client que me trae la BD
@@ -263,7 +255,7 @@ public class Controller {
 		
 		
 	}
-	public int addMoreQuantityClaim(MoreQuantityClaimDTO dto) throws InvalidNameException, InvalidAddressException, InvalidPhoneNumberException, InvalidEmailException, InvalidZoneException, InvalidCuitException, InvalidClientException, InvalidDateException, InvalidDescriptionException, InvalidProductItemException {
+	public int addMoreQuantityClaim(MoreQuantityClaimDTO dto) throws InvalidClaimException, InvalidClientException {
 		
 		int clientId = dto.getClientId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
 		Client existingClient =  new Client("cuit", "name", "address", "phoneNumber", "email", new Zone("zone")); //Este seria el client que me trae la BD
@@ -287,9 +279,9 @@ public class Controller {
 			
 			if(claimType == ClaimType.MISSING_PRODUCT) {		
 				if(existingInvoice.validateClient(existingClient) != true)
-					throw new InvalidClientException();
+					throw new InvalidClaimException("Invoice doesn't belong to the client");
 				if(existingInvoice.validateProductItem(existingProduct, quantity) != true)
-					throw new InvalidProductItemException();
+					throw new InvalidClaimException("ProductItem doesn't belong to the invoice");
 			}
 		
 			newClaim.addProductItem(existingProduct, quantity);
@@ -301,7 +293,7 @@ public class Controller {
 		
 		return newClaim.getClaimId();
 	}
-	public int addIncompatibleZoneClaim(IncompatibleZoneClaimDTO dto) throws InvalidClientException, InvalidDateException, InvalidDescriptionException, InvalidNameException, InvalidAddressException, InvalidPhoneNumberException, InvalidEmailException, InvalidZoneException, InvalidCuitException {
+	public int addIncompatibleZoneClaim(IncompatibleZoneClaimDTO dto) throws InvalidClientException, InvalidClaimException {
 		int clientId = dto.getClientId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
 		Client existingClient =  new Client("cuit", "name", "address", "phoneNumber", "email", new Zone("zone")); //Este seria el client que me trae la BD
 		
@@ -317,7 +309,7 @@ public class Controller {
 			return newClaim.getClaimId();
 		
 		}
-		throw new InvalidClientException();
+		throw new InvalidClientException("Client not found");
 	}
 	public int addCompositeClaim(List<ClaimDTO> listDTO) {
 		return 1;

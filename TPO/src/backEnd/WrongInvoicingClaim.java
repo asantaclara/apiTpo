@@ -7,15 +7,13 @@ import java.util.List;
 import dto.WrongInvoicingClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
-import exceptions.InvalidClientException;
-import exceptions.InvalidDateException;
-import exceptions.InvalidDescriptionException;
+import exceptions.InvalidClaimException;
 
 public class WrongInvoicingClaim extends IndividualClaim {
 
 	private List<InvoiceItem> invoices;
 	
-	public WrongInvoicingClaim(Client client, Date date, String description) throws InvalidClientException, InvalidDateException, InvalidDescriptionException {
+	public WrongInvoicingClaim(Client client, Date date, String description) throws InvalidClaimException{
 		super(client, date, description);
 		invoices = new LinkedList<>();
 	}

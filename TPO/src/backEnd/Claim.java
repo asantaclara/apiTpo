@@ -5,9 +5,7 @@ import java.util.Date;
 import dto.ClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
-import exceptions.InvalidClientException;
-import exceptions.InvalidDateException;
-import exceptions.InvalidDescriptionException;
+import exceptions.InvalidClaimException;
 
 public abstract class Claim {
 	
@@ -16,15 +14,15 @@ public abstract class Claim {
 	protected Date date;
 	protected String description;
 	
-	public Claim(Client client, Date date, String description) throws InvalidClientException, InvalidDateException, InvalidDescriptionException {
+	public Claim(Client client, Date date, String description) throws InvalidClaimException {
 		if(client == null) {
-			throw new InvalidClientException();
+			throw new InvalidClaimException("Client not found");
 		}
 		if(date == null) {
-			throw new InvalidDateException();
+			throw new InvalidClaimException("Date not found");
 		}
 		if(description == null || description.length() == 0) {
-			throw new InvalidDescriptionException();
+			throw new InvalidClaimException("Description not found");
 		}
 		
 		this.client = client;

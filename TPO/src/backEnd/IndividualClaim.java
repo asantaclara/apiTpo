@@ -7,9 +7,7 @@ import java.util.List;
 import dto.ClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
-import exceptions.InvalidClientException;
-import exceptions.InvalidDateException;
-import exceptions.InvalidDescriptionException;
+import exceptions.InvalidClaimException;
 
 public abstract class IndividualClaim extends Claim {
 
@@ -18,7 +16,7 @@ public abstract class IndividualClaim extends Claim {
 	protected State actualState;
 	protected ClaimType claimType;
 	
-	public IndividualClaim(Client client, Date date, String description) throws InvalidClientException, InvalidDateException, InvalidDescriptionException {
+	public IndividualClaim(Client client, Date date, String description) throws InvalidClaimException {
 		super(client, date, description);
 		this.actualState = State.ENTERED;
 		transitions = new LinkedList<>();

@@ -1,12 +1,7 @@
 package backEnd;
 
 import dto.ClientDTO;
-import exceptions.InvalidAddressException;
-import exceptions.InvalidCuitException;
-import exceptions.InvalidEmailException;
-import exceptions.InvalidNameException;
-import exceptions.InvalidPhoneNumberException;
-import exceptions.InvalidZoneException;
+import exceptions.InvalidClientException;
 
 public class Client {
 	
@@ -20,7 +15,7 @@ public class Client {
 	private boolean activeClient;
 	
 	
-	public Client(String cuit, String name, String address, String phoneNumber, String email, Zone zone) throws InvalidNameException, InvalidAddressException, InvalidPhoneNumberException, InvalidEmailException, InvalidZoneException, InvalidCuitException {
+	public Client(String cuit, String name, String address, String phoneNumber, String email, Zone zone) throws InvalidClientException {
 		parameterChecker(cuit, name, address, phoneNumber, email, zone);
 		this.name = name;
 		this.address = address;
@@ -35,7 +30,7 @@ public class Client {
 		return cuit;
 	}
 	
-	public void modify(String cuit, String name, String address, String phoneNumber, String email, Zone zone) throws InvalidNameException, InvalidAddressException, InvalidPhoneNumberException, InvalidEmailException, InvalidZoneException, InvalidCuitException {
+	public void modify(String cuit, String name, String address, String phoneNumber, String email, Zone zone) throws InvalidClientException {
 		
 		parameterChecker(cuit, name, address, phoneNumber, email, zone);
 		this.cuit = cuit;
@@ -74,19 +69,19 @@ public class Client {
 		
 	}
 	
-	private void parameterChecker(String cuit, String name, String address, String phoneNumber, String email, Zone zone) throws InvalidNameException, InvalidAddressException, InvalidPhoneNumberException, InvalidEmailException, InvalidZoneException, InvalidCuitException {
+	private void parameterChecker(String cuit, String name, String address, String phoneNumber, String email, Zone zone) throws InvalidClientException {
 		if(name == null || name.length() < 1) {
-			throw new InvalidNameException();
+			throw new InvalidClientException("Invalid name");
 		} else if(address == null || address.length() < 1) {
-			throw new InvalidAddressException();
+			throw new InvalidClientException("Invalid address");
 		} else if(phoneNumber == null || phoneNumber.length() < 1) {
-			throw new InvalidPhoneNumberException();
+			throw new InvalidClientException("Invalid phone number");
 		} else if(email == null || email.length() < 1) {
-			throw new InvalidEmailException();
+			throw new InvalidClientException("Invalid email");
 		} else if(zone == null) {
-			throw new InvalidZoneException();
+			throw new InvalidClientException("Invalid zone");
 		} else if(cuit == null) {
-			throw new InvalidCuitException();
+			throw new InvalidClientException("Invalid cuit");
 		}
 	}
 

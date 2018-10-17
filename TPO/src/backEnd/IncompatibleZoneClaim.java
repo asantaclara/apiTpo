@@ -5,15 +5,13 @@ import java.util.Date;
 import dto.IncompatibleZoneClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
-import exceptions.InvalidClientException;
-import exceptions.InvalidDateException;
-import exceptions.InvalidDescriptionException;
+import exceptions.InvalidClaimException;
 
 public class IncompatibleZoneClaim extends IndividualClaim {
 
 	private Zone zone;
 	
-	public IncompatibleZoneClaim(Client client, Date date, String description, Zone zone) throws InvalidClientException, InvalidDateException, InvalidDescriptionException {
+	public IncompatibleZoneClaim(Client client, Date date, String description, Zone zone) throws InvalidClaimException {
 		super(client, date, description);
 		this.zone = zone;
 	}

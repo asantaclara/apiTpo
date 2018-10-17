@@ -6,15 +6,13 @@ import java.util.List;
 import dto.ClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
-import exceptions.InvalidClientException;
-import exceptions.InvalidDateException;
-import exceptions.InvalidDescriptionException;
+import exceptions.InvalidClaimException;
 
 public class CompositeClaim extends Claim{
 
 	private List<Claim> claims;
 	
-	public CompositeClaim(Client client, Date date, String description) throws InvalidClientException, InvalidDateException, InvalidDescriptionException {
+	public CompositeClaim(Client client, Date date, String description) throws InvalidClaimException {
 		super(client, date, description);
 	}
 	

@@ -7,9 +7,7 @@ import java.util.List;
 import dto.MoreQuantityClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
-import exceptions.InvalidClientException;
-import exceptions.InvalidDateException;
-import exceptions.InvalidDescriptionException;
+import exceptions.InvalidClaimException;
 
 public class MoreQuantityClaim extends IndividualClaim {
 
@@ -17,7 +15,7 @@ public class MoreQuantityClaim extends IndividualClaim {
 	private ClaimType claimType;
 	private Invoice invoice;
 	
-	public MoreQuantityClaim(Client client, Date date, String description, ClaimType claimType, Invoice invoice) throws InvalidClientException, InvalidDateException, InvalidDescriptionException {
+	public MoreQuantityClaim(Client client, Date date, String description, ClaimType claimType, Invoice invoice) throws InvalidClaimException {
 		super(client, date, description);
 		products = new LinkedList<>();
 		this.invoice = invoice;
