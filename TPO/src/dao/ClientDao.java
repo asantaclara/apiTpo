@@ -15,7 +15,7 @@ import exceptions.ConnectionException;
 import exceptions.InvalidClientException;
 
 
-public class ClienteDAO {
+public class ClientDao {
 	/**
 	 * Dado un id de cliente: busca en la BD, y en caso de encontrarlo devuelve el mismo
 	 * @param clientId
@@ -110,6 +110,7 @@ public class ClienteDAO {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement stm;
 		try {
+			
 			stm = con.prepareStatement("insert into clientes values(?,?,?,?,?)");
 			stm.setString(1, c.getName());
 			stm.setString(2, c.getAddress());
