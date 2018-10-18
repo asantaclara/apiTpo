@@ -15,7 +15,7 @@ import exceptions.ConnectionException;
 import exceptions.InvalidClientException;
 
 
-public class ClientDao {
+public class ClientDAO {
 	/**
 	 * Dado un id de cliente: busca en la BD, y en caso de encontrarlo devuelve el mismo
 	 * @param clientId
@@ -111,59 +111,25 @@ public class ClientDao {
 	static public void saveClient(Client c) throws ConnectionException, AccessException{
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm;
-		Statement stmt = null;  
-		ResultSet rs = null;
 		
 		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
+			
+			prepStm = con.prepareStatement("insert into clientes values(?,?,?,?,?)");
+			prepStm.setString(1, c.getName());
+			prepStm.setString(2, c.getAddress());
+			prepStm.setString(3, c.getPhoneNumber());
+			prepStm.setInt(4, c.getId());
+			prepStm.setString(5, c.getZone().getName());
+			prepStm.executeUpdate();
+			
+		} catch (SQLException e) {
 			throw new AccessException("Access error");
 		}
 		
-		String SQL = "SELECT * FROM Zones WHERE Name = " + c.getZone().getName(); //Aca pido la tabla para ver si la zona existe
 		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			throw new AccessException("Query error");
-		}
-		try {
-			if(rs.next()){	//En caso de que exista en rs.getInt(1) tengo el ZoneId.				
-					try {
-						prepStm = con.prepareStatement("insert into clientes values(?,?,?,?,?)");
-						prepStm.setString(1, c.getName());
-						prepStm.setString(2, c.getAddress());
-						prepStm.setString(3, c.getPhoneNumber());
-						prepStm.setInt(4, c.getId());
-						prepStm.setString(5, c.getZone().getName());
-						prepStm.executeUpdate();
-						
-					} catch (SQLException e) {
-						throw new AccessException("Access error");
-					}
-					
-					try {
-						prepStm.execute();
-					} catch (SQLException e) {
-						throw new AccessException("Save error");
-					}
-			} else {
-				throw new InvalidClientException("The client is not active");
-			}
-			
-		}
-			else{
-				throw new InvalidClientException("Client not found");
-			}
+			prepStm.execute();
 		} catch (SQLException e) {
-			throw new ConnectionException("Data not reachable");
+			throw new AccessException("Save error");
 		}
-		
-		
-		
-		
-		
-		
-		
-		
 	}
 }
