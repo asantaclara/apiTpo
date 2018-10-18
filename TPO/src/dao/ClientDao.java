@@ -53,6 +53,7 @@ public class ClientDao {
 			while(rs.next()){
 				if(rs.getByte(8) == 1) {					
 					newClient = new Client(rs.getString(3), rs.getString(2), rs.getString(4), rs.getString(5), rs.getString(6), new Zone(rs.getString(10)));
+					newClient.setId(rs.getInt(1));
 					returnList.add(newClient);
 				} else {
 					throw new InvalidClientException("The client is not active");
@@ -88,6 +89,7 @@ public class ClientDao {
 			if(rs.next()){
 				if(rs.getByte(8) == 1) {					
 					Client newClient = new Client(rs.getString(3), rs.getString(2), rs.getString(4), rs.getString(5), rs.getString(6), new Zone(rs.getString(10)));
+					newClient.setId(rs.getInt(1));
 					return newClient;
 				} else {
 					throw new InvalidClientException("The client is not active");
