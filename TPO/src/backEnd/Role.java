@@ -9,7 +9,7 @@ import exceptions.ConnectionException;
 
 public class Role {
 
-	private int roleId;
+	private int roleId=0;
 	private Roles description;
 	private List<User> users;
 	private List<String> boardToShow;

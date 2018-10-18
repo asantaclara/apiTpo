@@ -9,10 +9,8 @@ import exceptions.AccessException;
 import exceptions.ConnectionException;
 
 public class Invoice {
-
-	private static int invoiceCount = 0;
 	
-	private int invoiceId;
+	private int invoiceId=0;
 	private List<ProductItem> items;
 	private Client client;
 	private Date date;
@@ -21,7 +19,6 @@ public class Invoice {
 	public Invoice(Client client) {
 		this.client = client;
 		this.date = Calendar.getInstance().getTime(); //Intento guardar la fecha actual en la variable date, tengo que ver para solo me aguerda ddmmyyyy
-		this.invoiceId = ++invoiceCount;
 		activeInvoice = true;
 	}
 	
@@ -29,11 +26,6 @@ public class Invoice {
 		items.add(new ProductItem(product, quantity));
 	}
 	
-	
-	public static int getInvoiceCount() {
-		return invoiceCount;
-	}
-
 	public int getInvoiceId() {
 		return invoiceId;
 	}

@@ -110,25 +110,60 @@ public class ClientDao {
 	 */
 	static public void saveClient(Client c) throws ConnectionException, AccessException{
 		Connection con = SqlUtils.getConnection();
-		PreparedStatement stm;
+		PreparedStatement prepStm;
+		Statement stmt = null;  
+		ResultSet rs = null;
+		
 		try {
-			
-			stm = con.prepareStatement("insert into clientes values(?,?,?,?,?)");
-			stm.setString(1, c.getName());
-			stm.setString(2, c.getAddress());
-			stm.setString(3, c.getPhoneNumber());
-			stm.setInt(4, c.getId());
-			stm.setString(5, c.getZone().getName());
-			stm.executeUpdate();
-			
-		} catch (SQLException e) {
+			stmt = con.createStatement();
+		} catch (SQLException e1) {
 			throw new AccessException("Access error");
 		}
 		
+		String SQL = "SELECT * FROM Zones WHERE Name = " + c.getZone().getName(); //Aca pido la tabla para ver si la zona existe
 		try {
-			stm.execute();
-		} catch (SQLException e) {
-			throw new AccessException("Save error");
+			rs = stmt.executeQuery(SQL);
+		} catch (SQLException e1) {
+			throw new AccessException("Query error");
 		}
+		try {
+			if(rs.next()){	//En caso de que exista en rs.getInt(1) tengo el ZoneId.				
+					try {
+						prepStm = con.prepareStatement("insert into clientes values(?,?,?,?,?)");
+						prepStm.setString(1, c.getName());
+						prepStm.setString(2, c.getAddress());
+						prepStm.setString(3, c.getPhoneNumber());
+						prepStm.setInt(4, c.getId());
+						prepStm.setString(5, c.getZone().getName());
+						prepStm.executeUpdate();
+						
+					} catch (SQLException e) {
+						throw new AccessException("Access error");
+					}
+					
+					try {
+						prepStm.execute();
+					} catch (SQLException e) {
+						throw new AccessException("Save error");
+					}
+			} else {
+				throw new InvalidClientException("The client is not active");
+			}
+			
+		}
+			else{
+				throw new InvalidClientException("Client not found");
+			}
+		} catch (SQLException e) {
+			throw new ConnectionException("Data not reachable");
+		}
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 }

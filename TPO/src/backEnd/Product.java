@@ -5,17 +5,14 @@ import exceptions.AccessException;
 import exceptions.ConnectionException;
 
 public class Product {
-
-	private static int productCount = 0;
 	
 	private String title;
 	private String description;
 	private float price;
-	private int productId;
+	private int productId=0;
 	private boolean activeProduct;
 	
 	public Product(String title, String description, float price) {
-		this.productId = productCount++;
 		this.title = title;
 		this.description = description;
 		this.price = price;

@@ -9,7 +9,7 @@ import exceptions.InvalidClaimException;
 
 public abstract class Claim {
 	
-	protected int claimId;
+	protected int claimId=0;
 	protected Client client;
 	protected Date date;
 	protected String description;

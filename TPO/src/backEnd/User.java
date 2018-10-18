@@ -6,16 +6,14 @@ import exceptions.ConnectionException;
 
 public class User {
 
-	private static int userCount = 0;
 	
-	private int userId;
+	private int userId=0;
 	private String name;
 	private Roles principalRole;
 	private Roles secondaryRole;
 	private boolean activeUser;
 	
 	public User(String name, Roles principalRole) {
-		this.userId = userCount++;
 		this.name = name;
 		this.principalRole = principalRole;
 		this.secondaryRole = principalRole;
