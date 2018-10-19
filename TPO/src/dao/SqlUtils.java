@@ -75,7 +75,7 @@ public class SqlUtils {
 				try {
 					
 					prepStm = con.prepareStatement("insert into Zones values(?,?)");
-					prepStm.setInt(1, lastId("Zone", "ZoneId")+1);
+					prepStm.setInt(1, lastId("Zones", "ZoneId")+1);
 					prepStm.setString(2, zoneName);
 					prepStm.executeUpdate();
 					

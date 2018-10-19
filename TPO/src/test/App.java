@@ -2,6 +2,7 @@ package test;
 
 import backEnd.Client;
 import dao.ClientDAO;
+import dao.SqlUtils;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClientException;
@@ -15,6 +16,7 @@ public class App {
 		
 		System.out.println(aux.getAddress());
 		
+		SqlUtils.fixZone("Palermo");
 	
 	}
 }
