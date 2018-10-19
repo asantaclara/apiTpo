@@ -8,8 +8,6 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
-import backEnd.Client;
-import backEnd.Product;
 import backEnd.Zone;
 import exceptions.AccessException;
 import exceptions.ConnectionException;

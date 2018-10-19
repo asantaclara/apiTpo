@@ -1,8 +1,11 @@
 package backEnd;
 
+import dao.UserDAO;
 import dto.UserDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
+import exceptions.InvalidRoleException;
+import exceptions.InvalidUserException;
 
 public class User {
 
@@ -47,8 +50,8 @@ public class User {
 		activeUser = false;
 	}
 	
-	public void saveInDB() {
-		
+	public void saveInDB() throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException {
+		UserDAO.save(this);
 	}
 	
 	public void modifyInDB() {

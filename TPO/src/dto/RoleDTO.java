@@ -1,7 +1,5 @@
 package dto;
 
-import backEnd.Roles;
-
 public class RoleDTO {
 
 	private String role;

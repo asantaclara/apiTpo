@@ -13,7 +13,6 @@ public class BoardDTO {
 	public BoardDTO(int boardID, Role role) {
 		super();
 		this.boardID = boardID;
-		this.claims = claims;
 		this.role = role;
 	}
 	

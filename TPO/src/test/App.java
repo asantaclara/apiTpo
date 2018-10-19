@@ -7,21 +7,26 @@ import java.util.List;
 import backEnd.Client;
 import backEnd.Invoice;
 import backEnd.Product;
+import backEnd.Roles;
+import backEnd.User;
 import backEnd.Zone;
 import dao.ClientDAO;
 import dao.InvoiceDAO;
 import dao.ProductDAO;
+import dao.RoleDAO;
 import dao.SqlUtils;
 import dao.ZoneDAO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
+import exceptions.InvalidRoleException;
+import exceptions.InvalidUserException;
 import exceptions.InvalidZoneException;
 
 public class App {
 	
-	public static void main(String[] args) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidInvoiceException {
+	public static void main(String[] args) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidInvoiceException, InvalidRoleException, InvalidUserException {
 //		ClientDAO test = new ClientDAO();
 //		
 //		Client aux = test.getClient(1);
@@ -74,5 +79,10 @@ public class App {
 //		Invoice invoice = InvoiceDAO.getInvoice(6);
 //		System.out.println("Hola");
 		
+//		System.out.println(RoleDAO.idByRole(Roles.ADMINISTRATOR));
+//		System.out.println(Roles.ADMINISTRATOR.toString());
+		
+		User user = new User("Juan Perez", Roles.ADMINISTRATOR);
+		user.saveInDB();
 	}
 }
