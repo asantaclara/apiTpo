@@ -1,6 +1,9 @@
 package backEnd;
 
+import dao.ClientDAO;
 import dto.ClientDTO;
+import exceptions.AccessException;
+import exceptions.ConnectionException;
 import exceptions.InvalidClientException;
 
 public class Client {
@@ -85,8 +88,12 @@ public class Client {
 		return id;
 	}
 	
-	public void save() {
-		
+	public void save() throws ConnectionException, AccessException, InvalidClientException {
+		ClientDAO.saveNewClient(this);
+	}
+	
+	public void modify() throws ConnectionException, AccessException, InvalidClientException {
+		ClientDAO.modifyClient(this);
 	}
 	
 	private void parameterChecker(String cuit, String name, String address, String phoneNumber, String email, Zone zone) throws InvalidClientException {

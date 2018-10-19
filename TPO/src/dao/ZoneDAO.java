@@ -10,47 +10,44 @@ import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClientException;
 
-public class SqlUtils {
+public class ZoneDAO {
 
-	public static Connection getConnection() throws ConnectionException {
-		try {    
-			return ConnectionFactory.getInstance().getConection();
-		}
-		catch (ClassNotFoundException | SQLException e) {
-			System.out.println(e.getMessage());
-			throw new ConnectionException("Server not available");
-		}
-	}
-	
-	public static int lastId(String table, String column) throws InvalidClientException, ConnectionException, AccessException {
+	public static int fixZone(String zoneName) throws AccessException, ConnectionException, InvalidClientException {
 		Connection con = SqlUtils.getConnection();
 		Statement stmt = null;  
 		ResultSet rs = null;
+		PreparedStatement prepStm;
 		
 		try {
 			stmt = con.createStatement();
 		} catch (SQLException e1) {
 			throw new AccessException("Access error");
 		}
-		
-		String SQL = "SELECT MAX(" + column + ") AS LastId FROM " + table + ";";
+		String SQL = "SELECT * FROM Zones WHERE Name = '" + zoneName + "';";
 		try {
 			rs = stmt.executeQuery(SQL);
 		} catch (SQLException e1) {
 			throw new AccessException("Query error");
 		}
 		try {
-			if(rs.next()){
-				return rs.getInt(1);
+			int zoneId;
+			if(!rs.next()){
+				try {
+					zoneId = SqlUtils.lastId("Zones", "ZoneId")+1;
+					prepStm = con.prepareStatement("insert into Zones values(?,?)");
+					prepStm.setInt(1, zoneId);
+					prepStm.setString(2, zoneName);
+					prepStm.executeUpdate();
+				} catch (SQLException e) {
+					throw new AccessException("Save error");
+				}
+			}else {
+				zoneId = rs.getInt(1);
 			}
-			else{
-				return 0;
-			}
+			return zoneId;
 		} catch (SQLException e) {
 			throw new ConnectionException("Data not reachable");
 		}
-		
 	}
-
 	
 }

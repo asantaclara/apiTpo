@@ -98,6 +98,7 @@ public class ClientDAO {
 			else{
 				throw new InvalidClientException("Client not found");
 			}
+			
 		} catch (SQLException e) {
 			throw new ConnectionException("Data not reachable");
 		}
@@ -107,64 +108,68 @@ public class ClientDAO {
 	 * @param Client c
 	 * @throws ConnectException
 	 * @throws AccessException
+	 * @throws InvalidClientException 
 	 */
-	static public void saveClient(Client client) throws ConnectionException, AccessException{
+	static public void saveNewClient(Client client) throws ConnectionException, AccessException, InvalidClientException{
 		Connection con = SqlUtils.getConnection();
-		Statement stmt = null;  
-		ResultSet rs = null;
 		PreparedStatement prepStm;
 	
 		/*
 		 * Si el cliente no tiene el clientId cargado quiere decir que es un cliente nuevo por lo tanto busco el ultimo
 		 * clientId que hay en la base de datos, le sumo uno y se lo asigno a este cliente nuevo para despues guardarlo.
 		 */
-		if(client.getId() == 0) {			
-			client.setId(SqlUtils.lastId("Clients", "ClientId") + 1); 
+		if(client.getId() != 0) {
+			throw new InvalidClientException("Client already in data base");
 		}
-	
-		/*
-		 * Ahora tengo que fijarme si la zona con la que viene el cliente ya esta creada en la tabla de Zone
-		 */
+		
+		int zoneId = ZoneDAO.fixZone(client.getZone().getName()); //Si la zona que tiene el cliente ya esta cargada en la BD no pasa nada, sino la crea.
+		
+		client.setId(SqlUtils.lastId("Clients", "ClientId") + 1); 
+		try {
+			prepStm = con.prepareStatement("insert into Clients values(?,?,?,?,?,?,?,?)");
+			prepStm.setInt(1, client.getId());
+			prepStm.setString(2, client.getName());
+			prepStm.setString(3, client.getCuit());
+			prepStm.setString(4, client.getAddress());
+			prepStm.setString(5, client.getPhoneNumber());
+			prepStm.setString(6, client.getEmail());
+			prepStm.setInt(7, zoneId);
+			prepStm.setByte(8, (byte) ((client.isActive() == true) ? 1 : 0));
+			
+		} catch (SQLException e) {
+			throw new AccessException("Access error");
+		}		
 		
 		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
+			prepStm.execute();
+		} catch (SQLException e) {
+			throw new AccessException("Save error");
+		}
+	}
+	
+	static public void modifyClient(Client client) throws ConnectionException, AccessException, InvalidClientException {
+		Connection con = SqlUtils.getConnection();
+		PreparedStatement prepStm;
+		
+		if(client.getId() == 0) {
+			throw new InvalidClientException("Client not in data base");
+		}
+		
+		int zoneId = ZoneDAO.fixZone(client.getZone().getName()); //Si la zona que tiene el cliente ya esta cargada en la BD no pasa nada, sino la crea.
+		
+		try {
+			prepStm = con.prepareStatement("UPDATE Clients SET Name = ?, Cuit = ?, Address = ?, Phone = ?, Mail = ?, ZoneId = ?, Active = ? WHERE ClientId = " + client.getId());
+			prepStm.setString(1, client.getName());
+			prepStm.setString(2, client.getCuit());
+			prepStm.setString(3, client.getAddress());
+			prepStm.setString(4, client.getPhoneNumber());
+			prepStm.setString(5, client.getEmail());
+			prepStm.setInt(6, zoneId);
+			prepStm.setByte(7, (byte) ((client.isActive() == true) ? 1 : 0));
+			
+		} catch (SQLException e) {
 			throw new AccessException("Access error");
 		}
-		
-		String SQL = "SELECT * FROM Zones WHERE ZoneId = " + client.getZone().getName(); 
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			throw new AccessException("Query error");
-		}
-		try {
-			if(rs.next()){ //Si entro en este if, quiere decir que tengo la zona creada
-				try {
-					prepStm = con.prepareStatement("insert into clientes values(?,?,?,?,?)");
-					prepStm.setString(1, c.getName());
-					prepStm.setString(2, c.getAddress());
-					prepStm.setString(3, c.getPhoneNumber());
-					prepStm.setInt(4, c.getId());
-					prepStm.setString(5, c.getZone().getName());
-					prepStm.executeUpdate();
-					
-				} catch (SQLException e) {
-					throw new AccessException("Access error");
-				}
-			}
-			else{
-				//Si no se encuentra la zona la tengo que crear y guardarme el ZoneId para poder meterlo en el cliente.
-			}
-		} catch (SQLException e) {
-			throw new ConnectionException("Data not reachable");
-		}
-		
-		
-		
-		//-----------DE ACA PARA ABAJO ES LA PARTE DE INSERTAR EN LA TABLA---------------
-		
-		
 		try {
 			prepStm.execute();
 		} catch (SQLException e) {
