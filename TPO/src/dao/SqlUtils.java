@@ -71,7 +71,6 @@ public class SqlUtils {
 		}
 		try {
 			if(!rs.next()){
-				//xdfghjklkjhgfdsdfghjklkjhgfdsadfghjkljhgfdsdfghjkjhgfdsdfghjkljhgfds
 				try {
 					
 					prepStm = con.prepareStatement("insert into Zones values(?,?)");
@@ -80,14 +79,8 @@ public class SqlUtils {
 					prepStm.executeUpdate();
 					
 				} catch (SQLException e) {
-					throw new AccessException("Access error");
-				}
-				try {
-					prepStm.execute();
-				} catch (SQLException e) {
 					throw new AccessException("Save error");
 				}
-				//fdghjkljhgfdfghjkljhgfcfvghjkjhgffghjkjhgfxcvghjkjhgfdxcvghjkjhgfcvbnkjhg
 			}
 		} catch (SQLException e) {
 			throw new ConnectionException("Data not reachable");
