@@ -34,6 +34,7 @@ import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
 import exceptions.InvalidClientException;
+import exceptions.InvalidProductException;
 
 public class Controller {
 	
@@ -113,7 +114,7 @@ public class Controller {
 	//------------------------------------------------------------ END USER ------------------------------------------------------------
 	
 	//------------------------------------------------------------ START PRODUCT ------------------------------------------------------------
-	public int addProduct(ProductDTO dto) throws ConnectionException, AccessException, InvalidClientException {
+	public int addProduct(ProductDTO dto) throws ConnectionException, AccessException, InvalidProductException {
 		Product newProduct = new Product(dto.getTitle(), dto.getDescription(), dto.getPrice());
 		newProduct.saveInDB();
 		

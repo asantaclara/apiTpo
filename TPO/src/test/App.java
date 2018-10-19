@@ -41,10 +41,16 @@ public class App {
 //		test.modify("Coca", "Coca Light", 1.6f);
 //		test.modifyInDB();
 //		
-		Product product1 = ProductDAO.getProduct(1);
-		List<Product> listProducts = ProductDAO.getAllProducts();
+//		Product product1 = ProductDAO.getProduct(1);
+//		List<Product> listProducts = ProductDAO.getAllProducts();
+//		
+//		System.out.println("hola");
 		
-		System.out.println("hola");
+		List<Zone> zones = ZoneDAO.getAllZones();
+		
+		Zone zone = ZoneDAO.getZone(10);
+		System.out.println(zone.getName());
+		System.out.println(zone.getZoneId());
 		
 	}
 }

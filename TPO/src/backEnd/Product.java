@@ -5,6 +5,7 @@ import dto.ProductDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClientException;
+import exceptions.InvalidProductException;
 
 public class Product {
 	
@@ -42,11 +43,11 @@ public class Product {
 		return new ProductDTO(productId, title, description, price);
 	}
 	
-	public void saveInDB() throws ConnectionException, AccessException, InvalidClientException {
+	public void saveInDB() throws ConnectionException, AccessException, InvalidProductException {
 		ProductDAO.save(this);
 	}
 	
-	public void modifyInDB() throws ConnectionException, AccessException, InvalidClientException {
+	public void modifyInDB() throws ConnectionException, AccessException, InvalidProductException {
 		ProductDAO.modify(this);
 	}
 	

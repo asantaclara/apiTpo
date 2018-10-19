@@ -22,7 +22,7 @@ public class SqlUtils {
 		}
 	}
 	
-	public static int lastId(String table, String column) throws InvalidClientException, ConnectionException, AccessException {
+	public static int lastId(String table, String column) throws ConnectionException, AccessException {
 		Connection con = SqlUtils.getConnection();
 		Statement stmt = null;  
 		ResultSet rs = null;

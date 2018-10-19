@@ -11,11 +11,11 @@ import java.util.List;
 import backEnd.Product;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
-import exceptions.InvalidClientException;
+import exceptions.InvalidProductException;
 
 public class ProductDAO {
 
-	static public List<Product> getAllProducts() throws ConnectionException, AccessException, InvalidClientException{
+	static public List<Product> getAllProducts() throws ConnectionException, AccessException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -49,7 +49,7 @@ public class ProductDAO {
 		}
 	}
 	
-	static public Product getProduct(int productId) throws ConnectionException, AccessException, InvalidClientException {
+	static public Product getProduct(int productId) throws ConnectionException, AccessException, InvalidProductException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -74,11 +74,11 @@ public class ProductDAO {
 					newProduct.setProductId(rs.getInt(1));
 					return newProduct;
 				} else {
-					throw new InvalidClientException("The product is not active");
+					throw new InvalidProductException("The product is not active");
 				}
 			}
 			else{
-				throw new InvalidClientException("Product not found");
+				throw new InvalidProductException("Product not found");
 			}
 			
 		} catch (SQLException e) {
@@ -86,12 +86,12 @@ public class ProductDAO {
 		}
 	}
 
-	static public void save(Product product) throws ConnectionException, AccessException, InvalidClientException{
+	static public void save(Product product) throws ConnectionException, AccessException, InvalidProductException{
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm;
 	
 		if(product.getProductId() != 0) {
-			throw new InvalidClientException("Product already in data base");
+			throw new InvalidProductException("Product already in data base");
 		}
 		
 		product.setProductId(SqlUtils.lastId("Products", "ProductId") + 1); 
@@ -114,12 +114,12 @@ public class ProductDAO {
 		}
 	}
 
-	static public void modify(Product product) throws ConnectionException, AccessException, InvalidClientException {
+	static public void modify(Product product) throws ConnectionException, AccessException, InvalidProductException {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm;
 		
 		if(product.getProductId() == 0) {
-			throw new InvalidClientException("Product not in data base");
+			throw new InvalidProductException("Product not in data base");
 		}
 			
 		try {
