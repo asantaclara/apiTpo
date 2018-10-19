@@ -108,23 +108,85 @@ public class ClientDAO {
 	 * @throws ConnectException
 	 * @throws AccessException
 	 */
-	static public void saveClient(Client c) throws ConnectionException, AccessException{
+	static public void saveClient(Client client) throws ConnectionException, AccessException{
 		Connection con = SqlUtils.getConnection();
-		PreparedStatement prepStm;
+		Statement stmt = null;  
+		ResultSet rs = null;
 		
 		try {
-			
-			prepStm = con.prepareStatement("insert into clientes values(?,?,?,?,?)");
-			prepStm.setString(1, c.getName());
-			prepStm.setString(2, c.getAddress());
-			prepStm.setString(3, c.getPhoneNumber());
-			prepStm.setInt(4, c.getId());
-			prepStm.setString(5, c.getZone().getName());
-			prepStm.executeUpdate();
-			
-		} catch (SQLException e) {
+			stmt = con.createStatement();
+		} catch (SQLException e1) {
 			throw new AccessException("Access error");
 		}
+		
+		String SQL = "SELECT MAX(ClientId) AS LastId FROM Clients;"; 
+		try {
+			rs = stmt.executeQuery(SQL);
+		} catch (SQLException e1) {
+			throw new AccessException("Query error");
+		}
+		try {
+			if(rs.next()){
+				
+			}
+			else{
+				throw new InvalidClientException("Client not found");
+			}
+		} catch (SQLException e) {
+			throw new ConnectionException("Data not reachable");
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		PreparedStatement prepStm;
+		try {
+			stmt = con.createStatement();
+		} catch (SQLException e1) {
+			throw new AccessException("Access error");
+		}
+		
+		String SQL = "SELECT * FROM Zones WHERE ZoneId = " + client.getZone().getName(); 
+		try {
+			rs = stmt.executeQuery(SQL);
+		} catch (SQLException e1) {
+			throw new AccessException("Query error");
+		}
+		try {
+			if(rs.next()){ //Si entro en este if, quiere decir que tengo la zona creada
+				try {
+					prepStm = con.prepareStatement("insert into clientes values(?,?,?,?,?)");
+					prepStm.setString(1, c.getName());
+					prepStm.setString(2, c.getAddress());
+					prepStm.setString(3, c.getPhoneNumber());
+					prepStm.setInt(4, c.getId());
+					prepStm.setString(5, c.getZone().getName());
+					prepStm.executeUpdate();
+					
+				} catch (SQLException e) {
+					throw new AccessException("Access error");
+				}
+			}
+			else{
+				//Si no se encuentra la zona la tengo que crear y guardarme el ZoneId para poder meterlo en el cliente.
+			}
+		} catch (SQLException e) {
+			throw new ConnectionException("Data not reachable");
+		}
+		
+		
+		
+		//-----------DE ACA PARA ABAJO ES LA PARTE DE INSERTAR EN LA TABLA---------------
+		
 		
 		try {
 			prepStm.execute();
