@@ -4,9 +4,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import dao.InvoiceDAO;
 import dto.InvoiceDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
+import exceptions.InvalidInvoiceException;
 
 public class Invoice {
 	
@@ -16,9 +18,9 @@ public class Invoice {
 	private Date date;
 	private boolean activeInvoice;
 	
-	public Invoice(Client client) {
+	public Invoice(Client client, Date date) {
 		this.client = client;
-		this.date = Calendar.getInstance().getTime(); //Intento guardar la fecha actual en la variable date, tengo que ver para solo me aguerda ddmmyyyy
+		this.date = date;
 		activeInvoice = true;
 	}
 	
@@ -48,6 +50,10 @@ public class Invoice {
 
 	public int getId() {
 		return invoiceId;
+	}
+	
+	public void setId(int invoiceId) {
+		this.invoiceId = invoiceId;
 	}
 	
 	public boolean isActive() {
@@ -80,8 +86,13 @@ public class Invoice {
 		return aux;
 	}
 	
-	public void save() throws ConnectionException, AccessException {
-		// TODO Auto-generated method stub
+	public void save() throws ConnectionException, AccessException, InvalidInvoiceException {
+		InvoiceDAO.save(this);
 		
 	}
+
+	public void modify() throws ConnectionException, AccessException, InvalidInvoiceException {
+		InvoiceDAO.modify(this);
+	}
+	
 }

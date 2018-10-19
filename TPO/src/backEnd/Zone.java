@@ -1,7 +1,9 @@
 package backEnd;
 
+import dao.ZoneDAO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
+import exceptions.InvalidZoneException;
 
 public class Zone {
 	
@@ -24,8 +26,8 @@ public class Zone {
 		this.zoneId = zoneId;
 	}
 	
-	public void save() throws ConnectionException, AccessException {
-		// TODO Auto-generated method stub
+	public void save() throws ConnectionException, AccessException, InvalidZoneException {
+		ZoneDAO.save(this);
 		
 	}
 }

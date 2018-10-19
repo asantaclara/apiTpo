@@ -16,17 +16,7 @@ import exceptions.InvalidClientException;
 
 
 public class ClientDAO {
-	/**
-	 * Dado un id de cliente: busca en la BD, y en caso de encontrarlo devuelve el mismo
-	 * @param clientId
-	 * @return Client
-	 * @throws ConnectionException 
-	 * @throws ConnectException
-	 * @throws AccessException
-	 * @throws InvalidClientException 
-	 * @throws ClientNotFoundException 
-	 * @throws ClientException
-	 */
+
 	
 	static public List<Client> getAllClients() throws ConnectionException, AccessException, InvalidClientException{
 		Connection con = SqlUtils.getConnection();  
@@ -97,13 +87,7 @@ public class ClientDAO {
 			throw new ConnectionException("Data not reachable");
 		}
 	}
-	/**
-	 * Dado un cliente lo almacena en la BD
-	 * @param Client c
-	 * @throws ConnectException
-	 * @throws AccessException
-	 * @throws InvalidClientException 
-	 */
+
 	static public void save(Client client) throws ConnectionException, AccessException, InvalidClientException{
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm;
