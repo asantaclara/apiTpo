@@ -112,43 +112,20 @@ public class ClientDAO {
 		Connection con = SqlUtils.getConnection();
 		Statement stmt = null;  
 		ResultSet rs = null;
-		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
-			throw new AccessException("Access error");
-		}
-		
-		String SQL = "SELECT MAX(ClientId) AS LastId FROM Clients;"; 
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			throw new AccessException("Query error");
-		}
-		try {
-			if(rs.next()){
-				
-			}
-			else{
-				throw new InvalidClientException("Client not found");
-			}
-		} catch (SQLException e) {
-			throw new ConnectionException("Data not reachable");
-		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		PreparedStatement prepStm;
+	
+		/*
+		 * Si el cliente no tiene el clientId cargado quiere decir que es un cliente nuevo por lo tanto busco el ultimo
+		 * clientId que hay en la base de datos, le sumo uno y se lo asigno a este cliente nuevo para despues guardarlo.
+		 */
+		if(client.getId() == 0) {			
+			client.setId(SqlUtils.lastId("Clients", "ClientId") + 1); 
+		}
+	
+		/*
+		 * Ahora tengo que fijarme si la zona con la que viene el cliente ya esta creada en la tabla de Zone
+		 */
+		
 		try {
 			stmt = con.createStatement();
 		} catch (SQLException e1) {

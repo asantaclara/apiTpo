@@ -14,5 +14,7 @@ public class App {
 		Client aux = test.getClient(1);
 		
 		System.out.println(aux.getAddress());
+		
+	
 	}
 }
