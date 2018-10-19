@@ -51,10 +51,10 @@ public class Controller {
 		
 	}
 	//------------------------------------------------------------ START CLIENT ------------------------------------------------------------
-	public int addClient(ClientDTO dto) throws InvalidClientException{
+	public int addClient(ClientDTO dto) throws InvalidClientException, ConnectionException, AccessException{
 	
 		Client newClient = new Client(dto.getCuit(), dto.getName(), dto.getAddress(), dto.getPhoneNumber(), dto.getEmail(), new Zone(dto.getZone()));
-		newClient.save();
+		newClient.saveInDB();
 		
 		return newClient.getId();
 	}
@@ -68,7 +68,7 @@ public class Controller {
 		}
 		
 	}
-	public void removeClient(ClientDTO dto) throws InvalidClientException {
+	public void removeClient(ClientDTO dto) throws InvalidClientException, ConnectionException, AccessException {
 		
 		int clientId = dto.getId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
 		Client existingClient =  new Client("cuit", "name", "address", "phoneNumber", "email", new Zone("zone")); //Este seria el client que me trae la BD
@@ -82,7 +82,7 @@ public class Controller {
 	public int addUser(UserDTO dto) throws ConnectionException, AccessException {
 		
 		User newUser = new User(dto.getName(), Roles.valueOf(dto.getPrincipalRole()));
-		newUser.save();
+		newUser.saveInDB();
 		// Aca tengo que ver como chequear si no tengo otro usuario con los mismos datos
 		
 		return newUser.getUserId();
@@ -113,9 +113,9 @@ public class Controller {
 	//------------------------------------------------------------ END USER ------------------------------------------------------------
 	
 	//------------------------------------------------------------ START PRODUCT ------------------------------------------------------------
-	public int addProduct(ProductDTO dto) throws ConnectionException, AccessException {
+	public int addProduct(ProductDTO dto) throws ConnectionException, AccessException, InvalidClientException {
 		Product newProduct = new Product(dto.getTitle(), dto.getDescription(), dto.getPrice());
-		newProduct.save();
+		newProduct.saveInDB();
 		
 		return newProduct.getProductId();
 	}

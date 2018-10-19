@@ -29,30 +29,6 @@ public class Client {
 		activeClient = true;
 	}
 	
-	public String getCuit() {
-		return cuit;
-	}
-	
-	public String getName() {
-		return name;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public boolean isActiveClient() {
-		return activeClient;
-	}
-
 	public void modify(String cuit, String name, String address, String phoneNumber, String email, Zone zone) throws InvalidClientException {
 		
 		parameterChecker(cuit, name, address, phoneNumber, email, zone);
@@ -61,39 +37,27 @@ public class Client {
 		this.address = address;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
-		this.zone = zone;
+		this.zone = zone;	
 	}
 	
-	public boolean isActive() {
-		return activeClient;
-	}
-	
-	public void deactivateClient() {
-		activeClient = false;
-	}
-	
-	public Zone getZone() {
-		return zone;
-	}
-	
-	public ClientDTO toDTO(){
-		return new ClientDTO(id, cuit, name, address, phoneNumber, email, zone.getName());
+	public void deactivateClient() throws ConnectionException, AccessException, InvalidClientException {
+		activeClient = false;		
 	}
 	
 	public void setId(int id) {
 		this.id = id;
 	}
 	
-	public int getId() {
-		return id;
+	public void saveInDB() throws ConnectionException, AccessException, InvalidClientException {
+		ClientDAO.save(this);
 	}
 	
-	public void save() throws ConnectionException, AccessException, InvalidClientException {
-		ClientDAO.saveNewClient(this);
+	public void modifyInDB() throws ConnectionException, AccessException, InvalidClientException {
+		ClientDAO.modify(this);
 	}
 	
-	public void modify() throws ConnectionException, AccessException, InvalidClientException {
-		ClientDAO.modifyClient(this);
+	public ClientDTO toDTO(){
+		return new ClientDTO(id, cuit, name, address, phoneNumber, email, zone.getName());
 	}
 	
 	private void parameterChecker(String cuit, String name, String address, String phoneNumber, String email, Zone zone) throws InvalidClientException {
@@ -111,5 +75,40 @@ public class Client {
 			throw new InvalidClientException("Invalid cuit");
 		}
 	}
+
+	//--------------------------------------------------------------------GETERS START-------------------------------------------------------------------------------------	
+		public String getCuit() {
+			return cuit;
+		}
+		
+		public String getName() {
+			return name;
+		}
+
+		public String getAddress() {
+			return address;
+		}
+
+		public String getPhoneNumber() {
+			return phoneNumber;
+		}
+
+		public String getEmail() {
+			return email;
+		}
+
+		public boolean isActive() {
+			return activeClient;
+		}
+		
+		public Zone getZone() {
+			return zone;
+		}
+		
+		public int getId() {
+			return id;
+		}
+		
+	//--------------------------------------------------------------------GETERS END-------------------------------------------------------------------------------------
 
 }

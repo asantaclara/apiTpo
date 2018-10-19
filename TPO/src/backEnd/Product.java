@@ -1,8 +1,10 @@
 package backEnd;
 
+import dao.ProductDAO;
 import dto.ProductDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
+import exceptions.InvalidClientException;
 
 public class Product {
 	
@@ -40,10 +42,14 @@ public class Product {
 		return new ProductDTO(productId, title, description, price);
 	}
 	
-	public void save() throws ConnectionException, AccessException {
-		// TODO Auto-generated method stub
-		
+	public void saveInDB() throws ConnectionException, AccessException, InvalidClientException {
+		ProductDAO.save(this);
 	}
+	
+	public void modifyInDB() throws ConnectionException, AccessException, InvalidClientException {
+		ProductDAO.modify(this);
+	}
+	
 
 	public void deactivateProduct() {
 		activeProduct = false;
@@ -53,4 +59,26 @@ public class Product {
 	public boolean isActive() {
 		return activeProduct;
 	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public float getPrice() {
+		return price;
+	}
+
+	public boolean isActiveProduct() {
+		return activeProduct;
+	}
+
+	public void setProductId(int productId) {
+		this.productId = productId;
+	}
+	
+	
 }

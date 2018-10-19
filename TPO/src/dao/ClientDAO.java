@@ -39,7 +39,7 @@ public class ClientDAO {
 			throw new AccessException("Access error");
 		}
 		
-		String SQL = "SELECT * FROM Clients JOIN Zones ON Clients.ZoneId = Zones.ZoneId"; 
+		String SQL = "SELECT * FROM Clients JOIN Zones ON Clients.ZoneId = Zones.ZoneId WHERE Active = 1"; 
 		try {
 			rs = stmt.executeQuery(SQL);
 		} catch (SQLException e1) {
@@ -50,22 +50,16 @@ public class ClientDAO {
 			List<Client> returnList = new LinkedList<>();
 			Client newClient = null;
 			
-			while(rs.next()){
-				if(rs.getByte(8) == 1) {					
+			while(rs.next()){				
 					newClient = new Client(rs.getString(3), rs.getString(2), rs.getString(4), rs.getString(5), rs.getString(6), new Zone(rs.getString(10)));
 					newClient.setId(rs.getInt(1));
 					returnList.add(newClient);
-				} else {
-					throw new InvalidClientException("The client is not active");
-				}
 			}
 			return returnList;
 			
 		} catch (SQLException e) {
 			throw new ConnectionException("Data not reachable");
 		}
-		
-		
 	}
 	
 	static public Client getClient(int clientId) throws ConnectionException, AccessException, InvalidClientException {
@@ -110,7 +104,7 @@ public class ClientDAO {
 	 * @throws AccessException
 	 * @throws InvalidClientException 
 	 */
-	static public void saveNewClient(Client client) throws ConnectionException, AccessException, InvalidClientException{
+	static public void save(Client client) throws ConnectionException, AccessException, InvalidClientException{
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm;
 	
@@ -147,7 +141,7 @@ public class ClientDAO {
 		}
 	}
 	
-	static public void modifyClient(Client client) throws ConnectionException, AccessException, InvalidClientException {
+	static public void modify(Client client) throws ConnectionException, AccessException, InvalidClientException {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm;
 		

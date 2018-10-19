@@ -5,77 +5,137 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
+import java.util.List;
 
-import Exceptions.AccessException;
-import Exceptions.ConnectException;
-import Exceptions.ProductException;
-import Models.Product;
+import backEnd.Product;
+import exceptions.AccessException;
+import exceptions.ConnectionException;
+import exceptions.InvalidClientException;
 
 public class ProductDAO {
-	/**
-	 * 
-	 * @param productId
-	 * @return
-	 * @throws ConnectException
-	 * @throws AccessException
-	 * @throws ProductException
-	 */
-	static public Product getProductThroughId(int productId) throws ConnectException, AccessException, ProductException{
+
+	static public List<Product> getAllProducts() throws ConnectionException, AccessException, InvalidClientException{
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
-		ResultSet rs = null; 
-
+		ResultSet rs = null;
+		
 		try {
 			stmt = con.createStatement();
 		} catch (SQLException e1) {
-			throw new AccessException("Error de acceso");
+			throw new AccessException("Access error");
 		}
 		
-		String SQL = "SELECT  * FROM products where productId = " + productId;
+		String SQL = "SELECT * FROM Products WHERE Active = 1"; 
 		try {
 			rs = stmt.executeQuery(SQL);
 		} catch (SQLException e1) {
-			throw new AccessException("Error de consulta");
-		}
-		try {
-			
-			if(rs.next()){
-				Product product = new Product(rs.getString(1), rs.getString(2), rs.getFloat(3));
-				return product;
-			}
-			else{
-				throw new ProductException("El cliente con id: " + productId + " no existe");
-			}
-		} catch (SQLException e) {
-			throw new ConnectException("No es posible acceder a los datos");
-		}
-	}
-	/**
-	 * Dado un producto lo almacena en la BD
-	 * @param Product p
-	 * @throws ConnectException
-	 * @throws AccessException
-	 */
-	static public void saveProduct(Product p) throws ConnectException, AccessException{
-		Connection con = SqlUtils.getConnection();
-
-		PreparedStatement stm;
-		try {
-			stm = con.prepareStatement("insert into products values(?,?,?,?)");
-			stm.setInt(1, p.getProductId());
-			stm.setString(2, p.getTitle());
-			stm.setString(3, p.getDescription());
-			stm.setFloat(4, p.getPrice());
-			stm.executeUpdate();
-			
-		} catch (SQLException e) {
-			throw new AccessException("Error de acceso");
+			throw new AccessException("Query error");
 		}
 		
 		try {
-			stm.execute();
+			List<Product> returnList = new LinkedList<>();
+			Product newProduct = null;
+			
+			while(rs.next()){					
+					newProduct = new Product(rs.getString(2), rs.getString(3), rs.getFloat(4));
+					newProduct.setProductId(rs.getInt(1));
+					returnList.add(newProduct);
+			}
+			return returnList;
+			
 		} catch (SQLException e) {
-			throw new AccessException("No se pudo guardar");
+			throw new ConnectionException("Data not reachable");
+		}
+	}
+	
+	static public Product getProduct(int productId) throws ConnectionException, AccessException, InvalidClientException {
+		Connection con = SqlUtils.getConnection();  
+		Statement stmt = null;  
+		ResultSet rs = null;
+		
+		try {
+			stmt = con.createStatement();
+		} catch (SQLException e1) {
+			throw new AccessException("Access error");
+		}
+		
+		String SQL = "SELECT * FROM Products WHERE ProductId = " + productId;
+		try {
+			rs = stmt.executeQuery(SQL);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			throw new AccessException("Query error");
+		}
+		try {
+			if(rs.next()){
+				if(rs.getByte(5) == 1) {					
+					Product newProduct = new Product(rs.getString(2), rs.getString(3), rs.getFloat(4));
+					newProduct.setProductId(rs.getInt(1));
+					return newProduct;
+				} else {
+					throw new InvalidClientException("The product is not active");
+				}
+			}
+			else{
+				throw new InvalidClientException("Product not found");
+			}
+			
+		} catch (SQLException e) {
+			throw new ConnectionException("Data not reachable");
+		}
+	}
+
+	static public void save(Product product) throws ConnectionException, AccessException, InvalidClientException{
+		Connection con = SqlUtils.getConnection();
+		PreparedStatement prepStm;
+	
+		if(product.getProductId() != 0) {
+			throw new InvalidClientException("Product already in data base");
+		}
+		
+		product.setProductId(SqlUtils.lastId("Products", "ProductId") + 1); 
+		try {
+			prepStm = con.prepareStatement("insert into Products values(?,?,?,?,?)");
+			prepStm.setInt(1, product.getProductId());
+			prepStm.setString(2, product.getTitle());
+			prepStm.setString(3, product.getDescription());
+			prepStm.setFloat(4, product.getPrice());
+			prepStm.setByte(5, (byte) ((product.isActive() == true) ? 1 : 0));
+			
+		} catch (SQLException e) {
+			throw new AccessException("Access error");
+		}		
+		
+		try {
+			prepStm.execute();
+		} catch (SQLException e) {
+			throw new AccessException("Save error");
+		}
+	}
+
+	static public void modify(Product product) throws ConnectionException, AccessException, InvalidClientException {
+		Connection con = SqlUtils.getConnection();
+		PreparedStatement prepStm;
+		
+		if(product.getProductId() == 0) {
+			throw new InvalidClientException("Product not in data base");
+		}
+			
+		try {
+			prepStm = con.prepareStatement("UPDATE Products SET Title = ?, Description = ?, Price = ?, Active = ? WHERE ProductId = " + product.getProductId());
+			prepStm.setString(1, product.getTitle());
+			prepStm.setString(2, product.getDescription());
+			prepStm.setFloat(3, product.getPrice());
+			prepStm.setByte(4, (byte) ((product.isActive() == true) ? 1 : 0));
+			
+		} catch (SQLException e) {
+			throw new AccessException("Access error");
+		}
+		try {
+			prepStm.execute();
+		} catch (SQLException e) {
+			throw new AccessException("Save error");
 		}
 	}
 }

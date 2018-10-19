@@ -31,8 +31,8 @@ public class User {
 		}
 	}
 	
-	public int getUserId() {
-		return userId;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 	
 	public void addRole(Roles role) {
@@ -43,24 +43,53 @@ public class User {
 		secondaryRole = principalRole;
 	}
 	
-	public Roles actualRole() {
-		return secondaryRole;
+	public void deactivateUser() {
+		activeUser = false;
+	}
+	
+	public void saveInDB() {
+		
+	}
+	
+	public void modifyInDB() {
+		
 	}
 	
 	public UserDTO toDTO() {
 		return new UserDTO(userId, name, principalRole.name(), secondaryRole.name());
 	}
 	
+	//--------------------------------------------------------------------GETERS START-------------------------------------------------------------------------------------	
+	
+	public int getUserId() {
+		return userId;
+	}
+	
+	public Roles actualRole() {
+		return secondaryRole;
+	}
+	
 	public boolean isActive() {
 		return activeUser;
 	}
-	
-	public void deactivateUser() {
-		activeUser = false;
+
+	public String getName() {
+		return name;
+	}
+
+	public Roles getPrincipalRole() {
+		return principalRole;
+	}
+
+	public Roles getSecondaryRole() {
+		return secondaryRole;
+	}
+
+	public boolean isActiveUser() {
+		return activeUser;
 	}
 	
-	public void save() throws ConnectionException, AccessException {
-		// TODO Auto-generated method stub
-		
-	}
+	
+	
+//--------------------------------------------------------------------GETERS END-------------------------------------------------------------------------------------
 }
