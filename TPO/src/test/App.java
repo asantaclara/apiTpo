@@ -90,12 +90,16 @@ public class App {
 //		User user = UserDAO.getUser(1);
 //		System.out.println(user.getName());
 		
-//		for (User u : UserDAO.getAllUsers()) {
+//		for (User u : UserDAO.getAllUserByRole(Roles.DISTRIBUTION_RESPONSABLE)) {
 //			System.out.println(u.getName());
 //		}
 		
-		User user = new User("Pepe", Roles.INVOICING_RESPONSABLE);
-		user.deactivateUser();
-		user.modifyInDB();
+//		User user = new User("Pepe", Roles.INVOICING_RESPONSABLE);
+//		user.deactivateUser();
+//		user.modifyInDB();
+		
+		User user1 = new User("Pedro", Roles.ADMINISTRATOR);
+		User user2 = new User("Pedro", Roles.ADMINISTRATOR);
+		System.out.println(user1.equals(user2));
 	}
 }

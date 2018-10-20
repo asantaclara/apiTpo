@@ -12,11 +12,9 @@ public class Role {
 	private int roleId = 0;
 	private Roles description;
 	private List<User> users;
-	private boolean activeRole;
 	
 	public Role(Roles description) {
 		this.description = description;
-		activeRole = true;
 		users = new LinkedList<>();
 	}
 	
@@ -31,14 +29,6 @@ public class Role {
 	public RoleDTO toDTO() {
 		return new RoleDTO(description.name(), -1);
 		//Chequear que onda con este constructor
-	}
-	
-	public boolean isActive() {
-		return activeRole;
-	}
-	
-	public void deactivate() {
-		activeRole = false;
 	}
 	
 	public void save() throws ConnectionException, AccessException {

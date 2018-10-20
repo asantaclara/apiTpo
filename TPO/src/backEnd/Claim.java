@@ -45,6 +45,5 @@ public abstract class Claim {
 	
 	public void setClaimId(int claimId) {
 		this.claimId = claimId;
-	}
-	
+	}	
 }

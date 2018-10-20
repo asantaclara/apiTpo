@@ -4,8 +4,12 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
+import java.util.List;
 
+import backEnd.Role;
 import backEnd.Roles;
+import backEnd.User;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidRoleException;
@@ -48,4 +52,22 @@ public class RoleDAO {
 		}
 		
 	}
+
+	public static Role getRole(Roles role) throws AccessException, ConnectionException, InvalidRoleException {		
+		Role returnRole = new Role(role);
+		returnRole.setRoleId(idByRole(role));
+		for (User user : UserDAO.getAllUserByRole(role)) {
+			returnRole.addUser(user);
+		}
+		return returnRole;
+	}
+
+	public static List<Role> getAllRoles() throws AccessException, ConnectionException, InvalidRoleException{
+		List<Role> returnRoles = new LinkedList<>();
+		for (Roles roles : Roles.values()) {
+			returnRoles.add(getRole(roles));
+		}
+		return returnRoles;
+	}
+
 }
