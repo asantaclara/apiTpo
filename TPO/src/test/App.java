@@ -15,6 +15,7 @@ import dao.InvoiceDAO;
 import dao.ProductDAO;
 import dao.RoleDAO;
 import dao.SqlUtils;
+import dao.UserDAO;
 import dao.ZoneDAO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
@@ -82,7 +83,11 @@ public class App {
 //		System.out.println(RoleDAO.idByRole(Roles.ADMINISTRATOR));
 //		System.out.println(Roles.ADMINISTRATOR.toString());
 		
-		User user = new User("Juan Perez", Roles.ADMINISTRATOR);
-		user.saveInDB();
+//		User user = new User("Jimena", Roles.DISTRIBUTION_RESPONSABLE);
+//		user.addRole(Roles.ADMINISTRATOR);
+//		user.saveInDB();
+		
+		User user = UserDAO.getUser(1);
+		System.out.println(user.getName());
 	}
 }

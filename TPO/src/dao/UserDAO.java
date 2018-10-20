@@ -2,9 +2,16 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.LinkedList;
+import java.util.List;
 
+import backEnd.Client;
+import backEnd.Roles;
 import backEnd.User;
+import backEnd.Zone;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidRoleException;
@@ -39,6 +46,82 @@ public class UserDAO {
 			prepStm.execute();
 		} catch (SQLException e) {
 			throw new AccessException("Save error");
+		}
+	}
+	
+	public static User getUser(int userId) throws InvalidUserException, ConnectionException, AccessException {
+		Connection con = SqlUtils.getConnection();  
+		Statement stmt = null;  
+		ResultSet rs = null;
+		
+		try {
+			stmt = con.createStatement();
+		} catch (SQLException e1) {
+			throw new AccessException("Access error");
+		}
+
+		String SQL = "SELECT Users.UserId, Users.Name, Users.Active as UserActive, Role1.Role as Role1, Role2.Role as Role2 "
+				+ "FROM Users JOIN Roles AS Role1 ON Users.RolId1 = Role1.RoleId JOIN Roles AS Role2 ON Users.RolId2 = Role2.RoleId WHERE Users.UserId = " + userId; 
+		try {
+			rs = stmt.executeQuery(SQL);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			throw new AccessException("Query error");
+		}
+		try {
+			if(rs.next()){
+				if(rs.getByte(3) == 1) { 
+					User newUser = new User(rs.getString(2), Roles.valueOf(rs.getString(4)));
+					newUser.addRole(Roles.valueOf(rs.getString(5)));
+					newUser.setUserId(rs.getInt(1));
+					return newUser;
+				} else {
+					throw new InvalidUserException("The user is not active");
+				}
+			}
+			else{
+				throw new InvalidUserException("User not found");
+			}
+			
+		} catch (SQLException e) {
+			throw new ConnectionException("Data not reachable");
+		}
+	}
+
+	public static List<User> getAllUsers() throws ConnectionException, AccessException{
+		Connection con = SqlUtils.getConnection();  
+		Statement stmt = null;  
+		ResultSet rs = null;
+		
+		try {
+			stmt = con.createStatement();
+		} catch (SQLException e1) {
+			throw new AccessException("Access error");
+		}
+		
+		String SQL = "SELECT Users.UserId, Users.Name, Users.Active, Role1.Role as Role1, Role2.Role as Role2 FROM "
+				+ "Users JOIN Roles AS Role1 ON Users.RolId1 = Role1.RoleId JOIN Roles AS Role2 ON Users.RolId2 = Role2.RoleId WHERE Users.Active = 1";
+
+		try {
+			rs = stmt.executeQuery(SQL);
+		} catch (SQLException e1) {
+			throw new AccessException("Query error");
+		}
+		
+		try {
+			List<User> returnList = new LinkedList<>();
+			User newUser = null;
+			
+			while(rs.next()){				
+				newUser = new User(rs.getString(2), Roles.valueOf(rs.getString(4)));
+				newUser.addRole(Roles.valueOf(rs.getString(5)));
+				newUser.setUserId(rs.getInt(1));				
+				returnList.add(newUser);
+			}
+			return returnList;
+			
+		} catch (SQLException e) {
+			throw new ConnectionException("Data not reachable");
 		}
 	}
 }
