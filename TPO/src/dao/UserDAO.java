@@ -8,10 +8,8 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
-import backEnd.Client;
 import backEnd.Roles;
 import backEnd.User;
-import backEnd.Zone;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidRoleException;
@@ -122,6 +120,32 @@ public class UserDAO {
 			
 		} catch (SQLException e) {
 			throw new ConnectionException("Data not reachable");
+		}
+	}
+
+	public static void modify(User user) throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException {
+		Connection con = SqlUtils.getConnection();
+		PreparedStatement prepStm;
+		
+		if(user.getUserId() == 0) {
+			throw new InvalidUserException("User not in data base");
+		}
+	
+		try {
+			prepStm = con.prepareStatement("UPDATE Users SET Name = ?, RolId1 = ?, RolId2 = ?, Active = ? WHERE UserId = " + user.getUserId());
+			prepStm.setString(1, user.getName());
+			prepStm.setInt(2, RoleDAO.idByRole(user.getPrincipalRole()));
+			prepStm.setInt(3, RoleDAO.idByRole(user.getSecondaryRole()));
+			prepStm.setByte(4, (byte) ((user.isActive() == true) ? 1 : 0));
+			
+		} catch (SQLException e) {
+			throw new AccessException("Access error");
+		}
+		try {
+			prepStm.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new AccessException("Save error");
 		}
 	}
 }

@@ -36,6 +36,8 @@ import exceptions.InvalidClaimException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidProductException;
+import exceptions.InvalidRoleException;
+import exceptions.InvalidUserException;
 
 public class Controller {
 	
@@ -81,7 +83,7 @@ public class Controller {
 	//------------------------------------------------------------ END CLIENT ------------------------------------------------------------
 	
 	//------------------------------------------------------------ START USER ------------------------------------------------------------
-	public int addUser(UserDTO dto) throws ConnectionException, AccessException {
+	public int addUser(UserDTO dto) throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException {
 		
 		User newUser = new User(dto.getName(), Roles.valueOf(dto.getPrincipalRole()));
 		newUser.saveInDB();

@@ -86,8 +86,16 @@ public class App {
 //		User user = new User("Jimena", Roles.DISTRIBUTION_RESPONSABLE);
 //		user.addRole(Roles.ADMINISTRATOR);
 //		user.saveInDB();
+//		
+//		User user = UserDAO.getUser(1);
+//		System.out.println(user.getName());
 		
-		User user = UserDAO.getUser(1);
-		System.out.println(user.getName());
+//		for (User u : UserDAO.getAllUsers()) {
+//			System.out.println(u.getName());
+//		}
+		
+		User user = new User("Pepe", Roles.INVOICING_RESPONSABLE);
+		user.deactivateUser();
+		user.modifyInDB();
 	}
 }

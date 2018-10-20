@@ -54,8 +54,8 @@ public class User {
 		UserDAO.save(this);
 	}
 	
-	public void modifyInDB() {
-		
+	public void modifyInDB() throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException {
+		UserDAO.modify(this);
 	}
 	
 	public UserDTO toDTO() {
