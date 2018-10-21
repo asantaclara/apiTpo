@@ -9,7 +9,7 @@ import exceptions.ConnectionException;
 
 public class UserBoard {
 
-	private int boardId=0;
+	private int id=0;
 	private List<Claim> claims;
 	private Role role;
 	private List<String> boardToShow;
@@ -42,7 +42,7 @@ public class UserBoard {
 	}
 	
 	public BoardDTO toDTO() {
-		BoardDTO aux = new BoardDTO(boardId, role);
+		BoardDTO aux = new BoardDTO(id, role);
 		
 		for (Claim c : claims) {
 			aux.addClaimDTO(c.toDTO());

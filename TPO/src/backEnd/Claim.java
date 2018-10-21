@@ -6,10 +6,11 @@ import dto.ClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
+import exceptions.InvalidProductException;
 
 public abstract class Claim {
 	
-	protected int claimId=0;
+	protected int claimId = 0;
 	protected Client client;
 	protected Date date;
 	protected String description;
@@ -33,7 +34,7 @@ public abstract class Claim {
 	public abstract State getActualState();
 	public abstract void treatClaim(User responsable, State newState, String description);
 	public abstract ClaimDTO toDTO();
-	public abstract void save() throws ConnectionException, AccessException;
+	public abstract void save() throws ConnectionException, AccessException, InvalidClaimException, InvalidProductException;
 	
 	public boolean validateClient(Client client) {
 		return (client.equals(this.client));
@@ -41,6 +42,18 @@ public abstract class Claim {
 	
 	public int getClaimId() {
 		return claimId;
+	}
+	
+	public Client getClient() {
+		return client;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+	
+	public Date getDate() {
+		return date;
 	}
 	
 	public void setClaimId(int claimId) {

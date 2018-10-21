@@ -10,7 +10,7 @@ import exceptions.InvalidUserException;
 public class User {
 
 	
-	private int userId=0;
+	private int id=0;
 	private String name;
 	private Roles principalRole;
 	private Roles secondaryRole;
@@ -23,7 +23,7 @@ public class User {
 		this.activeUser = true;
 	}
 	
-	public void modifyUser(String name, Roles principalRole) {
+	public void modify(String name, Roles principalRole) {
 		
 		if (name != null) {			
 			this.name = name;
@@ -34,8 +34,8 @@ public class User {
 		}
 	}
 	
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setId(int userId) {
+		this.id = userId;
 	}
 	
 	public void addRole(Roles role) {
@@ -59,13 +59,13 @@ public class User {
 	}
 	
 	public UserDTO toDTO() {
-		return new UserDTO(userId, name, principalRole.name(), secondaryRole.name());
+		return new UserDTO(id, name, principalRole.name(), secondaryRole.name());
 	}
 	
 	//--------------------------------------------------------------------GETERS START-------------------------------------------------------------------------------------	
 	
-	public int getUserId() {
-		return userId;
+	public int getId() {
+		return id;
 	}
 	
 	public Roles actualRole() {

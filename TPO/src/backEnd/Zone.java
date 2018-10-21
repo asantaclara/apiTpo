@@ -8,7 +8,7 @@ import exceptions.InvalidZoneException;
 public class Zone {
 	
 	private String name;
-	private int zoneId=0;
+	private int id = 0;
 	
 	public Zone(String name) {
 		this.name = name;
@@ -18,12 +18,12 @@ public class Zone {
 		return name;
 	}
 	
-	public int getZoneId() {
-		return zoneId;
+	public int getId() {
+		return id;
 	}
 	
-	public void setZoneId(int zoneId) {
-		this.zoneId = zoneId;
+	public void setId(int zoneId) {
+		this.id = zoneId;
 	}
 	
 	public void save() throws ConnectionException, AccessException, InvalidZoneException {

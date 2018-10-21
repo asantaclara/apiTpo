@@ -21,15 +21,15 @@ public class UserDAO {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm;
 	
-		if(user.getUserId() != 0) {
+		if(user.getId() != 0) {
 			throw new InvalidUserException("User already in data base");
 		}
 		
-		user.setUserId((SqlUtils.lastId("Users", "UserId") + 1)); 
+		user.setId((SqlUtils.lastId("Users", "UserId") + 1)); 
 		
 		try {
 			prepStm = con.prepareStatement("insert into Users values(?,?,?,?,?)");
-			prepStm.setInt(1, user.getUserId());
+			prepStm.setInt(1, user.getId());
 			prepStm.setString(2, user.getName());
 			prepStm.setInt(3, RoleDAO.idByRole(user.getPrincipalRole()));
 			prepStm.setInt(4, RoleDAO.idByRole(user.getSecondaryRole()));
@@ -71,7 +71,7 @@ public class UserDAO {
 				if(rs.getByte(3) == 1) { 
 					User newUser = new User(rs.getString(2), Roles.valueOf(rs.getString(4)));
 					newUser.addRole(Roles.valueOf(rs.getString(5)));
-					newUser.setUserId(rs.getInt(1));
+					newUser.setId(rs.getInt(1));
 					return newUser;
 				} else {
 					throw new InvalidUserException("The user is not active");
@@ -127,7 +127,7 @@ public class UserDAO {
 			while(rs.next()){				
 				newUser = new User(rs.getString(2), Roles.valueOf(rs.getString(4)));
 				newUser.addRole(Roles.valueOf(rs.getString(5)));
-				newUser.setUserId(rs.getInt(1));				
+				newUser.setId(rs.getInt(1));				
 				returnList.add(newUser);
 			}
 			return returnList;
@@ -141,12 +141,12 @@ public class UserDAO {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm;
 		
-		if(user.getUserId() == 0) {
+		if(user.getId() == 0) {
 			throw new InvalidUserException("User not in data base");
 		}
 	
 		try {
-			prepStm = con.prepareStatement("UPDATE Users SET Name = ?, RolId1 = ?, RolId2 = ?, Active = ? WHERE UserId = " + user.getUserId());
+			prepStm = con.prepareStatement("UPDATE Users SET Name = ?, RolId1 = ?, RolId2 = ?, Active = ? WHERE UserId = " + user.getId());
 			prepStm.setString(1, user.getName());
 			prepStm.setInt(2, RoleDAO.idByRole(user.getPrincipalRole()));
 			prepStm.setInt(3, RoleDAO.idByRole(user.getSecondaryRole()));

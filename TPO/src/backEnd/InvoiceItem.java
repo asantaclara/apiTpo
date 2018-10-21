@@ -8,6 +8,7 @@ public class InvoiceItem {
 
 	private Invoice invoice;
 	private String inconsistency;
+	private int id = 0;
 	
 	public InvoiceItem(Invoice invoice, String inconsistency) {
 		this.inconsistency = inconsistency;
@@ -16,6 +17,14 @@ public class InvoiceItem {
 	
 	public Invoice getInvoice() {
 		return invoice;
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	public String getInconsistency() {

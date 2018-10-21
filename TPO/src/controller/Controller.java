@@ -89,7 +89,7 @@ public class Controller {
 		newUser.saveInDB();
 		// Aca tengo que ver como chequear si no tengo otro usuario con los mismos datos
 		
-		return newUser.getUserId();
+		return newUser.getId();
 	}
 	public void modifyUser(UserDTO dto) {
 		
@@ -97,7 +97,7 @@ public class Controller {
 		User existingUser =  new User("Test", Roles.ADMINISTRATOR);
 		
 		if (existingUser != null) {
-			existingUser.modifyUser(dto.getName(), Roles.valueOf(dto.getPrincipalRole()));
+			existingUser.modify(dto.getName(), Roles.valueOf(dto.getPrincipalRole()));
 		}
 		
 	}
@@ -173,7 +173,7 @@ public class Controller {
 	//------------------------------------------------------------ END ROLE ------------------------------------------------------------
 	
 	//------------------------------------------------------------ START INVOICE ------------------------------------------------------------
-	public int addInvoice(InvoiceDTO dto) throws InvalidClientException, ConnectionException, AccessException, InvalidInvoiceException {
+	public int addInvoice(InvoiceDTO dto) throws InvalidClientException, ConnectionException, AccessException, InvalidInvoiceException, InvalidProductException {
 		List<ProductItemDTO> itemsDTO = dto.getProductItems(); //Esta lista de ProductItemDTO la tengo para despues traerme los product de la BD.
 		int clientId = dto.getClientId(); //Este es el id que uso para traerme al cliente de la BD.
 		Client existingClient =  new Client("cuit", "name", "address", "phoneNumber", "email", new Zone("zone")); //Este seria el client que me trae la BD

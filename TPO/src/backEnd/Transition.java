@@ -27,7 +27,7 @@ public class Transition {
 	}
 	
 	public TransitionDTO toDTO() {
-		return new TransitionDTO(claimId, date, responsable.getUserId(), previousState.name(), newState.name(), description);
+		return new TransitionDTO(claimId, date, responsable.getId(), previousState.name(), newState.name(), description);
 	}
 	
 	public void save() throws ConnectionException, AccessException {

@@ -2,6 +2,7 @@ package backEnd;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import dao.InvoiceDAO;
@@ -9,11 +10,12 @@ import dto.InvoiceDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidInvoiceException;
+import exceptions.InvalidProductException;
 
 public class Invoice {
 	
 	private int invoiceId=0;
-	private List<ProductItem> items;
+	private List<ProductItem> items = new LinkedList<>();
 	private Client client;
 	private Date date;
 	private boolean activeInvoice;
@@ -86,7 +88,7 @@ public class Invoice {
 		return aux;
 	}
 	
-	public void save() throws ConnectionException, AccessException, InvalidInvoiceException {
+	public void save() throws ConnectionException, AccessException, InvalidInvoiceException, InvalidProductException {
 		InvoiceDAO.save(this);
 		
 	}

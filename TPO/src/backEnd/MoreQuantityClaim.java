@@ -4,10 +4,12 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import dao.MoreQuantityClaimDAO;
 import dto.MoreQuantityClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
+import exceptions.InvalidProductException;
 
 public class MoreQuantityClaim extends IndividualClaim {
 
@@ -43,10 +45,21 @@ public class MoreQuantityClaim extends IndividualClaim {
 		return aux;
 	}
 
+	public ClaimType getClaimType() {
+		return claimType;
+	}
+	
+	public List<ProductItem> getProducts() {
+		return products;
+	}
+
+	public Invoice getInvoice() {
+		return invoice;
+	}
+	
 	@Override
-	public void save() throws ConnectionException, AccessException {
-		// TODO Auto-generated method stub
-		
+	public void save() throws ConnectionException, AccessException, InvalidClaimException, InvalidProductException {
+		MoreQuantityClaimDAO.save(this);
 	}
 
 }

@@ -10,48 +10,26 @@ import java.util.LinkedList;
 import java.util.List;
 
 import backEnd.Invoice;
+import backEnd.ProductItem;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
+import exceptions.InvalidProductException;
 
 public class InvoiceDAO {
 
-	public static List<Invoice> getAllInvoices() throws ConnectionException, AccessException, InvalidClientException {
-		Connection con = SqlUtils.getConnection();  
-		Statement stmt = null;  
-		ResultSet rs = null;
-		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
-			throw new AccessException("Access error");
-		}
-		
+	public static List<Invoice> getAllInvoices() throws ConnectionException, AccessException, InvalidClientException, InvalidProductException{
 		String SQL = "SELECT * FROM Invoices WHERE Active = 1"; 
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			throw new AccessException("Query error");
-		}
-		
-		try {
-			List<Invoice> returnList = new LinkedList<>();
-			Invoice newInvoice = null;
-			
-			while(rs.next()){				
-				newInvoice = new Invoice(ClientDAO.getClient(rs.getInt(2)),new Date(rs.getDate(3).getTime())); //Con esto paso de sql a utils
-				newInvoice.setId(rs.getInt(1));
-				returnList.add(newInvoice);
-			}
-			return returnList;
-			
-		} catch (SQLException e) {
-			throw new ConnectionException("Data not reachable");
-		}
+		return getAllInvoicesPrivate(SQL);
 	}
-
-	public static List<Invoice> getAllInvoicesFromClient(int clientId) throws InvalidInvoiceException, ConnectionException, AccessException, InvalidClientException{
+	
+	public static List<Invoice> getAllInvoicesFromClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException{
+		String SQL = "SELECT * FROM Invoices WHERE clientId = " + clientId + " AND Active = 1" ; 
+		return getAllInvoicesPrivate(SQL);
+	}
+	
+	private static List<Invoice> getAllInvoicesPrivate(String SQL) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -62,12 +40,12 @@ public class InvoiceDAO {
 			throw new AccessException("Access error");
 		}
 		
-		String SQL = "SELECT * FROM Invoices WHERE clientId = " + clientId + " AND Active = 1" ; 
 		try {
 			rs = stmt.executeQuery(SQL);
 		} catch (SQLException e1) {
 			throw new AccessException("Query error");
 		}
+		
 		try {
 			List<Invoice> returnList = new LinkedList<>();
 			Invoice newInvoice = null;
@@ -75,13 +53,11 @@ public class InvoiceDAO {
 			while(rs.next()){				
 				newInvoice = new Invoice(ClientDAO.getClient(rs.getInt(2)),new Date(rs.getDate(3).getTime())); //Con esto paso de sql a utils
 				newInvoice.setId(rs.getInt(1));
+				for (ProductItem pi : ProductItemDAO.getProductItemsOfInvoice(newInvoice)) {
+					newInvoice.addProductItem(pi.getProduct(), pi.getQuantity());
+				}
 				returnList.add(newInvoice);
 			}
-			
-			if(returnList.size() == 0){
-				throw new InvalidInvoiceException("Client doesn't have invoices");
-			}
-			
 			return returnList;
 			
 		} catch (SQLException e) {
@@ -89,7 +65,7 @@ public class InvoiceDAO {
 		}
 	}
 
-	public static Invoice getInvoice(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException {
+	public static Invoice getInvoice(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -112,6 +88,9 @@ public class InvoiceDAO {
 				if(rs.getByte(4) == 1) {					
 					Invoice newInvoice = new Invoice(ClientDAO.getClient(rs.getInt(2)),new Date(rs.getDate(3).getTime()));
 					newInvoice.setId(rs.getInt(1));
+					for (ProductItem pi : ProductItemDAO.getProductItemsOfInvoice(newInvoice)) {
+						newInvoice.addProductItem(pi.getProduct(), pi.getQuantity());
+					}
 					return newInvoice;
 				} else {
 					throw new InvalidInvoiceException("The invoice is not active");
@@ -125,8 +104,8 @@ public class InvoiceDAO {
 			throw new ConnectionException("Data not reachable");
 		}
 	}
-
-	public static void save(Invoice invoice) throws InvalidInvoiceException, ConnectionException, AccessException {
+	
+	public static void save(Invoice invoice) throws InvalidInvoiceException, ConnectionException, AccessException, InvalidProductException {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm;
 	
@@ -156,6 +135,13 @@ public class InvoiceDAO {
 		} catch (SQLException e) {
 			throw new AccessException("Save error");
 		}
+		
+		for (ProductItem pi : invoice.getItems()) {
+			pi.save();
+			
+			InvoiceProductItemDAO.save(invoice.getId(), pi.getId());
+		}
+		
 	}
 	
 	static public void modify(Invoice invoice) throws ConnectionException, AccessException, InvalidInvoiceException {

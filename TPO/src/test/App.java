@@ -4,30 +4,38 @@ import java.nio.channels.ClosedByInterruptException;
 import java.util.Date;
 import java.util.List;
 
+import backEnd.ClaimType;
 import backEnd.Client;
 import backEnd.Invoice;
+import backEnd.MoreQuantityClaim;
 import backEnd.Product;
+import backEnd.ProductItem;
 import backEnd.Roles;
 import backEnd.User;
 import backEnd.Zone;
 import dao.ClientDAO;
 import dao.InvoiceDAO;
+import dao.MoreQuantityClaimDAO;
+import dao.MoreQuantityClaimProductItemDAO;
 import dao.ProductDAO;
+import dao.ProductItemDAO;
 import dao.RoleDAO;
 import dao.SqlUtils;
 import dao.UserDAO;
 import dao.ZoneDAO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
+import exceptions.InvalidClaimException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
+import exceptions.InvalidProductException;
 import exceptions.InvalidRoleException;
 import exceptions.InvalidUserException;
 import exceptions.InvalidZoneException;
 
 public class App {
 	
-	public static void main(String[] args) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidInvoiceException, InvalidRoleException, InvalidUserException {
+	public static void main(String[] args) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidInvoiceException, InvalidRoleException, InvalidUserException, InvalidClaimException, InvalidProductException {
 //		ClientDAO test = new ClientDAO();
 //		
 //		Client aux = test.getClient(1);
@@ -97,9 +105,35 @@ public class App {
 //		User user = new User("Pepe", Roles.INVOICING_RESPONSABLE);
 //		user.deactivateUser();
 //		user.modifyInDB();
+//		
+//		User user1 = new User("Pedro", Roles.ADMINISTRATOR);
+//		User user2 = new User("Pedro", Roles.ADMINISTRATOR);
+//		System.out.println(user1.equals(user2));
 		
-		User user1 = new User("Pedro", Roles.ADMINISTRATOR);
-		User user2 = new User("Pedro", Roles.ADMINISTRATOR);
-		System.out.println(user1.equals(user2));
+//		MoreQuantityClaim claim = new MoreQuantityClaim(ClientDAO.getClient(1), new Date(), "Necesito 3 paquetes mas", ClaimType.MORE_QUANTITY, InvoiceDAO.getInvoice(1));
+//		claim.save();
+		
+//		Invoice invoice = new Invoice(ClientDAO.getClient(1), new Date());
+//		invoice.addProductItem(ProductDAO.getProduct(1), 3);
+//		invoice.addProductItem(ProductDAO.getProduct(2), 2);
+//		invoice.save();
+		
+//		Invoice invoice = new Invoice(ClientDAO.getClient(1), new Date());
+//		invoice.addProductItem(ProductDAO.getProduct(1), 15);
+//		invoice.save();
+//		System.out.println("Hola");
+//		
+//		MoreQuantityClaim claim = new MoreQuantityClaim(ClientDAO.getClient(1), new Date(), "Hola", ClaimType.MISSING_QUANTITY, InvoiceDAO.getInvoice(invoice.getId()));
+//		
+//			claim.addProductItem(ProductDAO.getProduct(1), 10);
+//		
+//		claim.save();
+//		MoreQuantityClaim claim2 = MoreQuantityClaimDAO.getMoreQuantityClaim(claim.getClaimId());
+//		
+//		System.out.println("HOla");
+		
+		ProductItem pepe = ProductItemDAO.getProductItem(1);
+		System.out.println(pepe.getQuantity());
+		
 	}
 }

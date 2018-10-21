@@ -78,7 +78,7 @@ public class ZoneDAO {
 			
 			while(rs.next()){						
 				newZone = new Zone(rs.getString(2));
-				newZone.setZoneId(rs.getInt(1));
+				newZone.setId(rs.getInt(1));
 				returnList.add(newZone);
 			}
 			return returnList;
@@ -108,7 +108,7 @@ public class ZoneDAO {
 		try {
 			if(rs.next()){					
 				Zone newZone = new Zone(rs.getString(2));
-				newZone.setZoneId(rs.getInt(1));
+				newZone.setId(rs.getInt(1));
 				return newZone;
 			}
 			else{
@@ -128,14 +128,14 @@ public class ZoneDAO {
 		 * Si el cliente no tiene el clientId cargado quiere decir que es un cliente nuevo por lo tanto busco el ultimo
 		 * clientId que hay en la base de datos, le sumo uno y se lo asigno a este cliente nuevo para despues guardarlo.
 		 */
-		if(zone.getZoneId() != 0) {
+		if(zone.getId() != 0) {
 			throw new InvalidZoneException("Zone already in data base");
 		}
 
-		zone.setZoneId(SqlUtils.lastId("Zones", "ZoneId") + 1); 
+		zone.setId(SqlUtils.lastId("Zones", "ZoneId") + 1); 
 		try {
 			prepStm = con.prepareStatement("insert into Zones values(?,?)");
-			prepStm.setInt(1, zone.getZoneId());
+			prepStm.setInt(1, zone.getId());
 			prepStm.setString(2, zone.getName());			
 		} catch (SQLException e) {
 			throw new AccessException("Access error");
