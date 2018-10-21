@@ -32,7 +32,7 @@ public class WrongInvoicingClaim extends IndividualClaim {
 
 	@Override
 	public WrongInvoicingClaimDTO toDTO() {
-		WrongInvoicingClaimDTO aux = new WrongInvoicingClaimDTO(claimId, client.getId(), description);
+		WrongInvoicingClaimDTO aux = new WrongInvoicingClaimDTO(claimId, client.getId(), description, date);
 		
 		for (InvoiceItem i : invoices) {
 			aux.addInvoiceItemDTO(i.toDTO());

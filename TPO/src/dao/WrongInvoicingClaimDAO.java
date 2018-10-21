@@ -11,6 +11,7 @@ import backEnd.ClaimType;
 import backEnd.InvoiceItem;
 import backEnd.MoreQuantityClaim;
 import backEnd.ProductItem;
+import backEnd.State;
 import backEnd.WrongInvoicingClaim;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
@@ -83,6 +84,7 @@ public class WrongInvoicingClaimDAO {
 			if(rs.next()){
 				WrongInvoicingClaim newClaim = new WrongInvoicingClaim(ClientDAO.getClient(rs.getInt(4)), new Date(rs.getDate(6).getTime()), rs.getString(5));
 				newClaim.setClaimId(rs.getInt(1));
+				newClaim.setActualState(State.valueOf(rs.getString(3)));
 				for (InvoiceItem i : InvoiceItemDAO.getAllInvoiceItemsOfClaim(newClaim)) {
 					newClaim.addInovice(i.getInvoice(), i.getInconsistency());
 				}		

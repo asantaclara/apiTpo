@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import backEnd.Claim;
 import backEnd.ClaimType;
 import backEnd.Client;
 import backEnd.CompositeClaim;
@@ -18,13 +19,14 @@ import backEnd.User;
 import backEnd.UserBoard;
 import backEnd.WrongInvoicingClaim;
 import backEnd.Zone;
+import dao.ClaimDAO;
 import dao.ClientDAO;
 import dao.InvoiceDAO;
 import dao.ProductDAO;
 import dao.RoleDAO;
 import dao.UserDAO;
-import dto.ClaimDTO;
 import dto.ClientDTO;
+import dto.CompositeClaimDTO;
 import dto.IncompatibleZoneClaimDTO;
 import dto.InvoiceDTO;
 import dto.InvoiceItemDTO;
@@ -42,6 +44,7 @@ import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidInvoiceItemException;
 import exceptions.InvalidProductException;
+import exceptions.InvalidProductItemException;
 import exceptions.InvalidRoleException;
 import exceptions.InvalidUserException;
 import exceptions.InvalidZoneException;
@@ -208,23 +211,8 @@ public class Controller {
 	}
 	//------------------------------------------------------------ END INVOICE ------------------------------------------------------------
 	
-	public String getClaimState(int claimNumber) throws InvalidClaimException {
-		//Me voy contra la BD de composite claims y me traigo la compositeClaim que corresponde con el claimNumber, me puede venir llena o null
-		CompositeClaim compositeClaim = null;
-		if(compositeClaim != null) {
-			return compositeClaim.getActualState().name(); //Si no es null la compositeClaim directamente le pido el estado a ella.
-		} else {
-			List<UserBoard> boards = new LinkedList<>(); //Esta lista esta compuesta por todos los diferentes boards del sistema.
-			
-			for (UserBoard userBoard : boards) {
-				String claimStatus = userBoard.getClaimState(claimNumber).name();
-				if (claimStatus.length() > 0) {
-					return claimStatus;
-				}
-			}
-			
-		}
-		throw new InvalidClaimException("Claim not found");
+	public String getClaimState(int claimNumber) throws InvalidClaimException, ConnectionException, AccessException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
+		return ClaimDAO.getClaim(claimNumber).getActualState().name();
 	}
 	public void treatClaim(TransitionDTO dto) {
 		int userId = dto.getUserId(); //Con este userId tengo que traer al user desde la BD y lo llamo existingUser.
@@ -262,41 +250,28 @@ public class Controller {
 		
 		
 	}
-	public int addMoreQuantityClaim(MoreQuantityClaimDTO dto) throws InvalidClaimException, InvalidClientException {
+	public int addMoreQuantityClaim(MoreQuantityClaimDTO dto) throws InvalidClaimException, InvalidClientException, ConnectionException, AccessException, InvalidZoneException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException {
 		
 		int clientId = dto.getClientId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
-		Client existingClient =  new Client("cuit", "name", "address", "phoneNumber", "email", new Zone("zone")); //Este seria el client que me trae la BD
+		
+		Client existingClient =  ClientDAO.getClient(clientId);
 		
 		List<ProductItemDTO> productItemsDTO = dto.getProducts();
 		
 		ClaimType claimType = ClaimType.valueOf(dto.getClaimType());
 		
 		int invoiceId = dto.getInvoiceId();
-		Invoice existingInvoice = new Invoice(null,null); // Aca traigo la Invoice de la BD con el idInvoice de arriba.
+		Invoice existingInvoice = InvoiceDAO.getInvoice(invoiceId);
 		
 		String description = dto.getDescription();
 		
 		MoreQuantityClaim newClaim = new MoreQuantityClaim(existingClient, new Date(), description, claimType, existingInvoice);
 		
 		for (ProductItemDTO productItemDTO : productItemsDTO) {
-			int productId = productItemDTO.getProductId();
-			Product existingProduct = new Product("title", "description", 0); //Este es el producto que sacaria de la BD.
-			
-			int quantity = productItemDTO.getQuantity();
-			
-			if(claimType == ClaimType.MISSING_PRODUCT) {		
-				if(existingInvoice.validateClient(existingClient) != true)
-					throw new InvalidClaimException("Invoice doesn't belong to the client");
-				if(existingInvoice.validateProductItem(existingProduct, quantity) != true)
-					throw new InvalidClaimException("ProductItem doesn't belong to the invoice");
-			}
-		
-			newClaim.addProductItem(existingProduct, quantity);
+			newClaim.addProductItem(ProductDAO.getProduct(productItemDTO.getProductId()), productItemDTO.getQuantity());
 		}
 		
-		UserBoard existingUserBoard = new UserBoard(new Role(null), null); //Este userBoard es el que guarda todas las MoreQuantityClaim
-		
-		existingUserBoard.addClaim(newClaim);
+		newClaim.save();
 		
 		return newClaim.getClaimId();
 	}
@@ -314,7 +289,13 @@ public class Controller {
 		}
 		throw new InvalidClientException("Client not found");
 	}
-	public int addCompositeClaim(List<ClaimDTO> listDTO) {
-		return 1;
+	public int addCompositeClaim(CompositeClaimDTO dto) throws InvalidClaimException, ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException {
+		CompositeClaim claim = new CompositeClaim(ClientDAO.getClient(dto.getClientId()), dto.getDate(), dto.getDescription());
+		for (Integer i : dto.getClaimsId()) {
+			claim.addClaim(ClaimDAO.getClaim(i.intValue()));
+		}
+		claim.save();
+		return claim.getClaimId();
+		
 	}
 }

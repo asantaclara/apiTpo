@@ -1,6 +1,5 @@
 package backEnd;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -67,12 +66,19 @@ public class Invoice {
 		InvoiceDAO.modify(this);
 	}
 	
-	public boolean validateClient(Client client) {
-		return (this.client.getId() == client.getId()); //Si la factura es del cliente que me mandan devuelvo true
+	public boolean validateClient(Client client) { //Si la factura es del cliente que me mandan devuelvo true
+		return (this.client.getId() == client.getId()); 
 	}
 	
 	public boolean validateProductItem(Product product, int quantity) {
-		return items.contains(new ProductItem(product, quantity)); //Hay que probar que esto funcione bien
+		for (ProductItem p : items) {
+			if (p.getProduct().getProductId() == product.getProductId()) {
+				return true;
+			}
+		}
+		return false;
+		
+		//Con este metodo me fijo si el producto que me mandan esta en la factura.
 	}
 	
 	public boolean validateDate(Date date) {

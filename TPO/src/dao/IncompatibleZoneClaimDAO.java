@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.Date;
 
 import backEnd.IncompatibleZoneClaim;
+import backEnd.State;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
@@ -75,6 +76,7 @@ public class IncompatibleZoneClaimDAO {
 			if(rs.next()){
 				IncompatibleZoneClaim newClaim = new IncompatibleZoneClaim(ClientDAO.getClient(rs.getInt(5)), new Date(rs.getDate(7).getTime()), rs.getString(6), ZoneDAO.getZone(rs.getInt(2)));
 				newClaim.setClaimId(rs.getInt(1));
+				newClaim.setActualState(State.valueOf(rs.getString(4)));
 				return newClaim;
 			}
 			else{

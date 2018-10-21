@@ -28,6 +28,10 @@ public abstract class IndividualClaim extends Claim {
 	public State getActualState() {
 		return actualState;
 	}
+	
+	public void setActualState(State actualState) {
+		this.actualState = actualState;
+	}
 
 	public abstract void treatClaim(User responsable, State newState, String description);
 	public abstract ClaimDTO toDTO();

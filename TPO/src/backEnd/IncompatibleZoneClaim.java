@@ -25,7 +25,7 @@ public class IncompatibleZoneClaim extends IndividualClaim {
 
 	@Override
 	public IncompatibleZoneClaimDTO toDTO() {
-		return new IncompatibleZoneClaimDTO(claimId, client.getId(), description, zone.getId());
+		return new IncompatibleZoneClaimDTO(claimId, client.getId(), description, zone.getId(), date);
 	}
 
 	@Override

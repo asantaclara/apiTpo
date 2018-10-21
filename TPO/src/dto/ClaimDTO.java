@@ -1,17 +1,20 @@
 package dto;
 
+import java.util.Date;
+
 public abstract class ClaimDTO {
 
 	protected int claimId;
 	protected int clientId;
 	protected String description;
-//	protected String claimType;
+	protected Date date;
 	
 	
-	public ClaimDTO(int claimId, int clientId, String description) {
+	public ClaimDTO(int claimId, int clientId, String description, Date date) {
 		this.claimId = claimId;
 		this.clientId = clientId;
 		this.description = description;
+		this.date = date;
 	}
 	
 	public int getClaimId() {
@@ -23,9 +26,9 @@ public abstract class ClaimDTO {
 	public String getDescription() {
 		return description;
 	}
-//	public String getClaimType() {
-//		return claimType;
-//	}
+	public Date getDate() {
+		return date;
+	}
 	
 	
 }

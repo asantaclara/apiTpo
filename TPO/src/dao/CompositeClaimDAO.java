@@ -1,6 +1,5 @@
 package dao;
 
-import java.awt.Composite;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,6 +17,7 @@ import exceptions.InvalidClaimException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidProductException;
+import exceptions.InvalidProductItemException;
 import exceptions.InvalidZoneException;
 
 public class CompositeClaimDAO {
@@ -76,11 +76,10 @@ public class CompositeClaimDAO {
 		}
 	}
 
-	private static List<Claim> getListOfClaims(int claimId) throws AccessException, ConnectionException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException {
+	private static List<Claim> getListOfClaims(int claimId) throws AccessException, ConnectionException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException{
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
-		List<Claim> returnList = new LinkedList<>();
 		
 		try {
 			stmt = con.createStatement();
@@ -88,58 +87,29 @@ public class CompositeClaimDAO {
 			throw new AccessException("Access error");
 		}
 		
-		String SQL = "SELECT * FROM CompositeClaims JOIN IncompatibleZoneClaims ON CompositeClaims.ClaimId = IncompatibleZoneClaims.IncompatibleZoneId "
-																								+ "WHERE CompositeClaims.CompositeClaimId = " + claimId;
+		String SQL = "SELECT * FROM Claims LEFT JOIN WrongInvoiceClaims ON CLAIMS.ClaimId = WrongInvoiceClaims.WrongInvoiceId "
+				+ "LEFT JOIN IncompatibleZoneClaims ON Claims.ClaimId = IncompatibleZoneClaims.IncompatibleZoneId "
+				+ "LEFT JOIN CompositeClaims ON Claims.ClaimId = CompositeClaims.CompositeClaimId "
+				+ "LEFT JOIN MoreQuantityClaims ON Claims.ClaimId = MoreQuantityClaims.MoreQuantityId WHERE CompositeClaims.CompositeClaimId = " + claimId;
 		try {
 			rs = stmt.executeQuery(SQL);
 		} catch (SQLException e1) {
+			e1.printStackTrace();
 			throw new AccessException("Query error");
 		}
-		
-		try {		
-			while(rs.next()){					
-				returnList.add(IncompatibleZoneClaimDAO.getIncompatibleZoneClaim(rs.getInt(2)));
-			}
-		} catch (SQLException e) {
-			throw new ConnectionException("Data not reachable");
-		}
-		
-		SQL = "SELECT * FROM CompositeClaims JOIN WrongInvoiceClaims ON CompositeClaims.ClaimId = WrongInvoiceClaims.WrongInvoiceId "
-																								+ "WHERE CompositeClaims.CompositeClaimId = " + claimId;
 		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			throw new AccessException("Query error");
-		}
-		
-		try {		
-			while(rs.next()){					
-				returnList.add(WrongInvoicingClaimDAO.getWrongInvoicingClaim(rs.getInt(2)));
+			List<Claim> claimList = new LinkedList<>();
+			while(rs.next()){
+				claimList.add(ClaimDAO.getClaim(rs.getInt(10)));
 			}
-		} catch (SQLException e) {
-			throw new ConnectionException("Data not reachable");
-		}
-		
-		SQL = "SELECT * FROM CompositeClaims JOIN MoreQuantityClaims ON CompositeClaims.ClaimId = MoreQuantityClaims.MoreQuantityId "
-																								+ "WHERE CompositeClaims.CompositeClaimId = " + claimId;
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			throw new AccessException("Query error");
-		}
-		
-		try {		
-			while(rs.next()){					
-				returnList.add(MoreQuantityClaimDAO.getMoreQuantityClaim(rs.getInt(2)));
-			}
-			return returnList;
+			return claimList;
 		} catch (SQLException e) {
 			throw new ConnectionException("Data not reachable");
 		}
 		
 	}
-
-	public static CompositeClaim getCompositeClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException {
+	
+	public static CompositeClaim getCompositeClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -175,7 +145,7 @@ public class CompositeClaimDAO {
 		}
 	}
 
-	public static List<CompositeClaim> getAllClaims() throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException{
+	public static List<CompositeClaim> getAllClaims() throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException{
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;

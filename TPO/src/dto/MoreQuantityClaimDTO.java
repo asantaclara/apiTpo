@@ -1,5 +1,6 @@
 package dto;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,10 +10,11 @@ public class MoreQuantityClaimDTO extends ClaimDTO {
 	private List<ProductItemDTO> products;
 	private String claimType;
 	
-	public MoreQuantityClaimDTO(int claimId, int clientId, String description, String claimType, int invoiceId) {
-		super(claimId, clientId, description);
+	public MoreQuantityClaimDTO(int claimId, int clientId, String description, String claimType, int invoiceId, Date date) {
+		super(claimId, clientId, description, date);
 		this.invoiceId = invoiceId;
 		products = new LinkedList<>();
+		this.claimType = claimType;
 		
 	}
 	

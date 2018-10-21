@@ -10,12 +10,14 @@ import java.util.Date;
 import backEnd.ClaimType;
 import backEnd.MoreQuantityClaim;
 import backEnd.ProductItem;
+import backEnd.State;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidProductException;
+import exceptions.InvalidProductItemException;
 import exceptions.InvalidZoneException;
 
 public class MoreQuantityClaimDAO {
@@ -61,7 +63,7 @@ public class MoreQuantityClaimDAO {
 		}
 	}
 
-	public static MoreQuantityClaim getMoreQuantityClaim(int claimId) throws AccessException, ConnectionException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException{
+	public static MoreQuantityClaim getMoreQuantityClaim(int claimId) throws AccessException, ConnectionException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException{
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -84,6 +86,7 @@ public class MoreQuantityClaimDAO {
 					MoreQuantityClaim newClaim = new MoreQuantityClaim(ClientDAO.getClient(rs.getInt(6)), new Date(rs.getDate(8).getTime()), rs.getString(7), 
 														ClaimType.valueOf(rs.getString(2)), InvoiceDAO.getInvoice(rs.getInt(3)));
 					newClaim.setClaimId(rs.getInt(1));
+					newClaim.setActualState(State.valueOf(rs.getString(5)));
 					for (ProductItem pi : ProductItemDAO.getProductItemsOfMoreQuantityClaim(newClaim)) {
 						newClaim.addProductItem(pi.getProduct(), pi.getQuantity());
 					}

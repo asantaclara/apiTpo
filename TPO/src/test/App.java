@@ -1,10 +1,20 @@
 package test;
 
-import backEnd.WrongInvoicingClaim;
+import java.util.Date;
+
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
+
+import backEnd.ClaimType;
+import backEnd.CompositeClaim;
+import backEnd.Invoice;
+import backEnd.MoreQuantityClaim;
 import controller.Controller;
-import dao.WrongInvoicingClaimDAO;
-import dto.InvoiceItemDTO;
-import dto.WrongInvoicingClaimDTO;
+import dao.ClientDAO;
+import dao.MoreQuantityClaimDAO;
+import dao.ProductDAO;
+import dto.CompositeClaimDTO;
+import dto.MoreQuantityClaimDTO;
+import dto.ProductItemDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
@@ -12,13 +22,14 @@ import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidInvoiceItemException;
 import exceptions.InvalidProductException;
+import exceptions.InvalidProductItemException;
 import exceptions.InvalidRoleException;
 import exceptions.InvalidUserException;
 import exceptions.InvalidZoneException;
 
 public class App {
 	
-	public static void main(String[] args) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidInvoiceException, InvalidRoleException, InvalidUserException, InvalidClaimException, InvalidProductException, InvalidInvoiceItemException {
+	public static void main(String[] args) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidInvoiceException, InvalidRoleException, InvalidUserException, InvalidClaimException, InvalidProductException, InvalidInvoiceItemException, InvalidProductItemException {
 		Controller c = Controller.getInstance();
 		
 //		c.addUser(new UserDTO(0, "Alejandro",Roles.ADMINISTRATOR.name(), null));
@@ -42,9 +53,26 @@ public class App {
 //		WrongInvoicingClaimDTO dto = new WrongInvoicingClaimDTO(0, 4, "Tengo MUCHO suenio");
 //		dto.addInvoiceItemDTO(new InvoiceItemDTO(8, "chau"));
 //		c.addWrongInvoicingClaim(dto);
-		WrongInvoicingClaim invoice = WrongInvoicingClaimDAO.getWrongInvoicingClaim(26);
-
-		System.out.println(invoice.getClaimId());
+//		MoreQuantityClaimDTO a = new MoreQuantityClaimDTO(claimId, clientId, description, claimType, invoiceId)
+//		MoreQuantityClaimDTO dto = new MoreQuantityClaimDTO(0, 3, "buen dia",ClaimType.MISSING_PRODUCT.name(), 13);
+//		dto.addProductItemDTO(new ProductItemDTO(4, 10));
+//		int claimdId = c.addMoreQuantityClaim(dto);
+//		System.out.println(claimdId);	
+//		Invoice invoice = new Invoice(ClientDAO.getClient(3), new Date());
+//		invoice.addProductItem(ProductDAO.getProduct(4), 10);
+//		invoice.save(); //Invoice 13
+//		MoreQuantityClaim claim = MoreQuantityClaimDAO.getMoreQuantityClaim(28);
 		
+//		CompositeClaimDTO dto = new CompositeClaimDTO(0, 1, "No se", new Date());
+//		dto.addClaimId(1);
+//		dto.addClaimId(15);
+//		int claimId = c.addCompositeClaim(dto);
+//		
+//		System.out.println(claimId);
+		System.out.println(c.getClaimState(1));
+		System.out.println(c.getClaimState(15));
+		System.out.println(c.getClaimState(30));
+		
+		System.out.println("END");
 	}
 }
