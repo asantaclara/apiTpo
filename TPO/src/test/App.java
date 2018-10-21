@@ -2,19 +2,9 @@ package test;
 
 import java.util.Date;
 
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
-
-import backEnd.ClaimType;
-import backEnd.CompositeClaim;
-import backEnd.Invoice;
-import backEnd.MoreQuantityClaim;
+import backEnd.State;
 import controller.Controller;
-import dao.ClientDAO;
-import dao.MoreQuantityClaimDAO;
-import dao.ProductDAO;
-import dto.CompositeClaimDTO;
-import dto.MoreQuantityClaimDTO;
-import dto.ProductItemDTO;
+import dto.TransitionDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
@@ -24,12 +14,13 @@ import exceptions.InvalidInvoiceItemException;
 import exceptions.InvalidProductException;
 import exceptions.InvalidProductItemException;
 import exceptions.InvalidRoleException;
+import exceptions.InvalidTransitionException;
 import exceptions.InvalidUserException;
 import exceptions.InvalidZoneException;
 
 public class App {
 	
-	public static void main(String[] args) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidInvoiceException, InvalidRoleException, InvalidUserException, InvalidClaimException, InvalidProductException, InvalidInvoiceItemException, InvalidProductItemException {
+	public static void main(String[] args) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidInvoiceException, InvalidRoleException, InvalidUserException, InvalidClaimException, InvalidProductException, InvalidInvoiceItemException, InvalidProductItemException, InvalidTransitionException {
 		Controller c = Controller.getInstance();
 		
 //		c.addUser(new UserDTO(0, "Alejandro",Roles.ADMINISTRATOR.name(), null));
@@ -62,17 +53,16 @@ public class App {
 //		invoice.addProductItem(ProductDAO.getProduct(4), 10);
 //		invoice.save(); //Invoice 13
 //		MoreQuantityClaim claim = MoreQuantityClaimDAO.getMoreQuantityClaim(28);
-		
 //		CompositeClaimDTO dto = new CompositeClaimDTO(0, 1, "No se", new Date());
 //		dto.addClaimId(1);
 //		dto.addClaimId(15);
 //		int claimId = c.addCompositeClaim(dto);
-//		
 //		System.out.println(claimId);
-		System.out.println(c.getClaimState(1));
-		System.out.println(c.getClaimState(15));
-		System.out.println(c.getClaimState(30));
-		
+//		System.out.println(c.getClaimState(1));
+//		System.out.println(c.getClaimState(15));
+//		System.out.println(c.getClaimState(30));
+		TransitionDTO dto = new TransitionDTO(19, new Date(), 4, State.ENTERED.name(), State.IN_TREATMENT.name(), "Hola");
+		c.treatClaim(dto);
 		System.out.println("END");
 	}
 }

@@ -24,11 +24,6 @@ public class WrongInvoicingClaim extends IndividualClaim {
 	public void addInovice(Invoice invoice, String inconsistency) {
 		invoices.add(new InvoiceItem(invoice, inconsistency));
 	}
-	
-	@Override
-	public void treatClaim(User responsable, State newState, String description) {
-
-	}
 
 	@Override
 	public WrongInvoicingClaimDTO toDTO() {

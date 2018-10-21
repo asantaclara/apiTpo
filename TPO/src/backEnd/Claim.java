@@ -8,6 +8,7 @@ import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
 import exceptions.InvalidInvoiceItemException;
 import exceptions.InvalidProductException;
+import exceptions.InvalidTransitionException;
 
 public abstract class Claim {
 	
@@ -33,7 +34,7 @@ public abstract class Claim {
 	}
 	
 	public abstract State getActualState();
-	public abstract void treatClaim(User responsable, State newState, String description);
+	public abstract void treatClaim(User responsable, State newState, String description) throws InvalidTransitionException, ConnectionException, AccessException;
 	public abstract ClaimDTO toDTO();
 	public abstract void save() throws ConnectionException, AccessException, InvalidClaimException, InvalidProductException, InvalidInvoiceItemException;
 	

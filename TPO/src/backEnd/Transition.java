@@ -19,7 +19,7 @@ public class Transition {
 	private int id = 0;
 	
 	public Transition(int claimId, State previousState, State newState, Date date, String description,
-			User responsable) {
+			User responsable) throws InvalidTransitionException {
 		super();
 		this.claimId = claimId;
 		this.previousState = previousState;
@@ -27,6 +27,10 @@ public class Transition {
 		this.date = date;
 		this.description = description;
 		this.responsable = responsable;
+		
+		if(newState.getValue() <= previousState.getValue()) {
+			throw new InvalidTransitionException("Invalid transition from " + previousState.name() + " to " + newState.name());
+		}
 	}
 	
 	public void setId(int id) {

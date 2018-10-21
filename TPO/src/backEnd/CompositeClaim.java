@@ -62,8 +62,7 @@ public class CompositeClaim extends Claim{
 
 	@Override
 	public void treatClaim(User responsable, State newState, String description) {
-		// Esto no puede hacer nada porque no se puede manejar una claim compuesta, solo se puede ver si esta resuelta.
-		
+		System.out.println("Can't treat composite claim");
 	}
 
 	@Override
@@ -74,7 +73,6 @@ public class CompositeClaim extends Claim{
 	@Override
 	public void save() throws ConnectionException, AccessException, InvalidClaimException {
 		CompositeClaimDAO.save(this);
-		
 	}
 	
 	public List<Claim> getIndividualClaims() {

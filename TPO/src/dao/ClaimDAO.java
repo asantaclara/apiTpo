@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -60,5 +61,22 @@ public class ClaimDAO {
 			throw new ConnectionException("Data not reachable");
 		}
 	}
-	
+
+	public static void updateState(Claim claim) throws ConnectionException, AccessException {
+		Connection con = SqlUtils.getConnection();
+		PreparedStatement prepStm;
+		 
+		try {
+			prepStm = con.prepareStatement("UPDATE Claims SET State='" + claim.getActualState().name() +"' WHERE ClaimId = " + claim.getClaimId());
+			
+		} catch (SQLException e) {
+			throw new AccessException("Access error");
+		}		
+		
+		try {
+			prepStm.execute();
+		} catch (SQLException e) {
+			throw new AccessException("Save error");
+		}
+	}
 }

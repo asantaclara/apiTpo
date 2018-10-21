@@ -16,13 +16,7 @@ public class IncompatibleZoneClaim extends IndividualClaim {
 		super(client, date, description);
 		this.zone = zone;
 	}
-
-	@Override
-	public void treatClaim(User responsable, State newState, String description) {
-		// TODO Auto-generated method stub
-
-	}
-
+	
 	@Override
 	public IncompatibleZoneClaimDTO toDTO() {
 		return new IncompatibleZoneClaimDTO(claimId, client.getId(), description, zone.getId(), date);

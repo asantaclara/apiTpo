@@ -46,6 +46,7 @@ import exceptions.InvalidInvoiceItemException;
 import exceptions.InvalidProductException;
 import exceptions.InvalidProductItemException;
 import exceptions.InvalidRoleException;
+import exceptions.InvalidTransitionException;
 import exceptions.InvalidUserException;
 import exceptions.InvalidZoneException;
 
@@ -214,13 +215,9 @@ public class Controller {
 	public String getClaimState(int claimNumber) throws InvalidClaimException, ConnectionException, AccessException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
 		return ClaimDAO.getClaim(claimNumber).getActualState().name();
 	}
-	public void treatClaim(TransitionDTO dto) {
-		int userId = dto.getUserId(); //Con este userId tengo que traer al user desde la BD y lo llamo existingUser.
-		User existingUser =  new User("Test", Roles.ADMINISTRATOR);
-		
-		UserBoard existingUserBoard = new UserBoard(new Role(null), null); //Este userBoard lo tomo en base al existingUser.actualRole();
-		
-		existingUserBoard.treatClaim(dto.getClaimId(), existingUser, State.valueOf(dto.getNewState()), dto.getDescription());
+	public void treatClaim(TransitionDTO dto) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidTransitionException, InvalidUserException, InvalidRoleException {
+		Claim aux = ClaimDAO.getClaim(dto.getClaimId());
+		aux.treatClaim(UserDAO.getUser(dto.getUserId()), State.valueOf(dto.getNewState()), dto.getDescription());
 		
 		
 	}

@@ -31,12 +31,6 @@ public class MoreQuantityClaim extends IndividualClaim {
 		
 	}
 
-	@Override
-	public void treatClaim(User responsable, State newState, String description) {
-		// TODO Auto-generated method stub
-
-	}
-
 	public void addProductItem(Product product, int quantity) throws InvalidProductItemException {
 		if(invoice.validateProductItem(product, quantity)){			
 			products.add(new ProductItem(product, quantity));
