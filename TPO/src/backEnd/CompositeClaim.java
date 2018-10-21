@@ -16,7 +16,7 @@ public class CompositeClaim extends Claim{
 		super(client, date, description);
 	}
 	
-	public void addClaims(Claim claim) {
+	public void addClaim(Claim claim) {
 		claims.add(claim);
 	}
 	
@@ -45,6 +45,10 @@ public class CompositeClaim extends Claim{
 	public void save() throws ConnectionException, AccessException {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public List<Claim> getIndividualClaims() {
+		return claims;
 	}
 
 	

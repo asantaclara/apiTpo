@@ -1,8 +1,11 @@
 package backEnd;
 
+import dao.InvoiceItemDAO;
 import dto.InvoiceItemDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
+import exceptions.InvalidInvoiceItemException;
+import exceptions.InvalidProductException;
 
 public class InvoiceItem {
 
@@ -35,8 +38,8 @@ public class InvoiceItem {
 		return new InvoiceItemDTO(invoice.getId(), inconsistency);
 	}
 	
-	public void save() throws ConnectionException, AccessException {
-		// TODO Auto-generated method stub
+	public void save(int claimId) throws ConnectionException, AccessException, InvalidProductException, InvalidInvoiceItemException {
+		InvoiceItemDAO.save(this, claimId);
 		
 	}
 }

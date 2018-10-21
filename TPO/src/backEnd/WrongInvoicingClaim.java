@@ -43,5 +43,9 @@ public class WrongInvoicingClaim extends IndividualClaim {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public List<InvoiceItem> getInvoices() {
+		return invoices;
+	}
 
 }

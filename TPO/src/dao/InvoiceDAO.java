@@ -138,7 +138,6 @@ public class InvoiceDAO {
 		
 		for (ProductItem pi : invoice.getItems()) {
 			pi.save();
-			
 			InvoiceProductItemDAO.save(invoice.getId(), pi.getId());
 		}
 		

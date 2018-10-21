@@ -2,6 +2,7 @@ package backEnd;
 
 import java.util.Date;
 
+import dao.IncompatibleZoneClaimDAO;
 import dto.IncompatibleZoneClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
@@ -28,9 +29,12 @@ public class IncompatibleZoneClaim extends IndividualClaim {
 	}
 
 	@Override
-	public void save() throws ConnectionException, AccessException {
-		// TODO Auto-generated method stub
+	public void save() throws ConnectionException, AccessException, InvalidClaimException {
+		IncompatibleZoneClaimDAO.save(this);
 		
 	}
 
+	public Zone getZone() {
+		return zone;
+	}
 }
