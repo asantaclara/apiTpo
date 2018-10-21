@@ -88,7 +88,7 @@ public class ZoneDAO {
 		}
 	}
 
-	static public Zone getZone(int zoneId) throws InvalidClientException, ConnectionException, AccessException {
+	static public Zone getZone(int zoneId) throws ConnectionException, AccessException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -112,7 +112,7 @@ public class ZoneDAO {
 				return newZone;
 			}
 			else{
-				throw new InvalidClientException("Zone not found");
+				throw new InvalidZoneException("Zone not found");
 			}
 			
 		} catch (SQLException e) {
@@ -145,6 +145,38 @@ public class ZoneDAO {
 			prepStm.execute();
 		} catch (SQLException e) {
 			throw new AccessException("Save error");
+		}
+	}
+
+	static public Zone getZone(String zoneName) throws AccessException, ConnectionException, InvalidZoneException {
+		Connection con = SqlUtils.getConnection();  
+		Statement stmt = null;  
+		ResultSet rs = null;
+		
+		try {
+			stmt = con.createStatement();
+		} catch (SQLException e1) {
+			throw new AccessException("Access error");
+		}
+		
+		String SQL = "SELECT * FROM Zones where Name = '" + zoneName + "'"; 
+		try {
+			rs = stmt.executeQuery(SQL);
+		} catch (SQLException e1) {
+			throw new AccessException("Query error");
+		}
+		try {
+			if(rs.next()){					
+				Zone newZone = new Zone(rs.getString(2));
+				newZone.setId(rs.getInt(1));
+				return newZone;
+			}
+			else{
+				throw new InvalidZoneException("Zone not found");
+			}
+			
+		} catch (SQLException e) {
+			throw new ConnectionException("Data not reachable");
 		}
 	}
 }

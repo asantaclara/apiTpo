@@ -13,6 +13,7 @@ import backEnd.User;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidRoleException;
+import exceptions.InvalidUserException;
 
 public class RoleDAO {
 //'DISTRIBUTION_RESPONSABLE',
@@ -53,7 +54,7 @@ public class RoleDAO {
 		
 	}
 
-	public static Role getRole(Roles role) throws AccessException, ConnectionException, InvalidRoleException {		
+	public static Role getRole(Roles role) throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException {		
 		Role returnRole = new Role(role);
 		returnRole.setRoleId(idByRole(role));
 		for (User user : UserDAO.getAllUserByRole(role)) {
@@ -62,7 +63,7 @@ public class RoleDAO {
 		return returnRole;
 	}
 
-	public static List<Role> getAllRoles() throws AccessException, ConnectionException, InvalidRoleException{
+	public static List<Role> getAllRoles() throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException{
 		List<Role> returnRoles = new LinkedList<>();
 		for (Roles roles : Roles.values()) {
 			returnRoles.add(getRole(roles));

@@ -13,6 +13,7 @@ import backEnd.State;
 import backEnd.Transition;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
+import exceptions.InvalidRoleException;
 import exceptions.InvalidTransitionException;
 import exceptions.InvalidUserException;
 
@@ -48,7 +49,7 @@ public class TransitionDAO {
 		}
 	}
 
-	public static List<Transition> getAllTransitionOfClaim(int claimId) throws ConnectionException, AccessException, InvalidUserException{
+	public static List<Transition> getAllTransitionOfClaim(int claimId) throws ConnectionException, AccessException, InvalidUserException, InvalidRoleException{
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -83,7 +84,7 @@ public class TransitionDAO {
 		}
 	}
 
-	public static Transition getTransitionById(int transitionId) throws AccessException, InvalidUserException, ConnectionException, InvalidTransitionException {
+	public static Transition getTransitionById(int transitionId) throws AccessException, InvalidUserException, ConnectionException, InvalidTransitionException, InvalidRoleException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;

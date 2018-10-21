@@ -8,6 +8,7 @@ import dto.ClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
+import exceptions.InvalidInvoiceItemException;
 import exceptions.InvalidProductException;
 
 public abstract class IndividualClaim extends Claim {
@@ -30,6 +31,6 @@ public abstract class IndividualClaim extends Claim {
 
 	public abstract void treatClaim(User responsable, State newState, String description);
 	public abstract ClaimDTO toDTO();
-	public abstract void save() throws ConnectionException, AccessException, InvalidClaimException, InvalidProductException; 
+	public abstract void save() throws ConnectionException, AccessException, InvalidClaimException, InvalidProductException, InvalidInvoiceItemException; 
 
 }

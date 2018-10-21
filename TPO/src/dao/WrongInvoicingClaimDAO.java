@@ -7,7 +7,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 
+import backEnd.ClaimType;
 import backEnd.InvoiceItem;
+import backEnd.MoreQuantityClaim;
+import backEnd.ProductItem;
 import backEnd.WrongInvoicingClaim;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
@@ -16,6 +19,7 @@ import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidInvoiceItemException;
 import exceptions.InvalidProductException;
+import exceptions.InvalidZoneException;
 
 public class WrongInvoicingClaimDAO {
 
@@ -57,7 +61,7 @@ public class WrongInvoicingClaimDAO {
 		}
 	}
 
-	public static WrongInvoicingClaim getWrongInvoicingClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException {
+	public static WrongInvoicingClaim getWrongInvoicingClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -76,13 +80,19 @@ public class WrongInvoicingClaimDAO {
 			throw new AccessException("Query error");
 		}
 		try {
-			WrongInvoicingClaim newClaim = new WrongInvoicingClaim(ClientDAO.getClient(rs.getInt(4)), new Date(rs.getDate(6).getTime()), rs.getString(5));
-			newClaim.setClaimId(rs.getInt(1));
-			for (InvoiceItem i : InvoiceItemDAO.getAllInvoiceItemsOfClaim(WrongInvoicingClaimDAO.getWrongInvoicingClaim(rs.getInt(1)))) {
-				newClaim.addInovice(i.getInvoice(), i.getInconsistency());
-			}		
-			return newClaim;
+			if(rs.next()){
+				WrongInvoicingClaim newClaim = new WrongInvoicingClaim(ClientDAO.getClient(rs.getInt(4)), new Date(rs.getDate(6).getTime()), rs.getString(5));
+				newClaim.setClaimId(rs.getInt(1));
+				for (InvoiceItem i : InvoiceItemDAO.getAllInvoiceItemsOfClaim(newClaim)) {
+					newClaim.addInovice(i.getInvoice(), i.getInconsistency());
+				}		
+				return newClaim;
+			}
+			else{
+				throw new InvalidClaimException("Claim not found");
+			}
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new ConnectionException("Data not reachable");
 		}
 	}

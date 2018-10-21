@@ -1,33 +1,16 @@
 package test;
 
-import java.nio.channels.ClosedByInterruptException;
-import java.util.Date;
-import java.util.List;
-
-import backEnd.ClaimType;
-import backEnd.Client;
-import backEnd.Invoice;
-import backEnd.MoreQuantityClaim;
-import backEnd.Product;
-import backEnd.ProductItem;
-import backEnd.Roles;
-import backEnd.User;
-import backEnd.Zone;
-import dao.ClientDAO;
-import dao.InvoiceDAO;
-import dao.MoreQuantityClaimDAO;
-import dao.MoreQuantityClaimProductItemDAO;
-import dao.ProductDAO;
-import dao.ProductItemDAO;
-import dao.RoleDAO;
-import dao.SqlUtils;
-import dao.UserDAO;
-import dao.ZoneDAO;
+import backEnd.WrongInvoicingClaim;
+import controller.Controller;
+import dao.WrongInvoicingClaimDAO;
+import dto.InvoiceItemDTO;
+import dto.WrongInvoicingClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
+import exceptions.InvalidInvoiceItemException;
 import exceptions.InvalidProductException;
 import exceptions.InvalidRoleException;
 import exceptions.InvalidUserException;
@@ -35,105 +18,33 @@ import exceptions.InvalidZoneException;
 
 public class App {
 	
-	public static void main(String[] args) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidInvoiceException, InvalidRoleException, InvalidUserException, InvalidClaimException, InvalidProductException {
-//		ClientDAO test = new ClientDAO();
-//		
-//		Client aux = test.getClient(1);
-//		
-//		System.out.println(aux.getAddress());
-//		
-//		System.out.println(ZoneDAO.fixZone("San Cristobal"));
+	public static void main(String[] args) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidInvoiceException, InvalidRoleException, InvalidUserException, InvalidClaimException, InvalidProductException, InvalidInvoiceItemException {
+		Controller c = Controller.getInstance();
 		
-//		Client test1 = new Client("12-12346588-09", "Juan Pablo", "Rivadavia 4542", "15-54379876", "asdas@asdf.com", new Zone("Balvanera"));
-//		test1.setId(2);
-////		test1.modify();
-//		
-//		List<Client> aux = ClientDAO.getAllClients();
-//		
-//		System.out.println("Hola");
-		
-//		Product test = new Product("Agua", "Agua purificada", 1.5f);
-//		
-//		test.saveInDB();
-//		
-//		test.setProductId(1);
-//		test.modify("Coca", "Coca Light", 1.6f);
-//		test.modifyInDB();
-//		
-//		Product product1 = ProductDAO.getProduct(1);
-//		List<Product> listProducts = ProductDAO.getAllProducts();
-//		
-//		System.out.println("hola");
-		
-//		List<Zone> zones = ZoneDAO.getAllZones();
-//		
-//		Zone zone = ZoneDAO.getZone(10);
-//		System.out.println(zone.getName());
-//		System.out.println(zone.getZoneId());
-		
-//		Zone zone = new Zone("Caballito");
-//		zone.save();
+//		c.addUser(new UserDTO(0, "Alejandro",Roles.ADMINISTRATOR.name(), null));
+//		c.modifyUser(new UserDTO(1, "Martin Abba", Roles.QUERY_USER.name(),Roles.CALL_CENTER_RESPONSABLE.name()));
+//		c.removeUser(new UserDTO(1, null, null, null));
+//		c.addClient(new ClientDTO(0, "11-11111111-1", "Pedro Picapiedra", "Siempreviva 123", "15-1515-1515","pedro@picapiedra.net", "Puerto Madero"));
+//		c.removeClient(new ClientDTO(6, "11-11111111-1", "Pedro Picapiedra", "Siempreviva 123", "15-1515-1515","pedro@picapiedra.net", "Puerto Madero")); 
+//		c.modifyClient(new ClientDTO(5, "22-22222222-2", "Pedro Picapiedra", "Siempreviva 123", "15-1515-1515","pedro@picapiedra.net", "Puerto Madero"));
+//		c.addProduct(new ProductDTO(0, "Manzana", "Manzana de Rio Negro", 45f));
+//		c.removeProduct(new ProductDTO(7, "Manzana", "Manzana de Rio Negro", 45f));
+//		c.modifyProduct(new ProductDTO(6, "Manzana", "Manzana de Rio Negro", 72f));
+//		InvoiceDTO invoice = new InvoiceDTO(0, 3, new Date());
+//		invoice.addProductItemDTO(8, 2);
+//		invoice.addProductItemDTO(5, 2);
+//		c.addInvoice(invoice);
+//		Invoice inv = InvoiceDAO.getInvoice(12);
+//		c.removeInvoice(new InvoiceDTO(12, 3, new Date()));
+//		c.addRole(new RoleDTO(Roles.QUERY_USER.name(), 5));
+//		c.removeRole(new RoleDTO(Roles.QUERY_USER.name(), 5));
+//		c.addIncompatibleZoneClaim(new IncompatibleZoneClaimDTO(0, 3, "Hola", 0));
+//		WrongInvoicingClaimDTO dto = new WrongInvoicingClaimDTO(0, 4, "Tengo MUCHO suenio");
+//		dto.addInvoiceItemDTO(new InvoiceItemDTO(8, "chau"));
+//		c.addWrongInvoicingClaim(dto);
+		WrongInvoicingClaim invoice = WrongInvoicingClaimDAO.getWrongInvoicingClaim(26);
 
-//		Invoice invoice = new Invoice(ClientDAO.getClient(15), new Date());
-//		invoice.save();
-//		
-//		invoice.deactivateInvoice();
-//		invoice.modify();
-//		
-//		List<Invoice> invoices = InvoiceDAO.getAllInvoices();
-//		
-//		List<Invoice> invoices = InvoiceDAO.getAllInvoicesFromClient(3);
-//		System.out.println(invoices.size());
-		
-//		Invoice invoice = InvoiceDAO.getInvoice(6);
-//		System.out.println("Hola");
-		
-//		System.out.println(RoleDAO.idByRole(Roles.ADMINISTRATOR));
-//		System.out.println(Roles.ADMINISTRATOR.toString());
-		
-//		User user = new User("Jimena", Roles.DISTRIBUTION_RESPONSABLE);
-//		user.addRole(Roles.ADMINISTRATOR);
-//		user.saveInDB();
-//		
-//		User user = UserDAO.getUser(1);
-//		System.out.println(user.getName());
-		
-//		for (User u : UserDAO.getAllUserByRole(Roles.DISTRIBUTION_RESPONSABLE)) {
-//			System.out.println(u.getName());
-//		}
-		
-//		User user = new User("Pepe", Roles.INVOICING_RESPONSABLE);
-//		user.deactivateUser();
-//		user.modifyInDB();
-//		
-//		User user1 = new User("Pedro", Roles.ADMINISTRATOR);
-//		User user2 = new User("Pedro", Roles.ADMINISTRATOR);
-//		System.out.println(user1.equals(user2));
-		
-//		MoreQuantityClaim claim = new MoreQuantityClaim(ClientDAO.getClient(1), new Date(), "Necesito 3 paquetes mas", ClaimType.MORE_QUANTITY, InvoiceDAO.getInvoice(1));
-//		claim.save();
-		
-//		Invoice invoice = new Invoice(ClientDAO.getClient(1), new Date());
-//		invoice.addProductItem(ProductDAO.getProduct(1), 3);
-//		invoice.addProductItem(ProductDAO.getProduct(2), 2);
-//		invoice.save();
-		
-//		Invoice invoice = new Invoice(ClientDAO.getClient(1), new Date());
-//		invoice.addProductItem(ProductDAO.getProduct(1), 15);
-//		invoice.save();
-//		System.out.println("Hola");
-//		
-//		MoreQuantityClaim claim = new MoreQuantityClaim(ClientDAO.getClient(1), new Date(), "Hola", ClaimType.MISSING_QUANTITY, InvoiceDAO.getInvoice(invoice.getId()));
-//		
-//			claim.addProductItem(ProductDAO.getProduct(1), 10);
-//		
-//		claim.save();
-//		MoreQuantityClaim claim2 = MoreQuantityClaimDAO.getMoreQuantityClaim(claim.getClaimId());
-//		
-//		System.out.println("HOla");
-		
-		ProductItem pepe = ProductItemDAO.getProductItem(1);
-		System.out.println(pepe.getQuantity());
+		System.out.println(invoice.getClaimId());
 		
 	}
 }

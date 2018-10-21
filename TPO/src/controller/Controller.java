@@ -18,6 +18,11 @@ import backEnd.User;
 import backEnd.UserBoard;
 import backEnd.WrongInvoicingClaim;
 import backEnd.Zone;
+import dao.ClientDAO;
+import dao.InvoiceDAO;
+import dao.ProductDAO;
+import dao.RoleDAO;
+import dao.UserDAO;
 import dto.ClaimDTO;
 import dto.ClientDTO;
 import dto.IncompatibleZoneClaimDTO;
@@ -35,9 +40,11 @@ import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
+import exceptions.InvalidInvoiceItemException;
 import exceptions.InvalidProductException;
 import exceptions.InvalidRoleException;
 import exceptions.InvalidUserException;
+import exceptions.InvalidZoneException;
 
 public class Controller {
 	
@@ -62,20 +69,20 @@ public class Controller {
 		
 		return newClient.getId();
 	}
-	public void modifyClient(ClientDTO dto) throws InvalidClientException{
+	public void modifyClient(ClientDTO dto) throws InvalidClientException, ConnectionException, AccessException, InvalidZoneException{
 		
 		int clientId = dto.getId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
-		Client existingClient =  new Client("cuit", "name", "address", "phoneNumber", "email", new Zone("zone")); //Este seria el client que me trae la BD
+		Client existingClient =  ClientDAO.getClient(clientId);
 		
 		if (existingClient != null) {
 			existingClient.modify("cuit", "name", "address", "phoneNumber", "email", new Zone("zone"));
 		}
 		
 	}
-	public void removeClient(ClientDTO dto) throws InvalidClientException, ConnectionException, AccessException {
+	public void removeClient(ClientDTO dto) throws InvalidClientException, ConnectionException, AccessException, InvalidZoneException {
 		
 		int clientId = dto.getId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
-		Client existingClient =  new Client("cuit", "name", "address", "phoneNumber", "email", new Zone("zone")); //Este seria el client que me trae la BD
+		Client existingClient =  ClientDAO.getClient(clientId);
 		
 		existingClient.deactivateClient();
 		
@@ -91,20 +98,21 @@ public class Controller {
 		
 		return newUser.getId();
 	}
-	public void modifyUser(UserDTO dto) {
+	public void modifyUser(UserDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
 		
 		int userId = dto.getUserId(); //Con este userId tengo que traer al user desde la BD y lo llamo existingUser.
-		User existingUser =  new User("Test", Roles.ADMINISTRATOR);
+		User existingUser = UserDAO.getUser(userId);
 		
 		if (existingUser != null) {
 			existingUser.modify(dto.getName(), Roles.valueOf(dto.getPrincipalRole()));
 		}
 		
 	}
-	public void removeUser(UserDTO dto) {
+	public void removeUser(UserDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
 		
 		int userId = dto.getUserId(); //Con este id me traigo el user de la DB.
-		User userToRemove = new User("Test", Roles.ADMINISTRATOR); // Este es el usuario que me estaria trayendo de la base de datos con el userId.
+		User userToRemove = UserDAO.getUser(userId);
+	
 		List<Role> roles = new LinkedList<>(); //Aca me traigo todos los roles de la DB y me hago una lista que es la que estoy simulando aca.
 		
 		for (Role role : roles) {
@@ -123,18 +131,18 @@ public class Controller {
 		
 		return newProduct.getProductId();
 	}
-	public void modifyProduct(ProductDTO dto) {
+	public void modifyProduct(ProductDTO dto) throws ConnectionException, AccessException, InvalidProductException {
 		int productId = dto.getProductId(); //Este es el id que voy a usar para obtener el producto de la BD.
-		Product existingProduct = new Product("title", "description", 0); //Este es el producto que sacaria de la BD.
+		Product existingProduct = ProductDAO.getProduct(productId);
 		
 		if(existingProduct != null) {
 			existingProduct.modify(dto.getTitle(), dto.getDescription(), dto.getPrice());
 		}
 			
 	}
-	public void removeProduct(ProductDTO dto) {
+	public void removeProduct(ProductDTO dto) throws ConnectionException, AccessException, InvalidProductException {
 		int productId = dto.getProductId(); //Con este id me traigo el product de la DB.
-		Product productToRemove = new Product("title", "description", 0); // Este es el product que me estaria trayendo de la base de datos con el userId.
+		Product productToRemove = ProductDAO.getProduct(productId);
 		
 		productToRemove.deactivateProduct(); //Aca desactivo al product para que no se pueda usar mas en el programa.
 		
@@ -142,47 +150,45 @@ public class Controller {
 	//------------------------------------------------------------ END PRODUCT ------------------------------------------------------------
 	
 	//------------------------------------------------------------ START ROLE ------------------------------------------------------------
-	public void addRole(RoleDTO dto) {
+	public void addRole(RoleDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
 		int userId = dto.getUserId(); //Con este userId agarro el user de la base de datos.
-		User existingUser =  new User("Test", Roles.ADMINISTRATOR); //Este es el user que voy a agarrar de la base de datos.
+		User existingUser =  UserDAO.getUser(userId);
 		
 		if(existingUser != null) {
-			
-			Roles existingRole = Roles.valueOf(dto.getRole()); //Con este role lo voy a buscar a la BD
-			Role existingRoleObjeto = new Role(existingRole); //Y me traigo este Role.
-			
-			existingUser.addRole(existingRole);
-			existingRoleObjeto.addUser(existingUser);
-			
+	
+			existingUser.addRole(Roles.valueOf(dto.getRole()));
+			RoleDAO.getRole(Roles.valueOf(dto.getRole())).addUser(existingUser);
+			existingUser.modifyInDB();
 		}
 		
 	}
-	public void removeRole(RoleDTO dto) {
+	public void removeRole(RoleDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
 	
 		int userId = dto.getUserId(); //Con este userId agarro el user de la base de datos.
-		User existingUser =  new User("Test", Roles.ADMINISTRATOR); //Este es el user que voy a agarrar de la base de datos.
+		User existingUser =  UserDAO.getUser(userId);
 		
 		Roles existingRole = Roles.valueOf(dto.getRole()); //Con este role lo voy a buscar a la BD
-		Role existingRoleObjeto = new Role(existingRole); //Y me traigo este Role.
+		Role existingRoleObjeto = RoleDAO.getRole(existingRole);
 		
 		if(existingRole != null && existingRoleObjeto != null) {
 			existingUser.removeRole();
 			existingRoleObjeto.removeUser(existingUser);
+			existingUser.modifyInDB();
 		}
 	}
 	//------------------------------------------------------------ END ROLE ------------------------------------------------------------
 	
 	//------------------------------------------------------------ START INVOICE ------------------------------------------------------------
-	public int addInvoice(InvoiceDTO dto) throws InvalidClientException, ConnectionException, AccessException, InvalidInvoiceException, InvalidProductException {
+	public int addInvoice(InvoiceDTO dto) throws InvalidClientException, ConnectionException, AccessException, InvalidInvoiceException, InvalidProductException, InvalidZoneException {
 		List<ProductItemDTO> itemsDTO = dto.getProductItems(); //Esta lista de ProductItemDTO la tengo para despues traerme los product de la BD.
 		int clientId = dto.getClientId(); //Este es el id que uso para traerme al cliente de la BD.
-		Client existingClient =  new Client("cuit", "name", "address", "phoneNumber", "email", new Zone("zone")); //Este seria el client que me trae la BD
+		Client existingClient =  ClientDAO.getClient(clientId);
 		
 		Invoice newInvoice = new Invoice(existingClient, new Date());
 		
 		for (ProductItemDTO productItemDTO : itemsDTO) {
 			int productId = productItemDTO.getProductId();
-			Product existingProduct = new Product("title", "description", 0); //Este es el producto que sacaria de la BD.
+			Product existingProduct = ProductDAO.getProduct(productId);
 			
 			int productQuantity = productItemDTO.getQuantity();
 			
@@ -194,9 +200,9 @@ public class Controller {
 		return newInvoice.getId();
 		
 	}
-	public void removeInvoice(InvoiceDTO dto) {
-		int inoviceId = dto.getInvoiceId();
-		Invoice existingInvoice = new Invoice(null,null); // Aca traigo la Invoice de la BD con el idInvoice de arriba.
+	public void removeInvoice(InvoiceDTO dto) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException {
+		int invoiceId = dto.getInvoiceId();
+		Invoice existingInvoice = InvoiceDAO.getInvoice(invoiceId);
 		
 		existingInvoice.deactivateInvoice();
 	}
@@ -230,10 +236,10 @@ public class Controller {
 		
 		
 	}
-	public int addWrongInvoicingClaim(WrongInvoicingClaimDTO dto) throws InvalidClaimException, InvalidClientException {
+	public int addWrongInvoicingClaim(WrongInvoicingClaimDTO dto) throws InvalidClaimException, InvalidClientException, ConnectionException, AccessException, InvalidZoneException, InvalidInvoiceException, InvalidProductException, InvalidInvoiceItemException {
 		
 		int clientId = dto.getClientId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
-		Client existingClient =  new Client("cuit", "name", "address", "phoneNumber", "email", new Zone("zone")); //Este seria el client que me trae la BD
+		Client existingClient =  ClientDAO.getClient(clientId);
 		
 		WrongInvoicingClaim newClaim = new WrongInvoicingClaim(existingClient, new Date(), dto.getDescription());
 		
@@ -241,18 +247,16 @@ public class Controller {
 		
 		for (InvoiceItemDTO invoiceItemDTO : invoiceItems) {
 			int invoiceId = invoiceItemDTO.getInvoiceId();
-			Invoice existingInvoice = new Invoice(null,null); // Aca traigo la Invoice de la BD con el idInvoice de arriba.
+			Invoice existingInvoice = InvoiceDAO.getInvoice(invoiceId);
 			
 			if(existingInvoice.validateClient(existingClient)) { //Si el cliente pertenece a la factura que me mandaron
 				String inconsistency = invoiceItemDTO.getInconsistency();
-				
 				newClaim.addInovice(existingInvoice, inconsistency);
+			}else {
+				throw new InvalidClaimException("Invoice doesn't belong to client");
 			}
 		}
-		
-		UserBoard existingUserBoard = new UserBoard(new Role(null), null); //Este userBoard es el que guarda todas las WrongInvoicingClaims
-		
-		existingUserBoard.addClaim(newClaim);
+		newClaim.save();
 		
 		return newClaim.getClaimId();
 		
@@ -296,19 +300,15 @@ public class Controller {
 		
 		return newClaim.getClaimId();
 	}
-	public int addIncompatibleZoneClaim(IncompatibleZoneClaimDTO dto) throws InvalidClientException, InvalidClaimException {
+	public int addIncompatibleZoneClaim(IncompatibleZoneClaimDTO dto) throws InvalidClientException, InvalidClaimException, ConnectionException, AccessException, InvalidZoneException {
 		int clientId = dto.getClientId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
-		Client existingClient =  new Client("cuit", "name", "address", "phoneNumber", "email", new Zone("zone")); //Este seria el client que me trae la BD
+		Client existingClient =  ClientDAO.getClient(clientId);
 		
 		if(existingClient != null) {
 			String description = dto.getDescription();
 			
 			IncompatibleZoneClaim newClaim = new IncompatibleZoneClaim(existingClient, new Date(), description, existingClient.getZone());
-		
-			UserBoard existingUserBoard = new UserBoard(new Role(null), null); //Este userBoard es el que guarda todas las IncompatibleZoneClaim
-		
-			existingUserBoard.addClaim(newClaim);
-		
+			newClaim.save();
 			return newClaim.getClaimId();
 		
 		}

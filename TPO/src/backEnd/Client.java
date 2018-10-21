@@ -29,7 +29,7 @@ public class Client {
 		activeClient = true;
 	}
 	
-	public void modify(String cuit, String name, String address, String phoneNumber, String email, Zone zone) throws InvalidClientException {
+	public void modify(String cuit, String name, String address, String phoneNumber, String email, Zone zone) throws InvalidClientException, ConnectionException, AccessException {
 		
 		parameterChecker(cuit, name, address, phoneNumber, email, zone);
 		this.cuit = cuit;
@@ -38,10 +38,12 @@ public class Client {
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 		this.zone = zone;	
+		ClientDAO.modify(this);
 	}
 	
 	public void deactivateClient() throws ConnectionException, AccessException, InvalidClientException {
-		activeClient = false;		
+		activeClient = false;	
+		ClientDAO.modify(this);
 	}
 	
 	public void setId(int id) {

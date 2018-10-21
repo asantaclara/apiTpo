@@ -12,6 +12,7 @@ import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
 import exceptions.InvalidClientException;
+import exceptions.InvalidZoneException;
 
 public class IncompatibleZoneClaimDAO {
 
@@ -46,12 +47,13 @@ public class IncompatibleZoneClaimDAO {
 			prepStm1.execute();
 			prepStm2.execute();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new AccessException("Save error");
 		}
 		
 	}
 
-	public static IncompatibleZoneClaim getIncompatibleZoneClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException {
+	public static IncompatibleZoneClaim getIncompatibleZoneClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;

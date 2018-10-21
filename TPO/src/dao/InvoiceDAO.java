@@ -16,20 +16,21 @@ import exceptions.ConnectionException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidProductException;
+import exceptions.InvalidZoneException;
 
 public class InvoiceDAO {
 
-	public static List<Invoice> getAllInvoices() throws ConnectionException, AccessException, InvalidClientException, InvalidProductException{
+	public static List<Invoice> getAllInvoices() throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException{
 		String SQL = "SELECT * FROM Invoices WHERE Active = 1"; 
 		return getAllInvoicesPrivate(SQL);
 	}
 	
-	public static List<Invoice> getAllInvoicesFromClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException{
+	public static List<Invoice> getAllInvoicesFromClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException{
 		String SQL = "SELECT * FROM Invoices WHERE clientId = " + clientId + " AND Active = 1" ; 
 		return getAllInvoicesPrivate(SQL);
 	}
 	
-	private static List<Invoice> getAllInvoicesPrivate(String SQL) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException {
+	private static List<Invoice> getAllInvoicesPrivate(String SQL) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -65,7 +66,7 @@ public class InvoiceDAO {
 		}
 	}
 
-	public static Invoice getInvoice(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException {
+	public static Invoice getInvoice(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -133,6 +134,7 @@ public class InvoiceDAO {
 		try {
 			prepStm.execute();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new AccessException("Save error");
 		}
 		

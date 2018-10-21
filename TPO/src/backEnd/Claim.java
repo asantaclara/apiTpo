@@ -6,6 +6,7 @@ import dto.ClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
+import exceptions.InvalidInvoiceItemException;
 import exceptions.InvalidProductException;
 
 public abstract class Claim {
@@ -34,7 +35,7 @@ public abstract class Claim {
 	public abstract State getActualState();
 	public abstract void treatClaim(User responsable, State newState, String description);
 	public abstract ClaimDTO toDTO();
-	public abstract void save() throws ConnectionException, AccessException, InvalidClaimException, InvalidProductException;
+	public abstract void save() throws ConnectionException, AccessException, InvalidClaimException, InvalidProductException, InvalidInvoiceItemException;
 	
 	public boolean validateClient(Client client) {
 		return (client.equals(this.client));

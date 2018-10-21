@@ -47,7 +47,7 @@ public class UserDAO {
 		}
 	}
 	
-	public static User getUser(int userId) throws InvalidUserException, ConnectionException, AccessException {
+	public static User getUser(int userId) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -86,14 +86,14 @@ public class UserDAO {
 		}
 	}
 
-	public static List<User> getAllUsers() throws ConnectionException, AccessException{
+	public static List<User> getAllUsers() throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException{
 		String SQL = "SELECT Users.UserId, Users.Name, Users.Active, Role1.Role as Role1, Role2.Role as Role2 FROM "
 				+ "Users JOIN Roles AS Role1 ON Users.RolId1 = Role1.RoleId JOIN Roles AS Role2 ON Users.RolId2 = Role2.RoleId WHERE Users.Active = 1";
 
 		return getAllUsersPrivate(SQL);
 	}
 	
-	public static List<User> getAllUserByRole(Roles role) throws ConnectionException, AccessException{
+	public static List<User> getAllUserByRole(Roles role) throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException{
 		
 		String SQL = "SELECT Users.UserId, Users.Name, Users.Active, Role1.Role as Role1, Role2.Role as Role2 FROM Users JOIN Roles AS Role1 ON Users.RolId1 = Role1.RoleId "
 				+ "JOIN Roles AS Role2 ON Users.RolId2 = Role2.RoleId WHERE Users.Active = 1 AND Role2.Role = '" + role.name() + "'";
@@ -102,7 +102,7 @@ public class UserDAO {
 
 	}
 	
-	private static List<User> getAllUsersPrivate(String SQL) throws ConnectionException, AccessException{
+	private static List<User> getAllUsersPrivate(String SQL) throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException{
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;

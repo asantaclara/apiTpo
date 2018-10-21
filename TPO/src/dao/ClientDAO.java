@@ -13,6 +13,7 @@ import backEnd.Zone;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClientException;
+import exceptions.InvalidZoneException;
 
 
 public class ClientDAO {
@@ -52,7 +53,7 @@ public class ClientDAO {
 		}
 	}
 	
-	static public Client getClient(int clientId) throws ConnectionException, AccessException, InvalidClientException {
+	static public Client getClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -72,7 +73,7 @@ public class ClientDAO {
 		try {
 			if(rs.next()){
 				if(rs.getByte(8) == 1) {					
-					Client newClient = new Client(rs.getString(3), rs.getString(2), rs.getString(4), rs.getString(5), rs.getString(6), new Zone(rs.getString(10)));
+					Client newClient = new Client(rs.getString(3), rs.getString(2), rs.getString(4), rs.getString(5), rs.getString(6), ZoneDAO.getZone(rs.getString(10)));
 					newClient.setId(rs.getInt(1));
 					return newClient;
 				} else {

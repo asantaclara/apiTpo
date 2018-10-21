@@ -16,6 +16,7 @@ import exceptions.InvalidClaimException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidProductException;
+import exceptions.InvalidZoneException;
 
 public class MoreQuantityClaimDAO {
 
@@ -60,7 +61,7 @@ public class MoreQuantityClaimDAO {
 		}
 	}
 
-	public static MoreQuantityClaim getMoreQuantityClaim(int claimId) throws AccessException, ConnectionException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException{
+	public static MoreQuantityClaim getMoreQuantityClaim(int claimId) throws AccessException, ConnectionException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException{
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;

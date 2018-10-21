@@ -23,7 +23,7 @@ public class User {
 		this.activeUser = true;
 	}
 	
-	public void modify(String name, Roles principalRole) {
+	public void modify(String name, Roles principalRole) throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException {
 		
 		if (name != null) {			
 			this.name = name;
@@ -32,13 +32,15 @@ public class User {
 			this.principalRole = principalRole;
 			this.secondaryRole = principalRole;
 		}
+		
+		UserDAO.modify(this);
 	}
 	
 	public void setId(int userId) {
 		this.id = userId;
 	}
 	
-	public void addRole(Roles role) {
+	public void addRole(Roles role) throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException {
 		secondaryRole = role;
 	}
 	
@@ -46,8 +48,9 @@ public class User {
 		secondaryRole = principalRole;
 	}
 	
-	public void deactivateUser() {
+	public void deactivateUser() throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException {
 		activeUser = false;
+		UserDAO.modify(this);
 	}
 	
 	public void saveInDB() throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException {

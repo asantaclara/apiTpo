@@ -4,10 +4,13 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import dao.WrongInvoicingClaimDAO;
 import dto.WrongInvoicingClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
+import exceptions.InvalidInvoiceItemException;
+import exceptions.InvalidProductException;
 
 public class WrongInvoicingClaim extends IndividualClaim {
 
@@ -39,9 +42,8 @@ public class WrongInvoicingClaim extends IndividualClaim {
 	}
 
 	@Override
-	public void save() throws ConnectionException, AccessException {
-		// TODO Auto-generated method stub
-		
+	public void save() throws ConnectionException, AccessException, InvalidProductException, InvalidInvoiceItemException, InvalidClaimException {
+		WrongInvoicingClaimDAO.save(this);
 	}
 	
 	public List<InvoiceItem> getInvoices() {

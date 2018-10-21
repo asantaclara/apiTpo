@@ -62,12 +62,13 @@ public class Invoice {
 		return activeInvoice;
 	}
 	
-	public void deactivateInvoice() {
+	public void deactivateInvoice() throws ConnectionException, AccessException, InvalidInvoiceException {
 		activeInvoice = false;
+		InvoiceDAO.modify(this);
 	}
 	
 	public boolean validateClient(Client client) {
-		return (this.client == client); //Si la factura es del cliente que me mandan devuelvo true
+		return (this.client.getId() == client.getId()); //Si la factura es del cliente que me mandan devuelvo true
 	}
 	
 	public boolean validateProductItem(Product product, int quantity) {

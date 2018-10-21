@@ -18,6 +18,7 @@ import exceptions.InvalidClaimException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidProductException;
+import exceptions.InvalidZoneException;
 
 public class CompositeClaimDAO {
 
@@ -75,7 +76,7 @@ public class CompositeClaimDAO {
 		}
 	}
 
-	private static List<Claim> getListOfClaims(int claimId) throws AccessException, ConnectionException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException {
+	private static List<Claim> getListOfClaims(int claimId) throws AccessException, ConnectionException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -138,7 +139,7 @@ public class CompositeClaimDAO {
 		
 	}
 
-	public static CompositeClaim getCompositeClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException {
+	public static CompositeClaim getCompositeClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -174,7 +175,7 @@ public class CompositeClaimDAO {
 		}
 	}
 
-	public static List<CompositeClaim> getAllClaims() throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException{
+	public static List<CompositeClaim> getAllClaims() throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException{
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;

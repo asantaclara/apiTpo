@@ -26,7 +26,7 @@ public class Product {
 		return productId;
 	}
 	
-	public void modify(String title, String description, float price) {
+	public void modify(String title, String description, float price) throws ConnectionException, AccessException, InvalidProductException {
 		
 		if(title != null) {			
 			this.title = title;
@@ -37,6 +37,7 @@ public class Product {
 		if (price >= 0) {			
 			this.price = price;
 		}
+		ProductDAO.modify(this);
 	}
 	
 	public ProductDTO toDTO() {
@@ -52,8 +53,9 @@ public class Product {
 	}
 	
 
-	public void deactivateProduct() {
+	public void deactivateProduct() throws ConnectionException, AccessException, InvalidProductException {
 		activeProduct = false;
+		ProductDAO.modify(this);
 		
 	}
 	
