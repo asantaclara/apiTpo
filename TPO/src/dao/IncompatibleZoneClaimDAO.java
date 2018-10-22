@@ -17,7 +17,7 @@ import exceptions.InvalidZoneException;
 
 public class IncompatibleZoneClaimDAO {
 
-	public static void save(IncompatibleZoneClaim claim) throws ConnectionException, InvalidClaimException, AccessException {
+	public static void save(IncompatibleZoneClaim claim) throws ConnectionException, InvalidClaimException, AccessException, SQLException {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm1;
 		PreparedStatement prepStm2;
@@ -29,6 +29,7 @@ public class IncompatibleZoneClaimDAO {
 		claim.setClaimId(SqlUtils.lastId("Claims", "ClaimId") + 1);
 		
 		try {
+			con.setAutoCommit(false);
 			prepStm1 = con.prepareStatement("insert into Claims values(?,?,?,?,?)");
 			prepStm1.setInt(1, claim.getClaimId());
 			prepStm1.setString(2,claim.getActualState().name());
@@ -47,7 +48,9 @@ public class IncompatibleZoneClaimDAO {
 		try {
 			prepStm1.execute();
 			prepStm2.execute();
+			con.commit();
 		} catch (SQLException e) {
+			con.rollback();
 			e.printStackTrace();
 			throw new AccessException("Save error");
 		}

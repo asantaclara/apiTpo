@@ -13,43 +13,56 @@ import backEnd.State;
 import backEnd.Transition;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
+import exceptions.InvalidClaimException;
+import exceptions.InvalidClientException;
+import exceptions.InvalidInvoiceException;
+import exceptions.InvalidProductException;
+import exceptions.InvalidProductItemException;
 import exceptions.InvalidRoleException;
 import exceptions.InvalidTransitionException;
 import exceptions.InvalidUserException;
+import exceptions.InvalidZoneException;
 
 public class TransitionDAO {
 
-	public static void save(Transition transition) throws ConnectionException, InvalidTransitionException, AccessException {
+	public static void save(Transition transition) throws ConnectionException, InvalidTransitionException, AccessException, SQLException {
 		Connection con = SqlUtils.getConnection();
-		PreparedStatement prepStm;
-	
+		PreparedStatement prepStm1;
+		PreparedStatement prepStm2;
+		
 		if(transition.getId() != 0) {
 			throw new InvalidTransitionException("Transition already in data base");
 		}
 		
 		transition.setId(SqlUtils.lastId("Transitions", "TransitionId") + 1); 
 		try {
-			prepStm = con.prepareStatement("insert into Transitions values(?,?,?,?,?,?,?)");
-			prepStm.setInt(1, transition.getId());
-			prepStm.setInt(2, transition.getClaimId());
-			prepStm.setString(3, transition.getPreviousState().name());
-			prepStm.setString(4, transition.getNewState().name());
-			prepStm.setDate(5, new java.sql.Date(transition.getDate().getTime()));
-			prepStm.setString(6, transition.getDescription());
-			prepStm.setInt(7, transition.getResponsable().getId());
+			con.setAutoCommit(false);
 			
+			prepStm1 = con.prepareStatement("insert into Transitions values(?,?,?,?,?,?,?)");
+			prepStm1.setInt(1, transition.getId());
+			prepStm1.setInt(2, transition.getClaimId());
+			prepStm1.setString(3, transition.getPreviousState().name());
+			prepStm1.setString(4, transition.getNewState().name());
+			prepStm1.setDate(5, new java.sql.Date(transition.getDate().getTime()));
+			prepStm1.setString(6, transition.getDescription());
+			prepStm1.setInt(7, transition.getResponsable().getId());
+			
+			prepStm2 = con.prepareStatement("UPDATE Claims SET State='" + transition.getNewState().name() +"' WHERE ClaimId = " + transition.getClaimId());
 		} catch (SQLException e) {
 			throw new AccessException("Access error");
 		}		
 		
 		try {
-			prepStm.execute();
+			prepStm1.execute();
+			prepStm2.execute();
+			con.commit();
 		} catch (SQLException e) {
+			con.rollback();
 			throw new AccessException("Save error");
 		}
 	}
 
-	public static List<Transition> getAllTransitionOfClaim(int claimId) throws ConnectionException, AccessException, InvalidUserException, InvalidRoleException, InvalidTransitionException{
+	public static List<Transition> getAllTransitionOfClaim(int claimId) throws ConnectionException, AccessException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException{
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -84,7 +97,7 @@ public class TransitionDAO {
 		}
 	}
 
-	public static Transition getTransitionById(int transitionId) throws AccessException, InvalidUserException, ConnectionException, InvalidTransitionException, InvalidRoleException {
+	public static Transition getTransitionById(int transitionId) throws AccessException, InvalidUserException, ConnectionException, InvalidTransitionException, InvalidRoleException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;

@@ -1,5 +1,6 @@
 package backEnd;
 
+import java.sql.SQLException;
 import java.util.Date;
 
 import dao.TransitionDAO;
@@ -44,7 +45,7 @@ public class Transition {
 	public int getClaimId() {
 		return claimId;
 	}
-
+	
 	public State getPreviousState() {
 		return previousState;
 	}
@@ -69,7 +70,7 @@ public class Transition {
 		return new TransitionDTO(claimId, date, responsable.getId(), previousState.name(), newState.name(), description);
 	}
 	
-	public void save() throws ConnectionException, AccessException, InvalidTransitionException {
+	public void save() throws ConnectionException, AccessException, InvalidTransitionException, SQLException {
 		TransitionDAO.save(this);
 	}
 	

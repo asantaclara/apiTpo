@@ -1,5 +1,6 @@
 package controller;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,6 +26,7 @@ import dao.InvoiceDAO;
 import dao.ProductDAO;
 import dao.RoleDAO;
 import dao.UserDAO;
+import dao.ZoneDAO;
 import dto.ClientDTO;
 import dto.CompositeClaimDTO;
 import dto.IncompatibleZoneClaimDTO;
@@ -79,7 +81,7 @@ public class Controller {
 		Client existingClient =  ClientDAO.getClient(clientId);
 		
 		if (existingClient != null) {
-			existingClient.modify("cuit", "name", "address", "phoneNumber", "email", new Zone("zone"));
+			existingClient.modify(dto.getCuit(), dto.getName(), dto.getAddress(), dto.getPhoneNumber(), dto.getEmail(),new Zone(dto.getZone()) );
 		}
 		
 	}
@@ -215,7 +217,7 @@ public class Controller {
 	public String getClaimState(int claimNumber) throws InvalidClaimException, ConnectionException, AccessException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
 		return ClaimDAO.getClaim(claimNumber).getActualState().name();
 	}
-	public void treatClaim(TransitionDTO dto) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidTransitionException, InvalidUserException, InvalidRoleException {
+	public void treatClaim(TransitionDTO dto) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidTransitionException, InvalidUserException, InvalidRoleException, SQLException {
 		Claim aux = ClaimDAO.getClaim(dto.getClaimId());
 		aux.treatClaim(UserDAO.getUser(dto.getUserId()), State.valueOf(dto.getNewState()), dto.getDescription());
 		
@@ -272,7 +274,7 @@ public class Controller {
 		
 		return newClaim.getClaimId();
 	}
-	public int addIncompatibleZoneClaim(IncompatibleZoneClaimDTO dto) throws InvalidClientException, InvalidClaimException, ConnectionException, AccessException, InvalidZoneException {
+	public int addIncompatibleZoneClaim(IncompatibleZoneClaimDTO dto) throws InvalidClientException, InvalidClaimException, ConnectionException, AccessException, InvalidZoneException, SQLException {
 		int clientId = dto.getClientId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
 		Client existingClient =  ClientDAO.getClient(clientId);
 		

@@ -1,5 +1,6 @@
 package backEnd;
 
+import java.sql.SQLException;
 import java.util.Date;
 
 import dto.ClaimDTO;
@@ -34,9 +35,9 @@ public abstract class Claim {
 	}
 	
 	public abstract State getActualState();
-	public abstract void treatClaim(User responsable, State newState, String description) throws InvalidTransitionException, ConnectionException, AccessException;
+	public abstract void treatClaim(User responsable, State newState, String description) throws InvalidTransitionException, ConnectionException, AccessException, SQLException;
 	public abstract ClaimDTO toDTO();
-	public abstract void save() throws ConnectionException, AccessException, InvalidClaimException, InvalidProductException, InvalidInvoiceItemException;
+	public abstract void save() throws ConnectionException, AccessException, InvalidClaimException, InvalidProductException, InvalidInvoiceItemException, SQLException;
 	
 	public boolean validateClient(Client client) {
 		return (client.equals(this.client));

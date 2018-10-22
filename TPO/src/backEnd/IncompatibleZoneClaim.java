@@ -1,5 +1,6 @@
 package backEnd;
 
+import java.sql.SQLException;
 import java.util.Date;
 
 import dao.IncompatibleZoneClaimDAO;
@@ -23,7 +24,7 @@ public class IncompatibleZoneClaim extends IndividualClaim {
 	}
 
 	@Override
-	public void save() throws ConnectionException, AccessException, InvalidClaimException {
+	public void save() throws ConnectionException, AccessException, InvalidClaimException, SQLException {
 		IncompatibleZoneClaimDAO.save(this);
 		
 	}

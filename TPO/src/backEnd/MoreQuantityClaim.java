@@ -28,7 +28,6 @@ public class MoreQuantityClaim extends IndividualClaim {
 		} else {
 			throw new InvalidInvoiceException("The invoice doesn't belog to the client");
 		}
-		
 	}
 
 	public void addProductItem(Product product, int quantity) throws InvalidProductItemException {

@@ -1,5 +1,6 @@
 package backEnd;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,13 +36,13 @@ public abstract class IndividualClaim extends Claim {
 		this.actualState = actualState;
 	}
 
-	public void treatClaim(User responsable, State newState, String description) throws InvalidTransitionException, ConnectionException, AccessException {
+	public void treatClaim(User responsable, State newState, String description) throws InvalidTransitionException, ConnectionException, AccessException, SQLException {
+		
 		Transition newTran = new Transition(claimId, actualState, newState, date, description, responsable);
 		newTran.save();
 		actualState = newState;
-		ClaimDAO.updateState(this);
 	}
 	public abstract ClaimDTO toDTO();
-	public abstract void save() throws ConnectionException, AccessException, InvalidClaimException, InvalidProductException, InvalidInvoiceItemException; 
+	public abstract void save() throws ConnectionException, AccessException, InvalidClaimException, InvalidProductException, InvalidInvoiceItemException, SQLException; 
 
 }

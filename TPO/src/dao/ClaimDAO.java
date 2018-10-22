@@ -77,6 +77,7 @@ public class ClaimDAO {
 			prepStm.execute();
 		} catch (SQLException e) {
 			throw new AccessException("Save error");
+			
 		}
 	}
 }

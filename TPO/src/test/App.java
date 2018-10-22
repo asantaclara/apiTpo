@@ -1,5 +1,6 @@
 package test;
 
+import java.sql.SQLException;
 import java.util.Date;
 
 import backEnd.State;
@@ -20,15 +21,16 @@ import exceptions.InvalidZoneException;
 
 public class App {
 	
-	public static void main(String[] args) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidInvoiceException, InvalidRoleException, InvalidUserException, InvalidClaimException, InvalidProductException, InvalidInvoiceItemException, InvalidProductItemException, InvalidTransitionException {
+	public static void main(String[] args) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidInvoiceException, InvalidRoleException, InvalidUserException, InvalidClaimException, InvalidProductException, InvalidInvoiceItemException, InvalidProductItemException, InvalidTransitionException, SQLException {
 		Controller c = Controller.getInstance();
-		
-//		c.addUser(new UserDTO(0, "Alejandro",Roles.ADMINISTRATOR.name(), null));
-//		c.modifyUser(new UserDTO(1, "Martin Abba", Roles.QUERY_USER.name(),Roles.CALL_CENTER_RESPONSABLE.name()));
-//		c.removeUser(new UserDTO(1, null, null, null));
+//		int i = c.addUser(new UserDTO(0, "Ezequiel",Roles.CALL_CENTER_RESPONSABLE.name(), null));
+	
+//		c.modifyUser(new UserDTO(4, "Martin Abba", Roles.QUERY_USER.name(),Roles.CALL_CENTER_RESPONSABLE.name()));
+//		c.removeUser(new UserDTO(4, null, null, null));
 //		c.addClient(new ClientDTO(0, "11-11111111-1", "Pedro Picapiedra", "Siempreviva 123", "15-1515-1515","pedro@picapiedra.net", "Puerto Madero"));
-//		c.removeClient(new ClientDTO(6, "11-11111111-1", "Pedro Picapiedra", "Siempreviva 123", "15-1515-1515","pedro@picapiedra.net", "Puerto Madero")); 
-//		c.modifyClient(new ClientDTO(5, "22-22222222-2", "Pedro Picapiedra", "Siempreviva 123", "15-1515-1515","pedro@picapiedra.net", "Puerto Madero"));
+//		c.removeClient(new ClientDTO(6, "11-11111111-1", "Pedro Picapiedra", "Siempreviva 123", "15-1515-1515","pedro@picapiedra.net", "Puerto Madero"));
+		
+//		c.modifyClient(new ClientDTO(2, "22-22222222-2", "Juan Pablo", "Siempreviva 123", "15-1515-1515","pedro@picapiedra.net", "Saavedra"));
 //		c.addProduct(new ProductDTO(0, "Manzana", "Manzana de Rio Negro", 45f));
 //		c.removeProduct(new ProductDTO(7, "Manzana", "Manzana de Rio Negro", 45f));
 //		c.modifyProduct(new ProductDTO(6, "Manzana", "Manzana de Rio Negro", 72f));
@@ -40,7 +42,7 @@ public class App {
 //		c.removeInvoice(new InvoiceDTO(12, 3, new Date()));
 //		c.addRole(new RoleDTO(Roles.QUERY_USER.name(), 5));
 //		c.removeRole(new RoleDTO(Roles.QUERY_USER.name(), 5));
-//		c.addIncompatibleZoneClaim(new IncompatibleZoneClaimDTO(0, 3, "Hola", 0));
+//		c.addIncompatibleZoneClaim(new IncompatibleZoneClaimDTO(0, 2, "Hola", 0,null));
 //		WrongInvoicingClaimDTO dto = new WrongInvoicingClaimDTO(0, 4, "Tengo MUCHO suenio");
 //		dto.addInvoiceItemDTO(new InvoiceItemDTO(8, "chau"));
 //		c.addWrongInvoicingClaim(dto);
@@ -61,7 +63,8 @@ public class App {
 //		System.out.println(c.getClaimState(1));
 //		System.out.println(c.getClaimState(15));
 //		System.out.println(c.getClaimState(30));
-		TransitionDTO dto = new TransitionDTO(19, new Date(), 4, State.ENTERED.name(), State.IN_TREATMENT.name(), "Hola");
+		
+		TransitionDTO dto = new TransitionDTO(2, new Date(), 3, State.IN_TREATMENT.name(), State.IN_TREATMENT.name(), "Hola");
 		c.treatClaim(dto);
 		System.out.println("END");
 	}
