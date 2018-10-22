@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import backEnd.Claim;
+import backEnd.Client;
 import backEnd.CompositeClaim;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
@@ -22,7 +23,7 @@ import exceptions.InvalidZoneException;
 
 public class CompositeClaimDAO {
 
-	public static void save(CompositeClaim claim) throws ConnectionException, InvalidClaimException, AccessException {
+	public void save(CompositeClaim claim) throws ConnectionException, InvalidClaimException, AccessException {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm;
 	
@@ -100,7 +101,8 @@ public class CompositeClaimDAO {
 		try {
 			List<Claim> claimList = new LinkedList<>();
 			while(rs.next()){
-				claimList.add(ClaimDAO.getClaim(rs.getInt(10)));
+				Claim claim = new ClaimDAO().getClaim(rs.getInt(10));
+				claimList.add(claim);
 			}
 			return claimList;
 		} catch (SQLException e) {
@@ -109,7 +111,7 @@ public class CompositeClaimDAO {
 		
 	}
 	
-	public static CompositeClaim getCompositeClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
+	public CompositeClaim getCompositeClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -129,7 +131,8 @@ public class CompositeClaimDAO {
 		}
 		try {
 			if(rs.next()){
-				CompositeClaim newClaim = new CompositeClaim(ClientDAO.getClient(rs.getInt(5)), new Date(rs.getDate(7).getTime()), rs.getString(6));
+				Client client = new ClientDAO().getClient(rs.getInt(5));
+				CompositeClaim newClaim = new CompositeClaim(client, new Date(rs.getDate(7).getTime()), rs.getString(6));
 				newClaim.setClaimId(rs.getInt(1));
 				for (Claim c : getListOfClaims(claimId)) {
 					newClaim.addClaim(c);
@@ -145,7 +148,7 @@ public class CompositeClaimDAO {
 		}
 	}
 
-	public static List<CompositeClaim> getAllClaims() throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException{
+	public List<CompositeClaim> getAllClaims() throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException{
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;

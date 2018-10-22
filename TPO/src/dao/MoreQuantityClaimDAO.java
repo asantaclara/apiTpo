@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.Date;
 
 import backEnd.ClaimType;
+import backEnd.Client;
 import backEnd.MoreQuantityClaim;
 import backEnd.ProductItem;
 import backEnd.State;
@@ -22,7 +23,7 @@ import exceptions.InvalidZoneException;
 
 public class MoreQuantityClaimDAO {
 
-	public static void save(MoreQuantityClaim claim) throws ConnectionException, AccessException, InvalidClaimException, InvalidProductException {
+	public void save(MoreQuantityClaim claim) throws ConnectionException, AccessException, InvalidClaimException, InvalidProductException {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm1;
 		PreparedStatement prepStm2;
@@ -59,11 +60,11 @@ public class MoreQuantityClaimDAO {
 		
 		for (ProductItem pi : claim.getProducts()) {
 			pi.save();
-			MoreQuantityClaimProductItemDAO.save(claim.getClaimId(), pi.getId());
+			new MoreQuantityClaimProductItemDAO().save(claim.getClaimId(), pi.getId());
 		}
 	}
 
-	public static MoreQuantityClaim getMoreQuantityClaim(int claimId) throws AccessException, ConnectionException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException{
+	public MoreQuantityClaim getMoreQuantityClaim(int claimId) throws AccessException, ConnectionException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException{
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -83,14 +84,15 @@ public class MoreQuantityClaimDAO {
 		}
 		try {
 			if(rs.next()){
-					MoreQuantityClaim newClaim = new MoreQuantityClaim(ClientDAO.getClient(rs.getInt(6)), new Date(rs.getDate(8).getTime()), rs.getString(7), 
-														ClaimType.valueOf(rs.getString(2)), InvoiceDAO.getInvoice(rs.getInt(3)));
-					newClaim.setClaimId(rs.getInt(1));
-					newClaim.setActualState(State.valueOf(rs.getString(5)));
-					for (ProductItem pi : ProductItemDAO.getProductItemsOfMoreQuantityClaim(newClaim)) {
-						newClaim.addProductItem(pi.getProduct(), pi.getQuantity());
-					}
-					return newClaim;
+				Client client = new ClientDAO().getClient(rs.getInt(6));
+				MoreQuantityClaim newClaim = new MoreQuantityClaim(client, new Date(rs.getDate(8).getTime()), rs.getString(7), 
+													ClaimType.valueOf(rs.getString(2)), new InvoiceDAO().getInvoice(rs.getInt(3)));
+				newClaim.setClaimId(rs.getInt(1));
+				newClaim.setActualState(State.valueOf(rs.getString(5)));
+				for (ProductItem pi : ProductItemDAO.getProductItemsOfMoreQuantityClaim(newClaim)) {
+					newClaim.addProductItem(pi.getProduct(), pi.getQuantity());
+				}
+				return newClaim;
 			}
 			else{
 				throw new InvalidInvoiceException("Invoice not found");

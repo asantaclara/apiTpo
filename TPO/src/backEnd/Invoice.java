@@ -63,7 +63,7 @@ public class Invoice {
 	
 	public void deactivateInvoice() throws ConnectionException, AccessException, InvalidInvoiceException {
 		activeInvoice = false;
-		InvoiceDAO.modify(this);
+		new InvoiceDAO().modify(this);
 	}
 	
 	public boolean validateClient(Client client) { //Si la factura es del cliente que me mandan devuelvo true
@@ -96,12 +96,12 @@ public class Invoice {
 	}
 	
 	public void save() throws ConnectionException, AccessException, InvalidInvoiceException, InvalidProductException {
-		InvoiceDAO.save(this);
+		new InvoiceDAO().save(this);
 		
 	}
 
 	public void modify() throws ConnectionException, AccessException, InvalidInvoiceException {
-		InvoiceDAO.modify(this);
+		new InvoiceDAO().modify(this);
 	}
 	
 }

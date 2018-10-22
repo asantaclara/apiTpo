@@ -15,7 +15,7 @@ import exceptions.InvalidProductException;
 
 public class ProductDAO {
 
-	static public List<Product> getAllProducts() throws ConnectionException, AccessException {
+	public List<Product> getAllProducts() throws ConnectionException, AccessException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -49,7 +49,7 @@ public class ProductDAO {
 		}
 	}
 	
-	static public Product getProduct(int productId) throws ConnectionException, AccessException, InvalidProductException {
+	public Product getProduct(int productId) throws ConnectionException, AccessException, InvalidProductException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -86,7 +86,7 @@ public class ProductDAO {
 		}
 	}
 
-	static public void save(Product product) throws ConnectionException, AccessException, InvalidProductException{
+	public void save(Product product) throws ConnectionException, AccessException, InvalidProductException{
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm;
 	
@@ -114,7 +114,7 @@ public class ProductDAO {
 		}
 	}
 
-	static public void modify(Product product) throws ConnectionException, AccessException, InvalidProductException {
+	public void modify(Product product) throws ConnectionException, AccessException, InvalidProductException {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm;
 		

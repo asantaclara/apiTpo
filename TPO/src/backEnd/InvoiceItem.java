@@ -39,7 +39,7 @@ public class InvoiceItem {
 	}
 	
 	public void save(int claimId) throws ConnectionException, AccessException, InvalidProductException, InvalidInvoiceItemException {
-		InvoiceItemDAO.save(this, claimId);
+		new InvoiceItemDAO().save(this, claimId);
 		
 	}
 }

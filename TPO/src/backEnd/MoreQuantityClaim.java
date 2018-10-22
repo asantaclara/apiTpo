@@ -63,7 +63,7 @@ public class MoreQuantityClaim extends IndividualClaim {
 	
 	@Override
 	public void save() throws ConnectionException, AccessException, InvalidClaimException, InvalidProductException {
-		MoreQuantityClaimDAO.save(this);
+		new MoreQuantityClaimDAO().save(this);
 	}
 
 }

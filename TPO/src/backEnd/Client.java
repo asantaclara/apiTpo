@@ -38,12 +38,13 @@ public class Client {
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 		this.zone = zone;	
-		ClientDAO.modify(this);
+		new ClientDAO().modify(this);
+		
 	}
 	
 	public void deactivateClient() throws ConnectionException, AccessException, InvalidClientException {
 		activeClient = false;	
-		ClientDAO.modify(this);
+		new ClientDAO().modify(this);
 	}
 	
 	public void setId(int id) {
@@ -51,11 +52,11 @@ public class Client {
 	}
 	
 	public void saveInDB() throws ConnectionException, AccessException, InvalidClientException {
-		ClientDAO.save(this);
+		new ClientDAO().save(this);
 	}
 	
 	public void modifyInDB() throws ConnectionException, AccessException, InvalidClientException {
-		ClientDAO.modify(this);
+		new ClientDAO().modify(this);
 	}
 	
 	public ClientDTO toDTO(){

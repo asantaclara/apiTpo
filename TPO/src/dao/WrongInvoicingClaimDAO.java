@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.Date;
 
 import backEnd.ClaimType;
+import backEnd.Client;
 import backEnd.InvoiceItem;
 import backEnd.MoreQuantityClaim;
 import backEnd.ProductItem;
@@ -24,7 +25,7 @@ import exceptions.InvalidZoneException;
 
 public class WrongInvoicingClaimDAO {
 
-	public static void save(WrongInvoicingClaim claim) throws ConnectionException, AccessException, InvalidProductException, InvalidInvoiceItemException, InvalidClaimException {
+	public void save(WrongInvoicingClaim claim) throws ConnectionException, AccessException, InvalidProductException, InvalidInvoiceItemException, InvalidClaimException {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm1;
 		PreparedStatement prepStm2;
@@ -62,7 +63,7 @@ public class WrongInvoicingClaimDAO {
 		}
 	}
 
-	public static WrongInvoicingClaim getWrongInvoicingClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException {
+	public WrongInvoicingClaim getWrongInvoicingClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -82,10 +83,11 @@ public class WrongInvoicingClaimDAO {
 		}
 		try {
 			if(rs.next()){
-				WrongInvoicingClaim newClaim = new WrongInvoicingClaim(ClientDAO.getClient(rs.getInt(4)), new Date(rs.getDate(6).getTime()), rs.getString(5));
+				Client client = new ClientDAO().getClient(rs.getInt(4));
+				WrongInvoicingClaim newClaim = new WrongInvoicingClaim(client, new Date(rs.getDate(6).getTime()), rs.getString(5));
 				newClaim.setClaimId(rs.getInt(1));
 				newClaim.setActualState(State.valueOf(rs.getString(3)));
-				for (InvoiceItem i : InvoiceItemDAO.getAllInvoiceItemsOfClaim(newClaim)) {
+				for (InvoiceItem i : new InvoiceItemDAO().getAllInvoiceItemsOfClaim(newClaim)) {
 					newClaim.addInovice(i.getInvoice(), i.getInconsistency());
 				}		
 				return newClaim;

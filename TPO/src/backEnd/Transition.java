@@ -71,7 +71,7 @@ public class Transition {
 	}
 	
 	public void save() throws ConnectionException, AccessException, InvalidTransitionException, SQLException {
-		TransitionDAO.save(this);
+		new TransitionDAO().save(this);
 	}
 	
 	

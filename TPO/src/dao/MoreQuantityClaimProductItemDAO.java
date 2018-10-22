@@ -9,7 +9,7 @@ import exceptions.ConnectionException;
 
 public class MoreQuantityClaimProductItemDAO {
 	
-	public static void save(int moreQuantityClaimId, int productId) throws ConnectionException, AccessException {
+	public void save(int moreQuantityClaimId, int productId) throws ConnectionException, AccessException {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm;
 		

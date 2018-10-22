@@ -19,7 +19,7 @@ import exceptions.InvalidZoneException;
 public class ClientDAO {
 
 	
-	static public List<Client> getAllClients() throws ConnectionException, AccessException, InvalidClientException{
+	public List<Client> getAllClients() throws ConnectionException, AccessException, InvalidClientException{
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -53,7 +53,7 @@ public class ClientDAO {
 		}
 	}
 	
-	static public Client getClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
+	public Client getClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -73,7 +73,7 @@ public class ClientDAO {
 		try {
 			if(rs.next()){
 				if(rs.getByte(8) == 1) {					
-					Client newClient = new Client(rs.getString(3), rs.getString(2), rs.getString(4), rs.getString(5), rs.getString(6), ZoneDAO.getZone(rs.getString(10)));
+					Client newClient = new Client(rs.getString(3), rs.getString(2), rs.getString(4), rs.getString(5), rs.getString(6), new ZoneDAO().getZone(rs.getString(10)));
 					newClient.setId(rs.getInt(1));
 					return newClient;
 				} else {
@@ -89,7 +89,7 @@ public class ClientDAO {
 		}
 	}
 
-	static public void save(Client client) throws ConnectionException, AccessException, InvalidClientException{
+	public void save(Client client) throws ConnectionException, AccessException, InvalidClientException{
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm;
 	
@@ -101,7 +101,7 @@ public class ClientDAO {
 			throw new InvalidClientException("Client already in data base");
 		}
 		
-		int zoneId = ZoneDAO.fixZone(client.getZone().getName()); //Si la zona que tiene el cliente ya esta cargada en la BD no pasa nada, sino la crea.
+		int zoneId = new ZoneDAO().fixZone(client.getZone().getName()); //Si la zona que tiene el cliente ya esta cargada en la BD no pasa nada, sino la crea.
 		
 		client.setId(SqlUtils.lastId("Clients", "ClientId") + 1); 
 		try {
@@ -126,7 +126,7 @@ public class ClientDAO {
 		}
 	}
 	
-	static public void modify(Client client) throws ConnectionException, AccessException, InvalidClientException {
+	public void modify(Client client) throws ConnectionException, AccessException, InvalidClientException {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm;
 		
@@ -134,7 +134,7 @@ public class ClientDAO {
 			throw new InvalidClientException("Client not in data base");
 		}
 		
-		int zoneId = ZoneDAO.fixZone(client.getZone().getName()); //Si la zona que tiene el cliente ya esta cargada en la BD no pasa nada, sino la crea.
+		int zoneId = new ZoneDAO().fixZone(client.getZone().getName()); //Si la zona que tiene el cliente ya esta cargada en la BD no pasa nada, sino la crea.
 		
 		try {
 			prepStm = con.prepareStatement("UPDATE Clients SET Name = ?, Cuit = ?, Address = ?, Phone = ?, Mail = ?, ZoneId = ?, Active = ? WHERE ClientId = " + client.getId());

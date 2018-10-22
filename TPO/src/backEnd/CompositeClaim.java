@@ -72,7 +72,7 @@ public class CompositeClaim extends Claim{
 
 	@Override
 	public void save() throws ConnectionException, AccessException, InvalidClaimException {
-		CompositeClaimDAO.save(this);
+		new CompositeClaimDAO().save(this);
 	}
 	
 	public List<Claim> getIndividualClaims() {

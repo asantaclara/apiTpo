@@ -33,7 +33,7 @@ public class User {
 			this.secondaryRole = principalRole;
 		}
 		
-		UserDAO.modify(this);
+		new UserDAO().modify(this);
 	}
 	
 	public void setId(int userId) {
@@ -50,15 +50,15 @@ public class User {
 	
 	public void deactivateUser() throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException {
 		activeUser = false;
-		UserDAO.modify(this);
+		new UserDAO().modify(this);
 	}
 	
 	public void saveInDB() throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException {
-		UserDAO.save(this);
+		new UserDAO().save(this);
 	}
 	
 	public void modifyInDB() throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException {
-		UserDAO.modify(this);
+		new UserDAO().modify(this);
 	}
 	
 	public UserDTO toDTO() {

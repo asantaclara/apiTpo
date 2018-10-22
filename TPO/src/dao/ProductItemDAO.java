@@ -62,7 +62,7 @@ public class ProductItemDAO {
 		}
 		try {
 			if(rs.next()){
-				ProductItem newProduct = new ProductItem(ProductDAO.getProduct(rs.getInt(2)), rs.getInt(3));
+				ProductItem newProduct = new ProductItem(new ProductDAO().getProduct(rs.getInt(2)), rs.getInt(3));
 				newProduct.setId(rs.getInt(1));
 				return newProduct;
 			}
@@ -110,7 +110,7 @@ public class ProductItemDAO {
 			ProductItem newProductItem = null;
 			
 			while(rs.next()){				
-				newProductItem = new ProductItem(ProductDAO.getProduct(rs.getInt(2)), rs.getInt(3));
+				newProductItem = new ProductItem(new ProductDAO().getProduct(rs.getInt(2)), rs.getInt(3));
 				newProductItem.setId(rs.getInt(1));
 				returnList.add(newProductItem);
 			}

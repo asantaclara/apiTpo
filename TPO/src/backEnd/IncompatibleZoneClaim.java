@@ -25,7 +25,7 @@ public class IncompatibleZoneClaim extends IndividualClaim {
 
 	@Override
 	public void save() throws ConnectionException, AccessException, InvalidClaimException, SQLException {
-		IncompatibleZoneClaimDAO.save(this);
+		new IncompatibleZoneClaimDAO().save(this);
 		
 	}
 

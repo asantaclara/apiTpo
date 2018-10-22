@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import backEnd.Client;
 import backEnd.Invoice;
 import backEnd.ProductItem;
 import exceptions.AccessException;
@@ -20,12 +21,12 @@ import exceptions.InvalidZoneException;
 
 public class InvoiceDAO {
 
-	public static List<Invoice> getAllInvoices() throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException{
+	public List<Invoice> getAllInvoices() throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException{
 		String SQL = "SELECT * FROM Invoices WHERE Active = 1"; 
 		return getAllInvoicesPrivate(SQL);
 	}
 	
-	public static List<Invoice> getAllInvoicesFromClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException{
+	public List<Invoice> getAllInvoicesFromClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException{
 		String SQL = "SELECT * FROM Invoices WHERE clientId = " + clientId + " AND Active = 1" ; 
 		return getAllInvoicesPrivate(SQL);
 	}
@@ -51,8 +52,9 @@ public class InvoiceDAO {
 			List<Invoice> returnList = new LinkedList<>();
 			Invoice newInvoice = null;
 			
-			while(rs.next()){				
-				newInvoice = new Invoice(ClientDAO.getClient(rs.getInt(2)),new Date(rs.getDate(3).getTime())); //Con esto paso de sql a utils
+			while(rs.next()){	
+				Client client = new ClientDAO().getClient(rs.getInt(2));
+				newInvoice = new Invoice(client,new Date(rs.getDate(3).getTime())); //Con esto paso de sql a utils
 				newInvoice.setId(rs.getInt(1));
 				for (ProductItem pi : ProductItemDAO.getProductItemsOfInvoice(newInvoice)) {
 					newInvoice.addProductItem(pi.getProduct(), pi.getQuantity());
@@ -66,7 +68,7 @@ public class InvoiceDAO {
 		}
 	}
 
-	public static Invoice getInvoice(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException {
+	public Invoice getInvoice(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -86,8 +88,9 @@ public class InvoiceDAO {
 		}
 		try {
 			if(rs.next()){
-				if(rs.getByte(4) == 1) {					
-					Invoice newInvoice = new Invoice(ClientDAO.getClient(rs.getInt(2)),new Date(rs.getDate(3).getTime()));
+				if(rs.getByte(4) == 1) {	
+					Client client = new ClientDAO().getClient(rs.getInt(2));
+					Invoice newInvoice = new Invoice(client,new Date(rs.getDate(3).getTime()));
 					newInvoice.setId(rs.getInt(1));
 					for (ProductItem pi : ProductItemDAO.getProductItemsOfInvoice(newInvoice)) {
 						newInvoice.addProductItem(pi.getProduct(), pi.getQuantity());
@@ -106,7 +109,7 @@ public class InvoiceDAO {
 		}
 	}
 	
-	public static void save(Invoice invoice) throws InvalidInvoiceException, ConnectionException, AccessException, InvalidProductException {
+	public void save(Invoice invoice) throws InvalidInvoiceException, ConnectionException, AccessException, InvalidProductException {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm;
 	
@@ -140,12 +143,12 @@ public class InvoiceDAO {
 		
 		for (ProductItem pi : invoice.getItems()) {
 			pi.save();
-			InvoiceProductItemDAO.save(invoice.getId(), pi.getId());
+			new InvoiceProductItemDAO().save(invoice.getId(), pi.getId());
 		}
 		
 	}
 	
-	static public void modify(Invoice invoice) throws ConnectionException, AccessException, InvalidInvoiceException {
+	public void modify(Invoice invoice) throws ConnectionException, AccessException, InvalidInvoiceException {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm;
 		

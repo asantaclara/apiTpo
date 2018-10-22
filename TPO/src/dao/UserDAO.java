@@ -17,7 +17,7 @@ import exceptions.InvalidUserException;
 
 public class UserDAO {
 
-	public static void save(User user) throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException {
+	public void save(User user) throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm;
 	
@@ -31,8 +31,8 @@ public class UserDAO {
 			prepStm = con.prepareStatement("insert into Users values(?,?,?,?,?)");
 			prepStm.setInt(1, user.getId());
 			prepStm.setString(2, user.getName());
-			prepStm.setInt(3, RoleDAO.idByRole(user.getPrincipalRole()));
-			prepStm.setInt(4, RoleDAO.idByRole(user.getSecondaryRole()));
+			prepStm.setInt(3, new RoleDAO().idByRole(user.getPrincipalRole()));
+			prepStm.setInt(4, new RoleDAO().idByRole(user.getSecondaryRole()));
 			prepStm.setByte(5, (byte) ((user.isActive() == true) ? 1 : 0));
 			
 		} catch (SQLException e) {
@@ -47,7 +47,7 @@ public class UserDAO {
 		}
 	}
 	
-	public static User getUser(int userId) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
+	public User getUser(int userId) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -86,7 +86,7 @@ public class UserDAO {
 		}
 	}
 
-	public static List<User> getAllUsers() throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException{
+	public List<User> getAllUsers() throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException{
 		String SQL = "SELECT Users.UserId, Users.Name, Users.Active, Role1.Role as Role1, Role2.Role as Role2 FROM "
 				+ "Users JOIN Roles AS Role1 ON Users.RolId1 = Role1.RoleId JOIN Roles AS Role2 ON Users.RolId2 = Role2.RoleId WHERE Users.Active = 1";
 
@@ -137,7 +137,7 @@ public class UserDAO {
 		}
 	}
 
-	public static void modify(User user) throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException {
+	public void modify(User user) throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm;
 		
@@ -148,8 +148,8 @@ public class UserDAO {
 		try {
 			prepStm = con.prepareStatement("UPDATE Users SET Name = ?, RolId1 = ?, RolId2 = ?, Active = ? WHERE UserId = " + user.getId());
 			prepStm.setString(1, user.getName());
-			prepStm.setInt(2, RoleDAO.idByRole(user.getPrincipalRole()));
-			prepStm.setInt(3, RoleDAO.idByRole(user.getSecondaryRole()));
+			prepStm.setInt(2, new RoleDAO().idByRole(user.getPrincipalRole()));
+			prepStm.setInt(3, new RoleDAO().idByRole(user.getSecondaryRole()));
 			prepStm.setByte(4, (byte) ((user.isActive() == true) ? 1 : 0));
 			
 		} catch (SQLException e) {

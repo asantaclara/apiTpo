@@ -18,7 +18,7 @@ import exceptions.InvalidZoneException;
 
 public class ClaimDAO {
 
-	public static Claim getClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
+	public Claim getClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -42,13 +42,13 @@ public class ClaimDAO {
 		try {
 			if(rs.next()){
 				if(rs.getInt(9) != 0) {
-					return CompositeClaimDAO.getCompositeClaim(claimId);
+					return new CompositeClaimDAO().getCompositeClaim(claimId);
 				} else if(rs.getInt(7) != 0){
-					return IncompatibleZoneClaimDAO.getIncompatibleZoneClaim(claimId);
+					return new IncompatibleZoneClaimDAO().getIncompatibleZoneClaim(claimId);
 				} else if(rs.getInt(6) != 0) {
-					return WrongInvoicingClaimDAO.getWrongInvoicingClaim(claimId);
+					return new WrongInvoicingClaimDAO().getWrongInvoicingClaim(claimId);
 				} else if(rs.getInt(11) != 0) {
-					return MoreQuantityClaimDAO.getMoreQuantityClaim(claimId);
+					return new MoreQuantityClaimDAO().getMoreQuantityClaim(claimId);
 				} else {
 					throw new InvalidClaimException("Claim not found");
 				}
@@ -62,22 +62,4 @@ public class ClaimDAO {
 		}
 	}
 
-	public static void updateState(Claim claim) throws ConnectionException, AccessException {
-		Connection con = SqlUtils.getConnection();
-		PreparedStatement prepStm;
-		 
-		try {
-			prepStm = con.prepareStatement("UPDATE Claims SET State='" + claim.getActualState().name() +"' WHERE ClaimId = " + claim.getClaimId());
-			
-		} catch (SQLException e) {
-			throw new AccessException("Access error");
-		}		
-		
-		try {
-			prepStm.execute();
-		} catch (SQLException e) {
-			throw new AccessException("Save error");
-			
-		}
-	}
 }

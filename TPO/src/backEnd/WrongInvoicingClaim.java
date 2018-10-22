@@ -38,7 +38,7 @@ public class WrongInvoicingClaim extends IndividualClaim {
 
 	@Override
 	public void save() throws ConnectionException, AccessException, InvalidProductException, InvalidInvoiceItemException, InvalidClaimException {
-		WrongInvoicingClaimDAO.save(this);
+		new WrongInvoicingClaimDAO().save(this);
 	}
 	
 	public List<InvoiceItem> getInvoices() {

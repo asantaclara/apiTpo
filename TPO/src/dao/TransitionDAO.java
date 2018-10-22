@@ -25,7 +25,7 @@ import exceptions.InvalidZoneException;
 
 public class TransitionDAO {
 
-	public static void save(Transition transition) throws ConnectionException, InvalidTransitionException, AccessException, SQLException {
+	public void save(Transition transition) throws ConnectionException, InvalidTransitionException, AccessException, SQLException {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm1;
 		PreparedStatement prepStm2;
@@ -62,7 +62,7 @@ public class TransitionDAO {
 		}
 	}
 
-	public static List<Transition> getAllTransitionOfClaim(int claimId) throws ConnectionException, AccessException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException{
+	public List<Transition> getAllTransitionOfClaim(int claimId) throws ConnectionException, AccessException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException{
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -86,7 +86,7 @@ public class TransitionDAO {
 			
 			while(rs.next()){					
 				newTransition = new Transition(rs.getInt(2), State.valueOf(rs.getString(3)), State.valueOf(rs.getString(4)), 
-													new Date(rs.getDate(5).getTime()), rs.getString(6), UserDAO.getUser(rs.getInt(7)));	
+													new Date(rs.getDate(5).getTime()), rs.getString(6), new UserDAO().getUser(rs.getInt(7)));	
 				newTransition.setId(rs.getInt(1));
 				returnList.add(newTransition);
 			}
@@ -97,7 +97,7 @@ public class TransitionDAO {
 		}
 	}
 
-	public static Transition getTransitionById(int transitionId) throws AccessException, InvalidUserException, ConnectionException, InvalidTransitionException, InvalidRoleException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
+	public Transition getTransitionById(int transitionId) throws AccessException, InvalidUserException, ConnectionException, InvalidTransitionException, InvalidRoleException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -118,7 +118,7 @@ public class TransitionDAO {
 		try {
 			if(rs.next()){
 				Transition newTransition = new Transition(rs.getInt(2), State.valueOf(rs.getString(3)), State.valueOf(rs.getString(4)), 
-						new Date(rs.getDate(5).getTime()), rs.getString(6), UserDAO.getUser(rs.getInt(7)));	
+						new Date(rs.getDate(5).getTime()), rs.getString(6), new UserDAO().getUser(rs.getInt(7)));	
 				newTransition.setId(rs.getInt(1));
 				return newTransition;
 			}

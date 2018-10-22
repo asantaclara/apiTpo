@@ -16,7 +16,7 @@ import exceptions.InvalidZoneException;
 
 public class ZoneDAO {
 
-	public static int fixZone(String zoneName) throws AccessException, ConnectionException {
+	public int fixZone(String zoneName) throws AccessException, ConnectionException {
 		Connection con = SqlUtils.getConnection();
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -54,7 +54,7 @@ public class ZoneDAO {
 		}
 	}
 	
-	static public List<Zone> getAllZones() throws ConnectionException, AccessException {
+	public List<Zone> getAllZones() throws ConnectionException, AccessException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -88,7 +88,7 @@ public class ZoneDAO {
 		}
 	}
 
-	static public Zone getZone(int zoneId) throws ConnectionException, AccessException, InvalidZoneException {
+	public Zone getZone(int zoneId) throws ConnectionException, AccessException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -120,7 +120,7 @@ public class ZoneDAO {
 		}
 	}
 
-	static public void save(Zone zone) throws ConnectionException, AccessException, InvalidZoneException {
+	public void save(Zone zone) throws ConnectionException, AccessException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm;
 	
@@ -148,7 +148,7 @@ public class ZoneDAO {
 		}
 	}
 
-	static public Zone getZone(String zoneName) throws AccessException, ConnectionException, InvalidZoneException {
+	public Zone getZone(String zoneName) throws AccessException, ConnectionException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;

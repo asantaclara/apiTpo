@@ -37,7 +37,7 @@ public class Product {
 		if (price >= 0) {			
 			this.price = price;
 		}
-		ProductDAO.modify(this);
+		new ProductDAO().modify(this);
 	}
 	
 	public ProductDTO toDTO() {
@@ -45,17 +45,17 @@ public class Product {
 	}
 	
 	public void saveInDB() throws ConnectionException, AccessException, InvalidProductException {
-		ProductDAO.save(this);
+		new ProductDAO().save(this);
 	}
 	
 	public void modifyInDB() throws ConnectionException, AccessException, InvalidProductException {
-		ProductDAO.modify(this);
+		new ProductDAO().modify(this);
 	}
 	
 
 	public void deactivateProduct() throws ConnectionException, AccessException, InvalidProductException {
 		activeProduct = false;
-		ProductDAO.modify(this);
+		new ProductDAO().modify(this);
 		
 	}
 	

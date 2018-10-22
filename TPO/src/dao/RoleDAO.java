@@ -23,7 +23,7 @@ public class RoleDAO {
 //'QUERY_USER',
 //'ADMINISTRATOR'
 	
-	public static int idByRole(Roles role) throws AccessException, ConnectionException, InvalidRoleException {
+	public int idByRole(Roles role) throws AccessException, ConnectionException, InvalidRoleException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -54,7 +54,7 @@ public class RoleDAO {
 		
 	}
 
-	public static Role getRole(Roles role) throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException {		
+	public Role getRole(Roles role) throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException {		
 		Role returnRole = new Role(role);
 		returnRole.setRoleId(idByRole(role));
 		for (User user : UserDAO.getAllUserByRole(role)) {
@@ -63,7 +63,7 @@ public class RoleDAO {
 		return returnRole;
 	}
 
-	public static List<Role> getAllRoles() throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException{
+	public List<Role> getAllRoles() throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException{
 		List<Role> returnRoles = new LinkedList<>();
 		for (Roles roles : Roles.values()) {
 			returnRoles.add(getRole(roles));

@@ -27,7 +27,7 @@ public class Zone {
 	}
 	
 	public void save() throws ConnectionException, AccessException, InvalidZoneException {
-		ZoneDAO.save(this);
+		new ZoneDAO().save(this);
 		
 	}
 }

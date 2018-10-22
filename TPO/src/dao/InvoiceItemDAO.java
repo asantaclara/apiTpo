@@ -20,7 +20,7 @@ import exceptions.InvalidZoneException;
 
 public class InvoiceItemDAO {
 
-	public static void save(InvoiceItem invoiceItem, int claimId) throws InvalidProductException, ConnectionException, AccessException, InvalidInvoiceItemException {
+	public void save(InvoiceItem invoiceItem, int claimId) throws InvalidProductException, ConnectionException, AccessException, InvalidInvoiceItemException {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm;
 	
@@ -48,7 +48,7 @@ public class InvoiceItemDAO {
 		}	
 	}
 	
-	public static InvoiceItem getInvoiceItem(int invoiceItemId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidInvoiceItemException, InvalidZoneException {
+	public InvoiceItem getInvoiceItem(int invoiceItemId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidInvoiceItemException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -67,7 +67,7 @@ public class InvoiceItemDAO {
 		}
 		try {
 			if(rs.next()){
-				InvoiceItem newInvoiceItem = new InvoiceItem(InvoiceDAO.getInvoice(rs.getInt(2)), rs.getString(3));
+				InvoiceItem newInvoiceItem = new InvoiceItem(new InvoiceDAO().getInvoice(rs.getInt(2)), rs.getString(3));
 				newInvoiceItem.setId(rs.getInt(1));
 				return newInvoiceItem;
 			}
@@ -80,7 +80,7 @@ public class InvoiceItemDAO {
 		}
 	}
 
-	public static List<InvoiceItem> getAllInvoiceItemsOfClaim(WrongInvoicingClaim claim) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException{
+	public List<InvoiceItem> getAllInvoiceItemsOfClaim(WrongInvoicingClaim claim) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException{
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -106,7 +106,7 @@ public class InvoiceItemDAO {
 			InvoiceItem newInvoiceItem = null;
 			
 			while(rs.next()){
-				newInvoiceItem = new InvoiceItem(InvoiceDAO.getInvoice(rs.getInt(2)), rs.getString(3));
+				newInvoiceItem = new InvoiceItem(new InvoiceDAO().getInvoice(rs.getInt(2)), rs.getString(3));
 				newInvoiceItem.setId(rs.getInt(1));
 				returnList.add(newInvoiceItem);
 			}

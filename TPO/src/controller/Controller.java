@@ -78,7 +78,7 @@ public class Controller {
 	public void modifyClient(ClientDTO dto) throws InvalidClientException, ConnectionException, AccessException, InvalidZoneException{
 		
 		int clientId = dto.getId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
-		Client existingClient =  ClientDAO.getClient(clientId);
+		Client existingClient =  new ClientDAO().getClient(clientId);
 		
 		if (existingClient != null) {
 			existingClient.modify(dto.getCuit(), dto.getName(), dto.getAddress(), dto.getPhoneNumber(), dto.getEmail(),new Zone(dto.getZone()) );
@@ -88,7 +88,7 @@ public class Controller {
 	public void removeClient(ClientDTO dto) throws InvalidClientException, ConnectionException, AccessException, InvalidZoneException {
 		
 		int clientId = dto.getId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
-		Client existingClient =  ClientDAO.getClient(clientId);
+		Client existingClient =  new ClientDAO().getClient(clientId);
 		
 		existingClient.deactivateClient();
 		
@@ -107,7 +107,7 @@ public class Controller {
 	public void modifyUser(UserDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
 		
 		int userId = dto.getUserId(); //Con este userId tengo que traer al user desde la BD y lo llamo existingUser.
-		User existingUser = UserDAO.getUser(userId);
+		User existingUser = new UserDAO().getUser(userId);
 		
 		if (existingUser != null) {
 			existingUser.modify(dto.getName(), Roles.valueOf(dto.getPrincipalRole()));
@@ -117,7 +117,7 @@ public class Controller {
 	public void removeUser(UserDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
 		
 		int userId = dto.getUserId(); //Con este id me traigo el user de la DB.
-		User userToRemove = UserDAO.getUser(userId);
+		User userToRemove = new UserDAO().getUser(userId);
 	
 		List<Role> roles = new LinkedList<>(); //Aca me traigo todos los roles de la DB y me hago una lista que es la que estoy simulando aca.
 		
@@ -139,7 +139,7 @@ public class Controller {
 	}
 	public void modifyProduct(ProductDTO dto) throws ConnectionException, AccessException, InvalidProductException {
 		int productId = dto.getProductId(); //Este es el id que voy a usar para obtener el producto de la BD.
-		Product existingProduct = ProductDAO.getProduct(productId);
+		Product existingProduct = new ProductDAO().getProduct(productId);
 		
 		if(existingProduct != null) {
 			existingProduct.modify(dto.getTitle(), dto.getDescription(), dto.getPrice());
@@ -148,7 +148,7 @@ public class Controller {
 	}
 	public void removeProduct(ProductDTO dto) throws ConnectionException, AccessException, InvalidProductException {
 		int productId = dto.getProductId(); //Con este id me traigo el product de la DB.
-		Product productToRemove = ProductDAO.getProduct(productId);
+		Product productToRemove = new ProductDAO().getProduct(productId);
 		
 		productToRemove.deactivateProduct(); //Aca desactivo al product para que no se pueda usar mas en el programa.
 		
@@ -158,12 +158,12 @@ public class Controller {
 	//------------------------------------------------------------ START ROLE ------------------------------------------------------------
 	public void addRole(RoleDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
 		int userId = dto.getUserId(); //Con este userId agarro el user de la base de datos.
-		User existingUser =  UserDAO.getUser(userId);
+		User existingUser =  new UserDAO().getUser(userId);
 		
 		if(existingUser != null) {
 	
 			existingUser.addRole(Roles.valueOf(dto.getRole()));
-			RoleDAO.getRole(Roles.valueOf(dto.getRole())).addUser(existingUser);
+			new RoleDAO().getRole(Roles.valueOf(dto.getRole())).addUser(existingUser);
 			existingUser.modifyInDB();
 		}
 		
@@ -171,10 +171,10 @@ public class Controller {
 	public void removeRole(RoleDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
 	
 		int userId = dto.getUserId(); //Con este userId agarro el user de la base de datos.
-		User existingUser =  UserDAO.getUser(userId);
+		User existingUser =  new UserDAO().getUser(userId);
 		
 		Roles existingRole = Roles.valueOf(dto.getRole()); //Con este role lo voy a buscar a la BD
-		Role existingRoleObjeto = RoleDAO.getRole(existingRole);
+		Role existingRoleObjeto = new RoleDAO().getRole(existingRole);
 		
 		if(existingRole != null && existingRoleObjeto != null) {
 			existingUser.removeRole();
@@ -188,13 +188,13 @@ public class Controller {
 	public int addInvoice(InvoiceDTO dto) throws InvalidClientException, ConnectionException, AccessException, InvalidInvoiceException, InvalidProductException, InvalidZoneException {
 		List<ProductItemDTO> itemsDTO = dto.getProductItems(); //Esta lista de ProductItemDTO la tengo para despues traerme los product de la BD.
 		int clientId = dto.getClientId(); //Este es el id que uso para traerme al cliente de la BD.
-		Client existingClient =  ClientDAO.getClient(clientId);
+		Client existingClient =  new ClientDAO().getClient(clientId);
 		
 		Invoice newInvoice = new Invoice(existingClient, new Date());
 		
 		for (ProductItemDTO productItemDTO : itemsDTO) {
 			int productId = productItemDTO.getProductId();
-			Product existingProduct = ProductDAO.getProduct(productId);
+			Product existingProduct = new ProductDAO().getProduct(productId);
 			
 			int productQuantity = productItemDTO.getQuantity();
 			
@@ -208,25 +208,26 @@ public class Controller {
 	}
 	public void removeInvoice(InvoiceDTO dto) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException {
 		int invoiceId = dto.getInvoiceId();
-		Invoice existingInvoice = InvoiceDAO.getInvoice(invoiceId);
+		Invoice existingInvoice = new InvoiceDAO().getInvoice(invoiceId);
 		
 		existingInvoice.deactivateInvoice();
 	}
 	//------------------------------------------------------------ END INVOICE ------------------------------------------------------------
 	
 	public String getClaimState(int claimNumber) throws InvalidClaimException, ConnectionException, AccessException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
-		return ClaimDAO.getClaim(claimNumber).getActualState().name();
+		Claim claim = new ClaimDAO().getClaim(claimNumber);
+		return claim.getActualState().name();
 	}
 	public void treatClaim(TransitionDTO dto) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidTransitionException, InvalidUserException, InvalidRoleException, SQLException {
-		Claim aux = ClaimDAO.getClaim(dto.getClaimId());
-		aux.treatClaim(UserDAO.getUser(dto.getUserId()), State.valueOf(dto.getNewState()), dto.getDescription());
+		Claim aux = new ClaimDAO().getClaim(dto.getClaimId());
+		aux.treatClaim(new UserDAO().getUser(dto.getUserId()), State.valueOf(dto.getNewState()), dto.getDescription());
 		
 		
 	}
 	public int addWrongInvoicingClaim(WrongInvoicingClaimDTO dto) throws InvalidClaimException, InvalidClientException, ConnectionException, AccessException, InvalidZoneException, InvalidInvoiceException, InvalidProductException, InvalidInvoiceItemException {
 		
 		int clientId = dto.getClientId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
-		Client existingClient =  ClientDAO.getClient(clientId);
+		Client existingClient =  new ClientDAO().getClient(clientId);
 		
 		WrongInvoicingClaim newClaim = new WrongInvoicingClaim(existingClient, new Date(), dto.getDescription());
 		
@@ -234,7 +235,7 @@ public class Controller {
 		
 		for (InvoiceItemDTO invoiceItemDTO : invoiceItems) {
 			int invoiceId = invoiceItemDTO.getInvoiceId();
-			Invoice existingInvoice = InvoiceDAO.getInvoice(invoiceId);
+			Invoice existingInvoice = new InvoiceDAO().getInvoice(invoiceId);
 			
 			if(existingInvoice.validateClient(existingClient)) { //Si el cliente pertenece a la factura que me mandaron
 				String inconsistency = invoiceItemDTO.getInconsistency();
@@ -253,21 +254,21 @@ public class Controller {
 		
 		int clientId = dto.getClientId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
 		
-		Client existingClient =  ClientDAO.getClient(clientId);
+		Client existingClient =  new ClientDAO().getClient(clientId);
 		
 		List<ProductItemDTO> productItemsDTO = dto.getProducts();
 		
 		ClaimType claimType = ClaimType.valueOf(dto.getClaimType());
 		
 		int invoiceId = dto.getInvoiceId();
-		Invoice existingInvoice = InvoiceDAO.getInvoice(invoiceId);
+		Invoice existingInvoice = new InvoiceDAO().getInvoice(invoiceId);
 		
 		String description = dto.getDescription();
 		
 		MoreQuantityClaim newClaim = new MoreQuantityClaim(existingClient, new Date(), description, claimType, existingInvoice);
 		
 		for (ProductItemDTO productItemDTO : productItemsDTO) {
-			newClaim.addProductItem(ProductDAO.getProduct(productItemDTO.getProductId()), productItemDTO.getQuantity());
+			newClaim.addProductItem(new ProductDAO().getProduct(productItemDTO.getProductId()), productItemDTO.getQuantity());
 		}
 		
 		newClaim.save();
@@ -276,7 +277,7 @@ public class Controller {
 	}
 	public int addIncompatibleZoneClaim(IncompatibleZoneClaimDTO dto) throws InvalidClientException, InvalidClaimException, ConnectionException, AccessException, InvalidZoneException, SQLException {
 		int clientId = dto.getClientId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
-		Client existingClient =  ClientDAO.getClient(clientId);
+		Client existingClient =  new ClientDAO().getClient(clientId);
 		
 		if(existingClient != null) {
 			String description = dto.getDescription();
@@ -289,9 +290,10 @@ public class Controller {
 		throw new InvalidClientException("Client not found");
 	}
 	public int addCompositeClaim(CompositeClaimDTO dto) throws InvalidClaimException, ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException {
-		CompositeClaim claim = new CompositeClaim(ClientDAO.getClient(dto.getClientId()), dto.getDate(), dto.getDescription());
+		CompositeClaim claim = new CompositeClaim(new ClientDAO().getClient(dto.getClientId()), dto.getDate(), dto.getDescription());
 		for (Integer i : dto.getClaimsId()) {
-			claim.addClaim(ClaimDAO.getClaim(i.intValue()));
+			Claim claimAux = new ClaimDAO().getClaim(i.intValue());
+			claim.addClaim(claimAux);
 		}
 		claim.save();
 		return claim.getClaimId();

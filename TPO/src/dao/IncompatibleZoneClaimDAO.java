@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 
+import backEnd.Client;
 import backEnd.IncompatibleZoneClaim;
 import backEnd.State;
 import exceptions.AccessException;
@@ -17,7 +18,7 @@ import exceptions.InvalidZoneException;
 
 public class IncompatibleZoneClaimDAO {
 
-	public static void save(IncompatibleZoneClaim claim) throws ConnectionException, InvalidClaimException, AccessException, SQLException {
+	public void save(IncompatibleZoneClaim claim) throws ConnectionException, InvalidClaimException, AccessException, SQLException {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm1;
 		PreparedStatement prepStm2;
@@ -57,7 +58,7 @@ public class IncompatibleZoneClaimDAO {
 		
 	}
 
-	public static IncompatibleZoneClaim getIncompatibleZoneClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidZoneException {
+	public IncompatibleZoneClaim getIncompatibleZoneClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;
@@ -77,7 +78,8 @@ public class IncompatibleZoneClaimDAO {
 		}
 		try {
 			if(rs.next()){
-				IncompatibleZoneClaim newClaim = new IncompatibleZoneClaim(ClientDAO.getClient(rs.getInt(5)), new Date(rs.getDate(7).getTime()), rs.getString(6), ZoneDAO.getZone(rs.getInt(2)));
+				Client client = new ClientDAO().getClient(rs.getInt(5));
+				IncompatibleZoneClaim newClaim = new IncompatibleZoneClaim(client, new Date(rs.getDate(7).getTime()), rs.getString(6), new ZoneDAO().getZone(rs.getInt(2)));
 				newClaim.setClaimId(rs.getInt(1));
 				newClaim.setActualState(State.valueOf(rs.getString(4)));
 				return newClaim;
