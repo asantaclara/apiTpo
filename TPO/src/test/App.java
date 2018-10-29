@@ -64,7 +64,7 @@ public class App {
 //		System.out.println(c.getClaimState(15));
 //		System.out.println(c.getClaimState(30));
 		
-		TransitionDTO dto = new TransitionDTO(2, new Date(), 3, State.IN_TREATMENT.name(), State.IN_TREATMENT.name(), "Hola");
+		TransitionDTO dto = new TransitionDTO(7, new Date(), 3, State.IN_TREATMENT.name(), State.IN_TREATMENT.name(), "Hola");
 		c.treatClaim(dto);
 		System.out.println("END");
 	}

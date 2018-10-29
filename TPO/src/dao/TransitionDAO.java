@@ -28,7 +28,6 @@ public class TransitionDAO {
 	public void save(Transition transition) throws ConnectionException, InvalidTransitionException, AccessException, SQLException {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm1;
-		PreparedStatement prepStm2;
 		
 		if(transition.getId() != 0) {
 			throw new InvalidTransitionException("Transition already in data base");
@@ -46,15 +45,13 @@ public class TransitionDAO {
 			prepStm1.setDate(5, new java.sql.Date(transition.getDate().getTime()));
 			prepStm1.setString(6, transition.getDescription());
 			prepStm1.setInt(7, transition.getResponsable().getId());
-			
-			prepStm2 = con.prepareStatement("UPDATE Claims SET State='" + transition.getNewState().name() +"' WHERE ClaimId = " + transition.getClaimId());
+
 		} catch (SQLException e) {
 			throw new AccessException("Access error");
 		}		
 		
 		try {
 			prepStm1.execute();
-			prepStm2.execute();
 			con.commit();
 		} catch (SQLException e) {
 			con.rollback();

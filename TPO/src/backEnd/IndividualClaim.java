@@ -41,6 +41,7 @@ public abstract class IndividualClaim extends Claim {
 		Transition newTran = new Transition(claimId, actualState, newState, date, description, responsable);
 		newTran.save();
 		actualState = newState;
+		new ClaimDAO().updateState(this);
 	}
 	public abstract ClaimDTO toDTO();
 	public abstract void save() throws ConnectionException, AccessException, InvalidClaimException, InvalidProductException, InvalidInvoiceItemException, SQLException; 

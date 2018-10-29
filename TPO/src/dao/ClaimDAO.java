@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import backEnd.Claim;
+import backEnd.Transition;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
@@ -14,6 +15,7 @@ import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidProductException;
 import exceptions.InvalidProductItemException;
+import exceptions.InvalidTransitionException;
 import exceptions.InvalidZoneException;
 
 public class ClaimDAO {
@@ -62,4 +64,26 @@ public class ClaimDAO {
 		}
 	}
 
+	
+	public void updateState(Claim c) throws AccessException, ConnectionException, SQLException {
+		Connection con = SqlUtils.getConnection();
+		PreparedStatement prepStm1;
+		
+		try {
+			con.setAutoCommit(false);
+			
+			prepStm1 = con.prepareStatement("UPDATE Claims SET State='" + c.getActualState().name() +"' WHERE ClaimId = " + c.getClaimId());
+		} catch (SQLException e) {
+			throw new AccessException("Access error");
+		}		
+		
+		try {
+			prepStm1.execute();
+			con.commit();
+		} catch (SQLException e) {
+			con.rollback();
+			throw new AccessException("Save error");
+		}
+		
+	}
 }
