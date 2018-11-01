@@ -86,7 +86,12 @@ public class Invoice {
 	}
 	
 	public InvoiceDTO toDTO() {
-		InvoiceDTO aux = new InvoiceDTO(invoiceId, client.getId(), date);
+		
+		InvoiceDTO aux = new InvoiceDTO();
+		
+		aux.setClientId(client.getId());
+		aux.setInvoiceId(invoiceId);
+		aux.setDate(date);
 		
 		for (ProductItem p : items) {
 			aux.addProductItemDTO(p.getProduct().getProductId(), p.getQuantity());

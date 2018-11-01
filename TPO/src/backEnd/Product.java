@@ -41,7 +41,15 @@ public class Product {
 	}
 	
 	public ProductDTO toDTO() {
-		return new ProductDTO(productId, title, description, price);
+		
+		ProductDTO aux = new ProductDTO();
+		
+		aux.setProductId(productId);
+		aux.setTitle(title);
+		aux.setDescription(description);
+		aux.setPrice(price);
+		
+		return aux;
 	}
 	
 	public void saveInDB() throws ConnectionException, AccessException, InvalidProductException {

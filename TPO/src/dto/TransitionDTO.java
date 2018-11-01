@@ -23,7 +23,7 @@ public class TransitionDTO {
 		this.date = date;
 	}
 
-	public void setUserId(int userId) {
+	public void setResponsableId(int userId) {
 		this.userId = userId;
 	}
 
@@ -45,7 +45,7 @@ public class TransitionDTO {
 	public Date getDate() {
 		return date;
 	}
-	public int getUserId() {
+	public int getResponsableId() {
 		return userId;
 	}
 	public String getPreviousState() {

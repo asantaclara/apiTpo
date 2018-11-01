@@ -67,7 +67,17 @@ public class Transition {
 	}
 
 	public TransitionDTO toDTO() {
-		return new TransitionDTO(claimId, date, responsable.getId(), previousState.name(), newState.name(), description);
+		
+		TransitionDTO aux = new TransitionDTO();
+		
+		aux.setClaimId(claimId);
+		aux.setDate(date);
+		aux.setResponsableId(responsable.getId());
+		aux.setPreviousState(previousState.name());
+		aux.setNewState(newState.name());
+		aux.setDescription(description);
+		
+		return aux;
 	}
 	
 	public void save() throws ConnectionException, AccessException, InvalidTransitionException, SQLException {

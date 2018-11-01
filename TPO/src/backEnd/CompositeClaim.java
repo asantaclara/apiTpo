@@ -67,7 +67,19 @@ public class CompositeClaim extends Claim{
 
 	@Override
 	public CompositeClaimDTO toDTO() {
-		return new CompositeClaimDTO(claimId, client.getId(), description, date);
+		
+		CompositeClaimDTO aux = new CompositeClaimDTO();
+		
+		aux.setClaimId(claimId);
+		aux.setClientId(client.getId());
+		aux.setDescription(description);
+		aux.setDate(date);
+		
+		for (Claim claim : claims) {
+			aux.addIndividualClaimId(claim.getClaimId());
+		}
+		
+		return aux;
 	}
 
 	@Override

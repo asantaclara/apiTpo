@@ -27,10 +27,15 @@ public class WrongInvoicingClaim extends IndividualClaim {
 
 	@Override
 	public WrongInvoicingClaimDTO toDTO() {
-		WrongInvoicingClaimDTO aux = new WrongInvoicingClaimDTO(claimId, client.getId(), description, date);
+		WrongInvoicingClaimDTO aux = new WrongInvoicingClaimDTO();
+
+		aux.setClaimId(claimId);
+		aux.setClientId(client.getId());
+		aux.setDescription(description);
+		aux.setDate(date);
 		
 		for (InvoiceItem i : invoices) {
-			aux.addInvoiceItemDTO(i.toDTO());
+			aux.addInvoiceItemDTO(i.getId(),i.getInconsistency());
 		}
 		
 		return aux;

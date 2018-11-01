@@ -43,6 +43,7 @@ public abstract class IndividualClaim extends Claim {
 		actualState = newState;
 		new ClaimDAO().updateState(this);
 	}
+	
 	public abstract ClaimDTO toDTO();
 	public abstract void save() throws ConnectionException, AccessException, InvalidClaimException, InvalidProductException, InvalidInvoiceItemException, SQLException; 
 

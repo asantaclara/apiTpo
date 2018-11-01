@@ -11,11 +11,10 @@ public class Role {
 
 	private int roleId = 0;
 	private Roles description;
-	private List<User> users;
+	private List<User> users = new LinkedList<>();
 	
 	public Role(Roles description) {
 		this.description = description;
-		users = new LinkedList<>();
 	}
 	
 	public void addUser(User user) {
@@ -27,8 +26,15 @@ public class Role {
 	}
 	
 	public RoleDTO toDTO() {
-		return new RoleDTO(description.name(), -1);
-		//Chequear que onda con este constructor
+		
+		RoleDTO aux = new RoleDTO();
+		
+		aux.setRole(description.name());
+		
+		for (User user : users) {
+			aux.addUserId(user.getId());
+		}
+		return aux;
 	}
 	
 	public void save() throws ConnectionException, AccessException {

@@ -10,7 +10,7 @@ import exceptions.InvalidUserException;
 public class User {
 
 	
-	private int id=0;
+	private int id = 0;
 	private String name;
 	private Roles principalRole;
 	private Roles secondaryRole;
@@ -62,7 +62,15 @@ public class User {
 	}
 	
 	public UserDTO toDTO() {
-		return new UserDTO(id, name, principalRole.name(), secondaryRole.name());
+		
+		UserDTO aux = new UserDTO();
+		
+		aux.setUserId(id);
+		aux.setName(name);
+		aux.setPrincipalRole(principalRole.name());
+		aux.setSecondaryRole(secondaryRole.name());
+		
+		return aux;
 	}
 	
 	//--------------------------------------------------------------------GETERS START-------------------------------------------------------------------------------------	

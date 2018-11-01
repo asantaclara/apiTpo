@@ -60,7 +60,16 @@ public class Client {
 	}
 	
 	public ClientDTO toDTO(){
-		return new ClientDTO(id, cuit, name, address, phoneNumber, email, zone.getName());
+		ClientDTO aux = new ClientDTO();
+		aux.setAddress(address);
+		aux.setCuit(cuit);
+		aux.setEmail(email);
+		aux.setId(id);
+		aux.setName(name);
+		aux.setPhoneNumber(phoneNumber);
+		aux.setZone(zone.getName());
+		
+		return aux;
 	}
 	
 	private void parameterChecker(String cuit, String name, String address, String phoneNumber, String email, Zone zone) throws InvalidClientException {
