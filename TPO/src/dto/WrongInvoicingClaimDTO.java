@@ -7,18 +7,17 @@ import java.util.List;
 public class WrongInvoicingClaimDTO extends ClaimDTO {
 
 
-	private List<InvoiceItemDTO> invoices;
+	private List<InvoiceItemDTO> invoices = new LinkedList<>();
 	
-	public WrongInvoicingClaimDTO(int claimId, int clientId, String description, Date date) {
-		super(claimId, clientId, description, date);
-		invoices = new LinkedList<>();
+	public WrongInvoicingClaimDTO() {
+		
 	}
-
+	
 	public List<InvoiceItemDTO> getInvoices() {
 		return invoices;
 	}
 	
-	public void addInvoiceItemDTO(InvoiceItemDTO invoiceItem) {
-		invoices.add(invoiceItem);
+	public void addInvoiceItemDTO(int invoiceId, String inconsistency) {
+		invoices.add(new InvoiceItemDTO(invoiceId, inconsistency));
 	}
 }

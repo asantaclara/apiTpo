@@ -5,8 +5,15 @@ public class RoleDTO {
 	private String role;
 	private int userId;
 	
-	public RoleDTO(String role, int userId) {
+	public RoleDTO() {
+		
+	}
+	
+	public void setRole(String role) {
 		this.role = role;
+	}
+	
+	public void setUserId(int userId) {
 		this.userId = userId;
 	}
 	

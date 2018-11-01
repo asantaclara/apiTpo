@@ -7,13 +7,30 @@ public class UserDTO {
 	private String principalRole;
 	private String secondaryRole;
 	
-	public UserDTO(int userId, String name, String principalRole, String secondaryRole) {
-		this.userId = userId;
-		this.name = name;
-		this.principalRole = principalRole;
-		this.secondaryRole = secondaryRole;
+	public UserDTO() {
+	
 	}
 	
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+	public void setPrincipalRole(String principalRole) {
+		this.principalRole = principalRole;
+	}
+
+
+	public void setSecondaryRole(String secondaryRole) {
+		this.secondaryRole = secondaryRole;
+	}
+
+
 	public int getUserId() {
 		return userId;
 	}

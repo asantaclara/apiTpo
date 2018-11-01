@@ -11,7 +11,6 @@ public class BoardDTO {
 	private int roleId;
 	
 	public BoardDTO() {
-		super();
 	}
 	
 	public void setBoardID(int boardID) {

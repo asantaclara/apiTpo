@@ -11,16 +11,34 @@ public class TransitionDTO {
 	private String newState;
 	private String description;
 	
-	public TransitionDTO(int claimId, Date date, int userId, String previousState, String newState, String description) {
-		super();
-		this.claimId = claimId;
-		this.date = date;
-		this.userId = userId;
-		this.previousState = previousState;
-		this.newState = newState;
-		this.description = description;
+	public TransitionDTO() {
+		
 	}
 	
+	public void setClaimId(int claimId) {
+		this.claimId = claimId;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
+	public void setPreviousState(String previousState) {
+		this.previousState = previousState;
+	}
+
+	public void setNewState(String newState) {
+		this.newState = newState;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public int getClaimId() {
 		return claimId;
 	}
@@ -39,7 +57,5 @@ public class TransitionDTO {
 	public String getDescription() {
 		return description;
 	}
-	
-	
 	
 }

@@ -11,12 +11,23 @@ public class InvoiceDTO {
 	private int clientId;
 	private Date date;
 	
-	public InvoiceDTO(int invoiceId, int clientId, Date date) {
-		this.invoiceId = invoiceId;
-		this.clientId = clientId;
-		this.date = date;
+//	int invoiceId, int clientId, Date date
+	
+	public InvoiceDTO() {
 	}
 
+	public void setClientId(int clientId) {
+		this.clientId = clientId;
+	}
+	
+	public void setInvoiceId(int invoiceId) {
+		this.invoiceId = invoiceId;
+	}
+	
+	public void setDate(Date date) {
+		this.date = date;
+	}
+	
 	public void addProductItemDTO(int productId, int quantity) {
 		productItems.add(new ProductItemDTO(productId, quantity));
 	}

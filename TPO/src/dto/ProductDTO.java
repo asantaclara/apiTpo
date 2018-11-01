@@ -7,10 +7,25 @@ public class ProductDTO {
 	private String description;
 	private float price;
 	
-	public ProductDTO(int productId, String title, String description, float price) {
+//	int productId, String title, String description, float price
+	
+	public ProductDTO() {
+	
+	}
+	
+	public void setProductId(int productId) {
 		this.productId = productId;
+	}
+	
+	public void setTitle(String title) {
 		this.title = title;
+	}
+	
+	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public void setPrice(float price) {
 		this.price = price;
 	}
 	

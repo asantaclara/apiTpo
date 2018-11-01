@@ -9,14 +9,26 @@ public abstract class ClaimDTO {
 	protected String description;
 	protected Date date;
 	
-	
-	public ClaimDTO(int claimId, int clientId, String description, Date date) {
-		this.claimId = claimId;
-		this.clientId = clientId;
-		this.description = description;
-		this.date = date;
+	public ClaimDTO() {
+		
 	}
 	
+	public void setClaimId(int claimId) {
+		this.claimId = claimId;
+	}
+
+	public void setClientId(int clientId) {
+		this.clientId = clientId;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
 	public int getClaimId() {
 		return claimId;
 	}
