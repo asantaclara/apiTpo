@@ -8,12 +8,18 @@ public class BoardDTO {
 
 	private int boardID;
 	private List<ClaimDTO> claims;
-	private Role role;
+	private int roleId;
 	
-	public BoardDTO(int boardID, Role role) {
+	public BoardDTO() {
 		super();
+	}
+	
+	public void setBoardID(int boardID) {
 		this.boardID = boardID;
-		this.role = role;
+	}
+	
+	public void setRole(int roleId) {
+		this.roleId = roleId;
 	}
 	
 	public void addClaimDTO(ClaimDTO claimDTO) {
@@ -28,8 +34,8 @@ public class BoardDTO {
 		return claims;
 	}
 
-	public Role getRole() {
-		return role;
+	public int getRoleId() {
+		return roleId;
 	}
 	
 	

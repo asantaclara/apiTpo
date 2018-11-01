@@ -42,7 +42,9 @@ public class UserBoard {
 	}
 	
 	public BoardDTO toDTO() {
-		BoardDTO aux = new BoardDTO(id, role);
+		BoardDTO aux = new BoardDTO();
+		aux.setBoardID(id);
+		aux.setBoardID(role.getRoleId());
 		
 		for (Claim c : claims) {
 			aux.addClaimDTO(c.toDTO());
