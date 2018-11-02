@@ -1,7 +1,6 @@
 package services;
 
 import backEnd.Client;
-import backEnd.Zone;
 import dao.ClientDAO;
 import dao.ZoneDAO;
 import dto.ClientDTO;

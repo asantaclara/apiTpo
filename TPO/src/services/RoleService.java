@@ -2,10 +2,8 @@ package services;
 
 import backEnd.Roles;
 import backEnd.User;
-import dao.RoleDAO;
 import dao.UserDAO;
 import dto.RoleDTO;
-import dto.UserDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidRoleException;

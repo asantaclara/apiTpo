@@ -51,11 +51,16 @@ import exceptions.InvalidRoleException;
 import exceptions.InvalidTransitionException;
 import exceptions.InvalidUserException;
 import exceptions.InvalidZoneException;
+import services.ClaimService;
 import services.ClientService;
+import services.CompositeClaimService;
+import services.IncompatibleZoneClaimService;
 import services.InvoiceService;
+import services.MoreQuantityClaimService;
 import services.ProductService;
 import services.RoleService;
 import services.UserService;
+import services.WrongInvoicingClaimService;
 
 public class Controller {
 	
@@ -131,88 +136,21 @@ public class Controller {
 	//------------------------------------------------------------ END INVOICE ------------------------------------------------------------
 	
 	public String getClaimState(int claimNumber) throws InvalidClaimException, ConnectionException, AccessException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
-		Claim claim = new ClaimDAO().getClaim(claimNumber);
-		return claim.getActualState().name();
+		return ClaimService.getIntance().getClaimState(claimNumber);
 	}
 	public void treatClaim(TransitionDTO dto) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidTransitionException, InvalidUserException, InvalidRoleException, SQLException {
-		Claim aux = new ClaimDAO().getClaim(dto.getClaimId());
-		aux.treatClaim(new UserDAO().getUser(dto.getResponsableId()), State.valueOf(dto.getNewState()), dto.getDescription());
-		
-		
+		ClaimService.getIntance().treatClaim(dto);	
 	}
 	public int addWrongInvoicingClaim(WrongInvoicingClaimDTO dto) throws InvalidClaimException, InvalidClientException, ConnectionException, AccessException, InvalidZoneException, InvalidInvoiceException, InvalidProductException, InvalidInvoiceItemException {
-		
-		int clientId = dto.getClientId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
-		Client existingClient =  new ClientDAO().getClient(clientId);
-		
-		WrongInvoicingClaim newClaim = new WrongInvoicingClaim(existingClient, new Date(), dto.getDescription());
-		
-		List<InvoiceItemDTO> invoiceItems = dto.getInvoices();
-		
-		for (InvoiceItemDTO invoiceItemDTO : invoiceItems) {
-			int invoiceId = invoiceItemDTO.getInvoiceId();
-			Invoice existingInvoice = new InvoiceDAO().getInvoice(invoiceId);
-			
-			if(existingInvoice.validateClient(existingClient)) { //Si el cliente pertenece a la factura que me mandaron
-				String inconsistency = invoiceItemDTO.getInconsistency();
-				newClaim.addInovice(existingInvoice, inconsistency);
-			}else {
-				throw new InvalidClaimException("Invoice doesn't belong to client");
-			}
-		}
-		newClaim.save();
-		
-		return newClaim.getClaimId();
-		
-		
+		return WrongInvoicingClaimService.getIntance().addWrongInvoicingClaim(dto);
 	}
 	public int addMoreQuantityClaim(MoreQuantityClaimDTO dto) throws InvalidClaimException, InvalidClientException, ConnectionException, AccessException, InvalidZoneException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException {
-		
-		int clientId = dto.getClientId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
-		
-		Client existingClient =  new ClientDAO().getClient(clientId);
-		
-		List<ProductItemDTO> productItemsDTO = dto.getProducts();
-		
-		ClaimType claimType = ClaimType.valueOf(dto.getClaimType());
-		
-		int invoiceId = dto.getInvoiceId();
-		Invoice existingInvoice = new InvoiceDAO().getInvoice(invoiceId);
-		
-		String description = dto.getDescription();
-		
-		MoreQuantityClaim newClaim = new MoreQuantityClaim(existingClient, new Date(), description, claimType, existingInvoice);
-		
-		for (ProductItemDTO productItemDTO : productItemsDTO) {
-			newClaim.addProductItem(new ProductDAO().getProduct(productItemDTO.getProductId()), productItemDTO.getQuantity());
-		}
-		
-		newClaim.save();
-		
-		return newClaim.getClaimId();
+		return MoreQuantityClaimService.getIntance().addMoreQuantityClaim(dto);	
 	}
 	public int addIncompatibleZoneClaim(IncompatibleZoneClaimDTO dto) throws InvalidClientException, InvalidClaimException, ConnectionException, AccessException, InvalidZoneException, SQLException {
-		int clientId = dto.getClientId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
-		Client existingClient =  new ClientDAO().getClient(clientId);
-		
-		if(existingClient != null) {
-			String description = dto.getDescription();
-			
-			IncompatibleZoneClaim newClaim = new IncompatibleZoneClaim(existingClient, new Date(), description, existingClient.getZone());
-			newClaim.save();
-			return newClaim.getClaimId();
-		
-		}
-		throw new InvalidClientException("Client not found");
+		return IncompatibleZoneClaimService.getIntance().addIncompatibleZoneClaim(dto);
 	}
 	public int addCompositeClaim(CompositeClaimDTO dto) throws InvalidClaimException, ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException {
-		CompositeClaim claim = new CompositeClaim(new ClientDAO().getClient(dto.getClientId()), dto.getDate(), dto.getDescription());
-		for (Integer i : dto.getInidividualClaimsId()) {
-			Claim claimAux = new ClaimDAO().getClaim(i.intValue());
-			claim.addClaim(claimAux);
-		}
-		claim.save();
-		return claim.getClaimId();
-		
+		return CompositeClaimService.getIntance().addCompositeClaim(dto);	
 	}
 }

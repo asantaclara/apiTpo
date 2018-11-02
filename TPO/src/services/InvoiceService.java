@@ -1,6 +1,5 @@
 package services;
 
-import java.util.Date;
 import java.util.List;
 
 import backEnd.Client;
@@ -55,5 +54,4 @@ public class InvoiceService {
 		new InvoiceDAO().getInvoice(dto.getInvoiceId()).deactivateInvoice();
 	}
 	
-
 }

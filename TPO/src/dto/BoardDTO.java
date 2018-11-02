@@ -2,8 +2,6 @@ package dto;
 
 import java.util.List;
 
-import backEnd.Role;
-
 public class BoardDTO {
 
 	private int boardID;

@@ -1,11 +1,8 @@
 package test;
 
 import java.sql.SQLException;
-import java.util.Date;
 
-import backEnd.State;
 import controller.Controller;
-import dto.TransitionDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;

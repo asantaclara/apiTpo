@@ -4,7 +4,6 @@ import dao.ProductDAO;
 import dto.ProductDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
-import exceptions.InvalidClientException;
 import exceptions.InvalidProductException;
 
 public class Product {
