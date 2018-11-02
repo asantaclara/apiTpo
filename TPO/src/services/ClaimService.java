@@ -40,6 +40,9 @@ public class ClaimService {
 	}
 	
 	public void treatClaim(TransitionDTO dto) throws InvalidTransitionException, ConnectionException, AccessException, SQLException, InvalidUserException, InvalidRoleException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
+		if(dto.getResponsableId() == 0 || dto.getNewState() == null || dto.getClaimId() == 0 || dto.getDescription() == null) {
+			throw new InvalidTransitionException("Missing parameters");
+		}
 		Claim aux = new ClaimDAO().getClaim(dto.getClaimId());
 		aux.treatClaim(new UserDAO().getUser(dto.getResponsableId()), State.valueOf(dto.getNewState()), dto.getDescription());
 		

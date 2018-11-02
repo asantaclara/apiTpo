@@ -134,20 +134,25 @@ public class Controller {
 	
 	//------------------------------------------------------------ START INVOICE ------------------------------------------------------------
 	public int addInvoice(InvoiceDTO dto) throws InvalidClientException, ConnectionException, AccessException, InvalidInvoiceException, InvalidProductException, InvalidZoneException {
+	// addProductItem(productId, quantity) / client / date
 		return InvoiceService.getIntance().addInvoice(dto);
 	}
 	public void removeInvoice(InvoiceDTO dto) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException {
+	// invoiceId
 		InvoiceService.getIntance().removeInvoice(dto);
 	}
 	//------------------------------------------------------------ END INVOICE ------------------------------------------------------------
 	
 	public String getClaimState(int claimNumber) throws InvalidClaimException, ConnectionException, AccessException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
+		// claimId
 		return ClaimService.getIntance().getClaimState(claimNumber);
 	}
 	public void treatClaim(TransitionDTO dto) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidTransitionException, InvalidUserException, InvalidRoleException, SQLException {
+	// responsable / newState / description / claimId
 		ClaimService.getIntance().treatClaim(dto);	
 	}
 	public int addWrongInvoicingClaim(WrongInvoicingClaimDTO dto) throws InvalidClaimException, InvalidClientException, ConnectionException, AccessException, InvalidZoneException, InvalidInvoiceException, InvalidProductException, InvalidInvoiceItemException {
+	// client / description / list de invoiceitemDTO	
 		return WrongInvoicingClaimService.getIntance().addWrongInvoicingClaim(dto);
 	}
 	public int addMoreQuantityClaim(MoreQuantityClaimDTO dto) throws InvalidClaimException, InvalidClientException, ConnectionException, AccessException, InvalidZoneException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException {

@@ -2,19 +2,12 @@ package test;
 
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.List;
 
-import backEnd.Client;
-import backEnd.Invoice;
-import backEnd.Product;
-import backEnd.Roles;
+import backEnd.State;
 import controller.Controller;
-import dao.ClientDAO;
-import dao.ProductDAO;
 import dto.InvoiceDTO;
-import dto.ProductDTO;
-import dto.ProductItemDTO;
-import dto.RoleDTO;
+import dto.TransitionDTO;
+import dto.WrongInvoicingClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
@@ -108,14 +101,39 @@ public class App {
 //		c.removeRole(dtoRole);
 		
 // test addInvoice
-		InvoiceDTO dtoInvoice = new InvoiceDTO();
-	// ProductItemDTO (lista de) / clienteId / Date / 
-		dtoInvoice.addProductItemDTO(2, 14);
-		dtoInvoice.addProductItemDTO(4, 9);
-		dtoInvoice.addProductItemDTO(3, 5);
-		dtoInvoice.setClientId(3);
-		dtoInvoice.setDate(new Date());
-		c.addInvoice(dtoInvoice);
+//		InvoiceDTO dtoInvoice = new InvoiceDTO();
+//		dtoInvoice.addProductItemDTO(2, 14);
+//		dtoInvoice.addProductItemDTO(4, 9);
+//		dtoInvoice.addProductItemDTO(3, 5);
+//		dtoInvoice.setClientId(3);
+//		dtoInvoice.setDate(new Date());
+//		c.addInvoice(dtoInvoice);
+		
+// test removeInvoice
+//		InvoiceDTO dtoInvoice = new InvoiceDTO();
+//		dtoInvoice.setInvoiceId(1);
+//		c.removeInvoice(dtoInvoice);
+		
+// test addWrongInvoicingClaim
+//		WrongInvoicingClaimDTO dtoWrong = new WrongInvoicingClaimDTO();
+//		dtoWrong.setClientId(3);
+//		dtoWrong.setDescription("No me gusta nada");
+//		dtoWrong.addInvoiceItemDTO(2, "No me gusta");
+//		c.addWrongInvoicingClaim(dtoWrong);
+		
+// test treatClaim
+//		TransitionDTO dtoTransition = new TransitionDTO();
+//		dtoTransition.setResponsableId(1);
+//		dtoTransition.setNewState(State.IN_TREATMENT.name());
+//		dtoTransition.setDescription("Estoy haciendo una prueba");
+//		dtoTransition.setClaimId(8);
+//		c.treatClaim(dtoTransition);
+		
+// test getClaimState
+//		System.out.println(c.getClaimState(1));
+		
+		
+		
 	System.out.println("END");
 	}
 }
