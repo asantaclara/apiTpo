@@ -45,4 +45,17 @@ public class ClientService {
 		
 		existingClient.deactivateClient();
 	}
+
+	public ClientDTO getClientById(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
+			return new ClientDAO().getClient(clientId).toDTO();
+	}
+
+	public boolean clientExists(int clientId) throws ConnectionException, AccessException, InvalidZoneException {
+		try {
+			new ClientDAO().getClient(clientId);
+			return true;
+		} catch (InvalidClientException e) {
+			return false;
+		}
+	}
 }

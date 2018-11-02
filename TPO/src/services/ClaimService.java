@@ -1,11 +1,15 @@
 package services;
 
+import java.nio.channels.NetworkChannel;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 import backEnd.Claim;
 import backEnd.State;
 import dao.ClaimDAO;
 import dao.UserDAO;
+import dto.ClaimDTO;
 import dto.TransitionDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
@@ -46,5 +50,15 @@ public class ClaimService {
 		Claim aux = new ClaimDAO().getClaim(dto.getClaimId());
 		aux.treatClaim(new UserDAO().getUser(dto.getResponsableId()), State.valueOf(dto.getNewState()), dto.getDescription());
 		
+	}
+
+	public List<ClaimDTO> getClaimsFromClient(int clientId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
+		List<ClaimDTO> claims = new LinkedList<>();
+		
+		for (Claim c : new ClaimDAO().getClaimsFromCLient(clientId)) {
+			claims.add(c.toDTO());
+		}
+		
+		return claims;
 	}
 }

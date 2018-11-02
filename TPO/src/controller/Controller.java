@@ -1,40 +1,15 @@
 package controller;
 
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
-import backEnd.Claim;
-import backEnd.ClaimType;
-import backEnd.Client;
-import backEnd.CompositeClaim;
-import backEnd.IncompatibleZoneClaim;
-import backEnd.Invoice;
-import backEnd.MoreQuantityClaim;
-import backEnd.Product;
-import backEnd.Role;
-import backEnd.Roles;
-import backEnd.State;
-import backEnd.User;
-import backEnd.UserBoard;
-import backEnd.WrongInvoicingClaim;
-import backEnd.Zone;
-import dao.ClaimDAO;
-import dao.ClientDAO;
-import dao.InvoiceDAO;
-import dao.ProductDAO;
-import dao.RoleDAO;
-import dao.UserDAO;
-import dao.ZoneDAO;
+import dto.ClaimDTO;
 import dto.ClientDTO;
 import dto.CompositeClaimDTO;
 import dto.IncompatibleZoneClaimDTO;
 import dto.InvoiceDTO;
-import dto.InvoiceItemDTO;
 import dto.MoreQuantityClaimDTO;
 import dto.ProductDTO;
-import dto.ProductItemDTO;
 import dto.RoleDTO;
 import dto.TransitionDTO;
 import dto.UserDTO;
@@ -170,12 +145,20 @@ public class Controller {
 	public List<InvoiceDTO> getInvoicesByClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException {
 		return InvoiceService.getIntance().getInvoicesByClient(clientId);
 	}
-	
-	public boolean validateUser(UserDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
-		return UserService.getIntance().validateUser(dto);
+	public boolean userExists(UserDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
+		return UserService.getIntance().userExists(dto);
 	}
-	
-	
-	
+	public List<ProductDTO> getInvoiceProducts(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException{
+		return ProductService.getIntance().getInvoiceProducts(invoiceId);
+	}
+	public ClientDTO getClientById(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
+		return ClientService.getIntance().getClientById(clientId);
+	}
+	public boolean clientExists(int clientId) throws ConnectionException, AccessException, InvalidZoneException {
+		return ClientService.getIntance().clientExists(clientId);
+	}
+	public List<ClaimDTO> getClaimsFromClient(int clientId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException{
+		return ClaimService.getIntance().getClaimsFromClient(clientId);
+	}
 	
 }

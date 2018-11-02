@@ -3,7 +3,9 @@ package test;
 import java.sql.SQLException;
 
 import controller.Controller;
+import dto.ClaimDTO;
 import dto.InvoiceDTO;
+import dto.ProductDTO;
 import dto.UserDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
@@ -133,10 +135,38 @@ public class App {
 //		for (InvoiceDTO i : c.getInvoicesByClient(95)) {
 //			System.out.println(i.getClientId());
 //		}
+	
+// test userExists
+//		UserDTO dto = new UserDTO();
+//		dto.setUserId(12);
+//		System.out.println(c.userExists(dto));
+	
+// test getInvoiceProducts
+//		for (ProductDTO p : c.getInvoiceProducts(2)) {
+//			System.out.println(p.getTitle());
+//			System.out.println(p.getProductId());
+//			System.out.println(p.getDescription());
+//			System.out.println("");
+//		}
+
+// test getClientById
+//		System.out.println(c.getClientById(9));
 		
-		UserDTO dto = new UserDTO();
-		dto.setUserId(12);
-		System.out.println(c.validateUser(dto));
+// test userExists
+//		UserDTO dto1 = new UserDTO();
+//		dto1.setUserId(1);
+//		System.out.println(c.userExists(dto1));
+//		UserDTO dto2 = new UserDTO();
+//		dto2.setUserId(9);
+//		System.out.println(c.userExists(dto2));
+	
+// test getClaimsFromClient
+//		for (ClaimDTO claim : c.getClaimsFromClient(3)) {
+//			System.out.println(claim.getDescription());
+//		}
+		
+		
+		
 	System.out.println("END");
 	}
 }

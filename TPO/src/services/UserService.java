@@ -49,7 +49,7 @@ public class UserService {
 		userToRemove.deactivateUser(); //Aca desactivo al usuario para que no se pueda usar mas en el programa.
 	}
 
-	public boolean validateUser(UserDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
+	public boolean userExists(UserDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
 		try {
 			new UserDAO().getUser(dto.getUserId());			
 		} catch (InvalidUserException e) {
@@ -57,4 +57,5 @@ public class UserService {
 		}
 		return true;
 	}
+
 }

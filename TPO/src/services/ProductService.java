@@ -1,11 +1,20 @@
 package services;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import backEnd.Invoice;
 import backEnd.Product;
+import backEnd.ProductItem;
+import dao.InvoiceDAO;
 import dao.ProductDAO;
 import dto.ProductDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
+import exceptions.InvalidClientException;
+import exceptions.InvalidInvoiceException;
 import exceptions.InvalidProductException;
+import exceptions.InvalidZoneException;
 
 public class ProductService {
 	
@@ -42,6 +51,17 @@ public class ProductService {
 		Product productToRemove = new ProductDAO().getProduct(dto.getProductId());
 		
 		productToRemove.deactivateProduct();
+	}
+
+	public List<ProductDTO> getInvoiceProducts(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException {
+		Invoice invoice = new InvoiceDAO().getInvoice(invoiceId);
+		List<ProductDTO> returnList = new LinkedList<>();
+		
+		for (ProductItem pi : invoice.getItems()) {
+			returnList.add(pi.getProduct().toDTO());
+		}
+		
+		return returnList;
 	}
 	
 }
