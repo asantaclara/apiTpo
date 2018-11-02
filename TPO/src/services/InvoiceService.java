@@ -1,5 +1,6 @@
 package services;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import backEnd.Client;
@@ -8,6 +9,7 @@ import backEnd.Product;
 import dao.ClientDAO;
 import dao.InvoiceDAO;
 import dao.ProductDAO;
+import dto.ClientDTO;
 import dto.InvoiceDTO;
 import dto.ProductItemDTO;
 import exceptions.AccessException;
@@ -52,6 +54,17 @@ public class InvoiceService {
 	}
 	public void removeInvoice(InvoiceDTO dto) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException {
 		new InvoiceDAO().getInvoice(dto.getInvoiceId()).deactivateInvoice();
+	}
+
+	public List<InvoiceDTO> getInvoicesByClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException {
+		List<Invoice> invoices = new InvoiceDAO().getAllInvoicesFromClient(clientId);
+		List<InvoiceDTO> aux = new LinkedList<>();
+		
+		for (Invoice invoice : invoices) {
+			aux.add(invoice.toDTO());
+		}
+		return aux;
+		
 	}
 	
 }

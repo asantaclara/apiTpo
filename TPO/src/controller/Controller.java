@@ -164,4 +164,18 @@ public class Controller {
 	public int addCompositeClaim(CompositeClaimDTO dto) throws InvalidClaimException, ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException {
 		return CompositeClaimService.getIntance().addCompositeClaim(dto);	
 	}
+	
+	//------------------------------------------------------------ START GUI ------------------------------------------------------------
+	
+	public List<InvoiceDTO> getInvoicesByClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException {
+		return InvoiceService.getIntance().getInvoicesByClient(clientId);
+	}
+	
+	public boolean validateUser(UserDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
+		return UserService.getIntance().validateUser(dto);
+	}
+	
+	
+	
+	
 }

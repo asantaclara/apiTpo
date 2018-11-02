@@ -1,13 +1,10 @@
 package test;
 
 import java.sql.SQLException;
-import java.util.Date;
 
-import backEnd.State;
 import controller.Controller;
 import dto.InvoiceDTO;
-import dto.TransitionDTO;
-import dto.WrongInvoicingClaimDTO;
+import dto.UserDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
@@ -131,9 +128,15 @@ public class App {
 		
 // test getClaimState
 //		System.out.println(c.getClaimState(1));
+
+// test getInvoicesByClient
+//		for (InvoiceDTO i : c.getInvoicesByClient(95)) {
+//			System.out.println(i.getClientId());
+//		}
 		
-		
-		
+		UserDTO dto = new UserDTO();
+		dto.setUserId(12);
+		System.out.println(c.validateUser(dto));
 	System.out.println("END");
 	}
 }
