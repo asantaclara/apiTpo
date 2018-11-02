@@ -25,16 +25,21 @@ public class UserService {
 	}
 	
 	public int addUser(UserDTO dto) throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException {
-		User u = new User(dto.getName(),Roles.valueOf(dto.getPrincipalRole()));
-		u.saveInDB();
-		return u.getId();
+		if(dto.getName() != null && dto.getPrincipalRole() != null) {			
+			User u = new User(dto.getName(),Roles.valueOf(dto.getPrincipalRole()));
+			u.saveInDB();
+			return u.getId();
+		} else {
+			throw new InvalidUserException("Parameters missing");
+		}
 	}
 	
 	public void modifyUser(UserDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
 		User existingUser = new UserDAO().getUser(dto.getUserId());
 		
+		
 		if (existingUser != null) {
-			existingUser.modify(dto.getName(), Roles.valueOf(dto.getPrincipalRole()));
+			existingUser.modify(dto.getName(), (dto.getPrincipalRole() == null) ? null : Roles.valueOf(dto.getPrincipalRole()));
 		}
 	}
 

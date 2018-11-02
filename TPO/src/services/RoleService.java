@@ -24,6 +24,9 @@ public class RoleService {
 	}
 	
 	public void addRole(RoleDTO dto) throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException {
+		if(dto.getUserId() == 0 || dto.getRole() == null) {
+			throw new InvalidRoleException("Missing parameters");
+		}
 		User existingUser =  new UserDAO().getUser(dto.getUserId());
 		
 		if(existingUser != null) {
@@ -34,6 +37,10 @@ public class RoleService {
 	}
 	
 	public void removeRole(RoleDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
+		if(dto.getUserId() == 0) {
+			throw new InvalidRoleException("Missing userId");
+		}
+		
 		User existingUser = new UserDAO().getUser(dto.getUserId());
 		
 		if(existingUser != null) {			

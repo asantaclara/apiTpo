@@ -1,8 +1,20 @@
 package test;
 
 import java.sql.SQLException;
+import java.util.Date;
+import java.util.List;
 
+import backEnd.Client;
+import backEnd.Invoice;
+import backEnd.Product;
+import backEnd.Roles;
 import controller.Controller;
+import dao.ClientDAO;
+import dao.ProductDAO;
+import dto.InvoiceDTO;
+import dto.ProductDTO;
+import dto.ProductItemDTO;
+import dto.RoleDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
@@ -20,50 +32,90 @@ public class App {
 	
 	public static void main(String[] args) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidInvoiceException, InvalidRoleException, InvalidUserException, InvalidClaimException, InvalidProductException, InvalidInvoiceItemException, InvalidProductItemException, InvalidTransitionException, SQLException {
 		Controller c = Controller.getInstance();
-//		int i = c.addUser(new UserDTO(0, "Ezequiel",Roles.CALL_CENTER_RESPONSABLE.name(), null));
-	
-//		c.modifyUser(new UserDTO(4, "Martin Abba", Roles.QUERY_USER.name(),Roles.CALL_CENTER_RESPONSABLE.name()));
-//		c.removeUser(new UserDTO(4, null, null, null));
-//		c.addClient(new ClientDTO(0, "11-11111111-1", "Pedro Picapiedra", "Siempreviva 123", "15-1515-1515","pedro@picapiedra.net", "Puerto Madero"));
-//		c.removeClient(new ClientDTO(6, "11-11111111-1", "Pedro Picapiedra", "Siempreviva 123", "15-1515-1515","pedro@picapiedra.net", "Puerto Madero"));
+// test addClient
+//		ClientDTO dtoAddClient = new ClientDTO();
+//		dtoAddClient.setCuit("33-33333333-3");
+//		dtoAddClient.setName("Jimena");
+//		dtoAddClient.setAddress("Lima 123");
+//		dtoAddClient.setPhoneNumber("1234-4234");
+//		dtoAddClient.setEmail("hola@hola.com");
+//		dtoAddClient.setZone("Saavedra");
+//		c.addClient(dtoAddClient);
 		
-//		c.modifyClient(new ClientDTO(2, "22-22222222-2", "Juan Pablo", "Siempreviva 123", "15-1515-1515","pedro@picapiedra.net", "Saavedra"));
-//		c.addProduct(new ProductDTO(0, "Manzana", "Manzana de Rio Negro", 45f));
-//		c.removeProduct(new ProductDTO(7, "Manzana", "Manzana de Rio Negro", 45f));
-//		c.modifyProduct(new ProductDTO(6, "Manzana", "Manzana de Rio Negro", 72f));
-//		InvoiceDTO invoice = new InvoiceDTO(0, 3, new Date());
-//		invoice.addProductItemDTO(8, 2);
-//		invoice.addProductItemDTO(5, 2);
-//		c.addInvoice(invoice);
-//		Invoice inv = InvoiceDAO.getInvoice(12);
-//		c.removeInvoice(new InvoiceDTO(12, 3, new Date()));
-//		c.addRole(new RoleDTO(Roles.QUERY_USER.name(), 5));
-//		c.removeRole(new RoleDTO(Roles.QUERY_USER.name(), 5));
-//		c.addIncompatibleZoneClaim(new IncompatibleZoneClaimDTO(0, 2, "Hola", 0,null));
-//		WrongInvoicingClaimDTO dto = new WrongInvoicingClaimDTO(0, 4, "Tengo MUCHO suenio");
-//		dto.addInvoiceItemDTO(new InvoiceItemDTO(8, "chau"));
-//		c.addWrongInvoicingClaim(dto);
-//		MoreQuantityClaimDTO a = new MoreQuantityClaimDTO(claimId, clientId, description, claimType, invoiceId)
-//		MoreQuantityClaimDTO dto = new MoreQuantityClaimDTO(0, 3, "buen dia",ClaimType.MISSING_PRODUCT.name(), 13);
-//		dto.addProductItemDTO(new ProductItemDTO(4, 10));
-//		int claimdId = c.addMoreQuantityClaim(dto);
-//		System.out.println(claimdId);	
-//		Invoice invoice = new Invoice(ClientDAO.getClient(3), new Date());
-//		invoice.addProductItem(ProductDAO.getProduct(4), 10);
-//		invoice.save(); //Invoice 13
-//		MoreQuantityClaim claim = MoreQuantityClaimDAO.getMoreQuantityClaim(28);
-//		CompositeClaimDTO dto = new CompositeClaimDTO(0, 1, "No se", new Date());
-//		dto.addClaimId(1);
-//		dto.addClaimId(15);
-//		int claimId = c.addCompositeClaim(dto);
-//		System.out.println(claimId);
-//		System.out.println(c.getClaimState(1));
-//		System.out.println(c.getClaimState(15));
-//		System.out.println(c.getClaimState(30));
+// test modifyClient
+//		ClientDTO dtoModifyClient = new ClientDTO();
+//		dtoModifyClient.setId(2);
+//		dtoModifyClient.setCuit("33-33333333-3");
+//		dtoModifyClient.setName("Jimena");
+//		dtoModifyClient.setAddress("Lima 123");
+//		dtoModifyClient.setPhoneNumber("1234-4234");
+//		dtoModifyClient.setEmail("chau@chau.com");
+//		dtoModifyClient.setZone("Saavedra");
+//		c.modifyClient(dtoModifyClient);
 		
-//		TransitionDTO dto = new TransitionDTO(7, new Date(), 3, State.IN_TREATMENT.name(), State.IN_TREATMENT.name(), "Hola");
-//		
-//		c.treatClaim(dto);
-		System.out.println("END");
+// test removeClient
+//		ClientDTO dtoRemoveClient = new ClientDTO();
+//		dtoRemoveClient.setId(4);
+//		c.removeClient(dtoRemoveClient);
+		
+// test addUser
+//		UserDTO dtoAddUser = new UserDTO();
+//		dtoAddUser.setName("Juan Ignacio");
+//		dtoAddUser.setPrincipalRole(Roles.CALL_CENTER_RESPONSABLE.name());
+//		c.addUser(dtoAddUser);
+
+// test modifyUser
+//		UserDTO dtoUser = new UserDTO();
+//		dtoUser.setUserId(3);
+//		dtoUser.setName("Juan Pedro");
+//		dtoUser.setPrincipalRole(Roles.CALL_CENTER_RESPONSABLE.name());
+//		c.modifyUser(dtoUser);
+		
+// test removeUser
+//		UserDTO dtoUser = new UserDTO();
+//		dtoUser.setUserId(5);
+//		c.removeUser(dtoUser);
+
+// test addProduct
+//		ProductDTO dtoProduct = new ProductDTO();
+//		dtoProduct.setTitle("Banana");
+//		dtoProduct.setDescription("Importadas de Argentina");
+//		dtoProduct.setPrice(32);
+//		c.addProduct(dtoProduct);
+		
+// test modifyProduct
+//		ProductDTO dtoProduct = new ProductDTO();
+//		dtoProduct.setProductId(1);
+//		dtoProduct.setTitle("Kiwi");
+//		dtoProduct.setDescription("Importadas de Colombia");
+//		dtoProduct.setPrice(12);
+//		c.modifyProduct(dtoProduct);
+
+// test removeProduct
+//		ProductDTO dtoProduct = new ProductDTO();
+//		dtoProduct.setProductId(1);
+//		c.removeProduct(dtoProduct);
+		
+// test addRole
+//		RoleDTO dtoRole = new RoleDTO();
+//		dtoRole.setRole(Roles.ADMINISTRATOR.name());
+//		dtoRole.setUserId(3);
+//		c.addRole(dtoRole);
+
+// test removeRole
+//		RoleDTO dtoRole = new RoleDTO();
+//		dtoRole.setUserId(3);
+//		c.removeRole(dtoRole);
+		
+// test addInvoice
+		InvoiceDTO dtoInvoice = new InvoiceDTO();
+	// ProductItemDTO (lista de) / clienteId / Date / 
+		dtoInvoice.addProductItemDTO(2, 14);
+		dtoInvoice.addProductItemDTO(4, 9);
+		dtoInvoice.addProductItemDTO(3, 5);
+		dtoInvoice.setClientId(3);
+		dtoInvoice.setDate(new Date());
+		c.addInvoice(dtoInvoice);
+	System.out.println("END");
 	}
 }

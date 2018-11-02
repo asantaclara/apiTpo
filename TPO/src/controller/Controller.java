@@ -77,51 +77,57 @@ public class Controller {
 	}
 	//------------------------------------------------------------ START CLIENT ------------------------------------------------------------
 	public int addClient(ClientDTO dto) throws InvalidClientException, ConnectionException, AccessException, InvalidZoneException{
-	
+	// cuit - name - address - phoneNumber - email - zone
 		return ClientService.getIntance().addClient(dto);
 	}
 	public void modifyClient(ClientDTO dto) throws InvalidClientException, ConnectionException, AccessException, InvalidZoneException{
-		
+	// id - los parametro que quiero modificar
 		ClientService.getIntance().modifyClient(dto);
 
 	}
 	public void removeClient(ClientDTO dto) throws InvalidClientException, ConnectionException, AccessException, InvalidZoneException {
-		
+	// id	
 		ClientService.getIntance().removeClient(dto.getId());
 	}
 	//------------------------------------------------------------ END CLIENT ------------------------------------------------------------
 	
 	//------------------------------------------------------------ START USER ------------------------------------------------------------
 	public int addUser(UserDTO dto) throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException {
+	// name - principalRole	
 		return UserService.getIntance().addUser(dto);
 	}
 	public void modifyUser(UserDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
+	// id - lo que quiera cambiar
 		UserService.getIntance().modifyUser(dto);
 	}
 	public void removeUser(UserDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
-		
+	// id	
 		UserService.getIntance().removeUser(dto);
 	}
 	//------------------------------------------------------------ END USER ------------------------------------------------------------
 	
 	//------------------------------------------------------------ START PRODUCT ------------------------------------------------------------
 	public int addProduct(ProductDTO dto) throws ConnectionException, AccessException, InvalidProductException {
+	// title - description - price	
 		return ProductService.getIntance().addProduct(dto);
 	}
 	public void modifyProduct(ProductDTO dto) throws ConnectionException, AccessException, InvalidProductException {
+	// id - lo que quiera cambiar	
 		ProductService.getIntance().modifyProduct(dto);		
 	}
 	public void removeProduct(ProductDTO dto) throws ConnectionException, AccessException, InvalidProductException {
+	// id	
 		ProductService.getIntance().removeProduct(dto);	
 	}
 	//------------------------------------------------------------ END PRODUCT ------------------------------------------------------------
 	
 	//------------------------------------------------------------ START ROLE ------------------------------------------------------------
 	public void addRole(RoleDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
+	// id y role
 		RoleService.getIntance().addRole(dto);	
 	}
 	public void removeRole(RoleDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
-	
+	// id
 		RoleService.getIntance().removeRole(dto);
 	}
 	//------------------------------------------------------------ END ROLE ------------------------------------------------------------

@@ -31,13 +31,24 @@ public class Client {
 	
 	public void modify(String cuit, String name, String address, String phoneNumber, String email, Zone zone) throws InvalidClientException, ConnectionException, AccessException {
 		
-		parameterChecker(cuit, name, address, phoneNumber, email, zone);
-		this.cuit = cuit;
-		this.name = name;
-		this.address = address;
-		this.phoneNumber = phoneNumber;
-		this.email = email;
-		this.zone = zone;	
+		if(cuit != null) {			
+			this.cuit = cuit;
+		}
+		if(name != null) {			
+			this.name = name;
+		}
+		if(address != null) {			
+			this.address = address;
+		}
+		if(phoneNumber != null && phoneNumber.length() > 0) {			
+			this.phoneNumber = phoneNumber;
+		}
+		if(email != null) {			
+			this.email = email;
+		}
+		if(zone != null) {			
+			this.zone = zone;	
+		}
 		new ClientDAO().modify(this);
 		
 	}

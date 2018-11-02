@@ -15,7 +15,7 @@ import exceptions.InvalidProductException;
 
 public class ProductDAO {
 
-	public List<Product> getAllProducts() throws ConnectionException, AccessException {
+	public List<Product> getAllProducts() throws ConnectionException, AccessException, InvalidProductException {
 		Connection con = SqlUtils.getConnection();  
 		Statement stmt = null;  
 		ResultSet rs = null;

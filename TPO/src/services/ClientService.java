@@ -35,7 +35,7 @@ public class ClientService {
 		Client existingClient =  new ClientDAO().getClient(dto.getId());
 		
 		if (existingClient != null) {
-			existingClient.modify(dto.getCuit(), dto.getName(), dto.getAddress(), dto.getPhoneNumber(), dto.getEmail(), new ZoneDAO().getZone(dto.getZone()));
+			existingClient.modify(dto.getCuit(), dto.getName(), dto.getAddress(), dto.getPhoneNumber(), dto.getEmail(), (dto.getZone() != null) ? new ZoneDAO().getZone(dto.getZone()) : null);
 		}
 	}
 

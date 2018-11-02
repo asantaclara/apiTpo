@@ -29,6 +29,9 @@ public class ProductService {
 	}
 	public void modifyProduct(ProductDTO dto) throws ConnectionException, AccessException, InvalidProductException {
 		
+		if(dto.getProductId() == 0) {
+			throw new InvalidProductException("Id missing");
+		}
 		Product existingProduct = new ProductDAO().getProduct(dto.getProductId());
 		
 		if(existingProduct != null) {
