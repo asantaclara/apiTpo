@@ -7,6 +7,7 @@ public class RoleDTO {
 
 	private String role;
 	private List<Integer> usersId = new LinkedList<>();
+	private int userId;
 			
 	public RoleDTO() {
 		
@@ -14,6 +15,14 @@ public class RoleDTO {
 	
 	public void setRole(String role) {
 		this.role = role;
+	}
+	
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+	
+	public int getUserId() {
+		return userId;
 	}
 	
 	public void addUserId(int userId) {
