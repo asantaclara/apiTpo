@@ -165,6 +165,14 @@ public class App {
 //			System.out.println(claim.getDescription());
 //		}
 		
+// test getUserById
+//		UserDTO aux = c.getUserById(6);
+//		if (aux != null) {
+//			System.out.println(aux.getName());
+//		} else {
+//			System.out.println("Null return");
+//		}
+		
 		
 		
 	System.out.println("END");

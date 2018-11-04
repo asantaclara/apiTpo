@@ -58,4 +58,13 @@ public class UserService {
 		return true;
 	}
 
+	public UserDTO getUserById(int userId) throws ConnectionException, AccessException, InvalidRoleException {
+		try {
+			return new UserDAO().getUser(userId).toDTO();			
+		} catch (InvalidUserException e) {
+			System.out.println("User not found");
+			return null;
+		}
+	}
+
 }
