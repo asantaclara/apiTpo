@@ -1,11 +1,12 @@
 package dto;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class MoreQuantityClaimDTO extends ClaimDTO {
 
 	private int invoiceId;
-	private List<ProductItemDTO> products;
+	private List<ProductItemDTO> products = new LinkedList<>();
 	private String claimType;
 	
 //	int claimId, int clientId, String description, String claimType, int invoiceId, Date date

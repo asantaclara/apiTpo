@@ -160,7 +160,7 @@ public class Controller {
 	public List<ClaimDTO> getClaimsFromClient(int clientId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException{
 		return ClaimService.getIntance().getClaimsFromClient(clientId);
 	}
-	public UserDTO getUserById(int userId) throws ConnectionException, AccessException, InvalidRoleException {
+	public UserDTO getUserById(int userId) throws AccessException, InvalidRoleException, ConnectionException {
 		return UserService.getIntance().getUserById(userId);
 	}
 }

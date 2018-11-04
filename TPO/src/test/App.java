@@ -4,9 +4,6 @@ import java.sql.SQLException;
 
 import controller.Controller;
 import dto.ClaimDTO;
-import dto.InvoiceDTO;
-import dto.ProductDTO;
-import dto.UserDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
@@ -101,13 +98,12 @@ public class App {
 		
 // test addInvoice
 //		InvoiceDTO dtoInvoice = new InvoiceDTO();
-//		dtoInvoice.addProductItemDTO(2, 14);
-//		dtoInvoice.addProductItemDTO(4, 9);
-//		dtoInvoice.addProductItemDTO(3, 5);
-//		dtoInvoice.setClientId(3);
+//		dtoInvoice.addProductItemDTO(3, 14);
+//		dtoInvoice.addProductItemDTO(2, 9);
+//		dtoInvoice.setClientId(2);
 //		dtoInvoice.setDate(new Date());
 //		c.addInvoice(dtoInvoice);
-		
+//		
 // test removeInvoice
 //		InvoiceDTO dtoInvoice = new InvoiceDTO();
 //		dtoInvoice.setInvoiceId(1);
@@ -161,9 +157,9 @@ public class App {
 //		System.out.println(c.userExists(dto2));
 	
 // test getClaimsFromClient
-//		for (ClaimDTO claim : c.getClaimsFromClient(3)) {
-//			System.out.println(claim.getDescription());
-//		}
+		for (ClaimDTO claim : c.getClaimsFromClient(2)) {
+			System.out.println(claim.getDescription());
+		}
 		
 // test getUserById
 //		UserDTO aux = c.getUserById(6);
@@ -172,6 +168,16 @@ public class App {
 //		} else {
 //			System.out.println("Null return");
 //		}
+		
+// test addMoreQuantityClaim
+//		MoreQuantityClaimDTO dto = new MoreQuantityClaimDTO();
+//		dto.setClientId(2);
+//		dto.addProductItemDTO(3, 4);
+//		dto.addProductItemDTO(2, 5);
+//		dto.setClaimType(ClaimType.MORE_QUANTITY.name());
+//		dto.setInvoiceId(3);
+//		dto.setDescription("Necesito mas");
+//		c.addMoreQuantityClaim(dto);
 		
 		
 		
