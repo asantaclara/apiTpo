@@ -201,5 +201,46 @@ public class UserDAO {
 		}
 	}
 
+	public User getUserByUsername(String userName) throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException {
+		Connection con = SqlUtils.getConnection();  
+		Statement stmt = null;  
+		ResultSet rs = null;
+		
+		try {
+			stmt = con.createStatement();
+		} catch (SQLException e1) {
+			throw new AccessException("Access error");
+		}
+
+		String SQL = "SELECT Users.UserId, Users.Name, Users.Active as UserActive, Role1.Role as Role1, Role2.Role as Role2, "
+				+ "UserLogin.name as Username, UserLogin.password as password FROM Users JOIN Roles AS Role1 ON "
+				+ "Users.RolId1 = Role1.RoleId JOIN Roles AS Role2 ON Users.RolId2 = Role2.RoleId JOIN "
+				+ "UserLogin on Users.UserId = UserLogin.userId WHERE UserLogin.name = '" + userName + "'"; 
+		try {
+			rs = stmt.executeQuery(SQL);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			throw new AccessException("Query error");
+		}
+		try {
+			if(rs.next()){
+				if(rs.getByte(3) == 1) { 
+					User newUser = new User(rs.getString(2), Roles.valueOf(rs.getString(4)), rs.getString(6), rs.getString(7));
+					newUser.addRole(Roles.valueOf(rs.getString(5)));
+					newUser.setId(rs.getInt(1));
+					return newUser;
+				} else {
+					throw new InvalidUserException("The user is not active");
+				}
+			}
+			else{
+				throw new InvalidUserException("User not found");
+			}
+			
+		} catch (SQLException e) {
+			throw new ConnectionException("Data not reachable");
+		}
+	}
+
 
 }

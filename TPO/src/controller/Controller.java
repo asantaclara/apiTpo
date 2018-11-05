@@ -165,4 +165,7 @@ public class Controller {
 	public UserDTO getUserById(int userId) throws AccessException, InvalidRoleException, ConnectionException {
 		return UserService.getIntance().getUserById(userId);
 	}
+	public UserDTO getUserByUsernameAndPassword(UserDTO dto) throws AccessException, ConnectionException, InvalidRoleException {
+		return UserService.getIntance().getUserByUsernameAndPassword(dto);
+	}
 }

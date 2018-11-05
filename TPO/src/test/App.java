@@ -49,12 +49,12 @@ public class App {
 //		c.removeClient(dtoRemoveClient);
 		
 // test addUser
-		UserDTO dtoAddUser = new UserDTO();
-		dtoAddUser.setName("Matias");
-		dtoAddUser.setPrincipalRole(Roles.CALL_CENTER_RESPONSABLE.name());
-		dtoAddUser.setUserName("Matias3");
-		dtoAddUser.setPassword("123");
-		c.addUser(dtoAddUser);
+//		UserDTO dtoAddUser = new UserDTO();
+//		dtoAddUser.setName("Matias");
+//		dtoAddUser.setPrincipalRole(Roles.CALL_CENTER_RESPONSABLE.name());
+//		dtoAddUser.setUserName("Matias3");
+//		dtoAddUser.setPassword("123");
+//		c.addUser(dtoAddUser);
 
 // test modifyUser
 //		UserDTO dtoUser = new UserDTO();
@@ -181,6 +181,13 @@ public class App {
 //		dto.setInvoiceId(3);
 //		dto.setDescription("Necesito mas");
 //		c.addMoreQuantityClaim(dto);
+		
+// test getUserByUsernameAndPassword
+		UserDTO dto = new UserDTO();
+		dto.setUserName("Matias3");
+		dto.setPassword("123");
+		UserDTO aux = c.getUserByUsernameAndPassword(dto);
+		System.out.println((aux == null) ? "No existe" : aux.getName());
 		
 		
 		

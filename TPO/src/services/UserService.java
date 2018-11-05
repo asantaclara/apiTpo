@@ -71,4 +71,19 @@ public class UserService {
 		}
 	}
 
+	public UserDTO getUserByUsernameAndPassword(UserDTO dto) throws AccessException, ConnectionException, InvalidRoleException {
+		try {
+			User aux = new UserDAO().getUserByUsername(dto.getUserName());
+			
+			if(aux.getPassword().equals(dto.getPassword())) {
+				return aux.toDTO();
+			} else {
+				return null;
+			}
+		} catch (InvalidUserException e) {
+			System.out.println("User not found");
+			return null;
+		}
+	}
+
 }
