@@ -122,9 +122,9 @@ public class ClaimDAO {
 		
 		try {
 			prepStm1.execute();
-			con.commit();
+			con.setAutoCommit(false);
 		} catch (SQLException e) {
-			con.rollback();
+			con.setAutoCommit(false);
 			throw new AccessException("Save error");
 		}
 		

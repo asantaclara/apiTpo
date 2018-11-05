@@ -36,7 +36,7 @@ public class MoreQuantityClaimService {
 	}
 	
 	public int addMoreQuantityClaim(MoreQuantityClaimDTO dto) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidClaimException {
-int clientId = dto.getClientId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
+int 	clientId = dto.getClientId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
 		
 		Client existingClient =  new ClientDAO().getClient(clientId);
 		

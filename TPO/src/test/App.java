@@ -2,8 +2,9 @@ package test;
 
 import java.sql.SQLException;
 
+import backEnd.Roles;
 import controller.Controller;
-import dto.ClaimDTO;
+import dto.UserDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
@@ -48,10 +49,12 @@ public class App {
 //		c.removeClient(dtoRemoveClient);
 		
 // test addUser
-//		UserDTO dtoAddUser = new UserDTO();
-//		dtoAddUser.setName("Juan Ignacio");
-//		dtoAddUser.setPrincipalRole(Roles.CALL_CENTER_RESPONSABLE.name());
-//		c.addUser(dtoAddUser);
+		UserDTO dtoAddUser = new UserDTO();
+		dtoAddUser.setName("Matias");
+		dtoAddUser.setPrincipalRole(Roles.CALL_CENTER_RESPONSABLE.name());
+		dtoAddUser.setUserName("Matias3");
+		dtoAddUser.setPassword("123");
+		c.addUser(dtoAddUser);
 
 // test modifyUser
 //		UserDTO dtoUser = new UserDTO();
@@ -157,9 +160,9 @@ public class App {
 //		System.out.println(c.userExists(dto2));
 	
 // test getClaimsFromClient
-		for (ClaimDTO claim : c.getClaimsFromClient(2)) {
-			System.out.println(claim.getDescription());
-		}
+//		for (ClaimDTO claim : c.getClaimsFromClient(2)) {
+//			System.out.println(claim.getDescription());
+//		}
 		
 // test getUserById
 //		UserDTO aux = c.getUserById(6);

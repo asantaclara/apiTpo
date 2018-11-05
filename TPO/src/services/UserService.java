@@ -1,5 +1,7 @@
 package services;
 
+import java.sql.SQLException;
+
 import backEnd.Roles;
 import backEnd.User;
 import dao.UserDAO;
@@ -25,10 +27,12 @@ public class UserService {
 	}
 	
 	public int addUser(UserDTO dto) throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException {
-		if(dto.getName() != null && dto.getPrincipalRole() != null) {			
-			User u = new User(dto.getName(),Roles.valueOf(dto.getPrincipalRole()));
+		if(dto.getName() != null && dto.getPrincipalRole() != null && dto.getUserName() != null && dto.getPassword() != null) {			
+			User u = new User(dto.getName(),Roles.valueOf(dto.getPrincipalRole()), dto.getUserName(), dto.getPassword());
 			u.saveInDB();
-			return u.getId();
+			int i = u.getId();
+			System.out.println("Termino con el addUser en el servicio");
+			return i;
 		} else {
 			throw new InvalidUserException("Parameters missing");
 		}
@@ -39,7 +43,7 @@ public class UserService {
 		
 		
 		if (existingUser != null) {
-			existingUser.modify(dto.getName(), (dto.getPrincipalRole() == null) ? null : Roles.valueOf(dto.getPrincipalRole()));
+			existingUser.modify(dto.getName(), (dto.getPrincipalRole() == null) ? null : Roles.valueOf(dto.getPrincipalRole()), dto.getUserName(), dto.getPassword());
 		}
 	}
 

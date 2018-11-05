@@ -1,5 +1,7 @@
 package backEnd;
 
+import java.sql.SQLException;
+
 import dao.UserDAO;
 import dto.UserDTO;
 import exceptions.AccessException;
@@ -15,15 +17,19 @@ public class User {
 	private Roles principalRole;
 	private Roles secondaryRole;
 	private boolean activeUser;
+	private String userName;
+	private String password;
 	
-	public User(String name, Roles principalRole) {
+	public User(String name, Roles principalRole, String userName, String password) {
 		this.name = name;
 		this.principalRole = principalRole;
 		this.secondaryRole = principalRole;
 		this.activeUser = true;
+		this.userName = userName;
+		this.password = password;
 	}
 	
-	public void modify(String name, Roles principalRole) throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException {
+	public void modify(String name, Roles principalRole, String userName, String password) throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException {
 		
 		if (name != null) {			
 			this.name = name;
@@ -31,6 +37,12 @@ public class User {
 		if (principalRole != null) {			
 			this.principalRole = principalRole;
 			this.secondaryRole = principalRole;
+		}
+		if (userName != null) {
+			this.userName = userName;
+		}
+		if (password != null) {
+			this.password = password;
 		}
 		
 		new UserDAO().modify(this);
@@ -55,6 +67,7 @@ public class User {
 	
 	public void saveInDB() throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException {
 		new UserDAO().save(this);
+		System.out.println("Termino con el save de la clase User");
 	}
 	
 	public void modifyInDB() throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException {
@@ -69,6 +82,8 @@ public class User {
 		aux.setName(name);
 		aux.setPrincipalRole(principalRole.name());
 		aux.setSecondaryRole(secondaryRole.name());
+		aux.setUserName(userName);
+		//No devuelvo la password en el DTO
 		
 		return aux;
 	}
@@ -101,6 +116,14 @@ public class User {
 
 	public boolean isActiveUser() {
 		return activeUser;
+	}
+	
+	public String getUserName() {
+		return userName;
+	}
+	
+	public String getPassword() {
+		return password;
 	}
 	
 //--------------------------------------------------------------------GETERS END-------------------------------------------------------------------------------------

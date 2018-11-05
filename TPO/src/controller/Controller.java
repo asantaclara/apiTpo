@@ -69,7 +69,9 @@ public class Controller {
 	//------------------------------------------------------------ START USER ------------------------------------------------------------
 	public int addUser(UserDTO dto) throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException {
 	// name - principalRole	
-		return UserService.getIntance().addUser(dto);
+		int i = UserService.getIntance().addUser(dto);
+		System.out.println("Termino con el addUser en el controller");
+		return i;
 	}
 	public void modifyUser(UserDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
 	// id - lo que quiera cambiar
