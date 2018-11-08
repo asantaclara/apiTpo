@@ -47,6 +47,7 @@ public class MoreQuantityClaim extends IndividualClaim {
 		aux.setClaimType(claimType.name());
 		aux.setInvoiceId(invoice.getId());
 		aux.setDate(date);
+		aux.setState(actualState.name());
 		
 		for (ProductItem p : products) {
 			aux.addProductItemDTO(p.getId(), p.getQuantity());

@@ -8,6 +8,7 @@ public abstract class ClaimDTO {
 	protected int clientId;
 	protected String description;
 	protected Date date;
+	protected String state;
 	
 	public ClaimDTO() {
 		
@@ -51,6 +52,14 @@ public abstract class ClaimDTO {
 		aux[3] = description;
 		
 		return aux;
+	}
+	
+	public void setState(String state) {
+		this.state = state;
+	}
+	
+	public String getState() {
+		return state;
 	}
 	
 	

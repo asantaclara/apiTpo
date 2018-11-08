@@ -33,6 +33,7 @@ public class WrongInvoicingClaim extends IndividualClaim {
 		aux.setClientId(client.getId());
 		aux.setDescription(description);
 		aux.setDate(date);
+		aux.setState(actualState.name());
 		
 		for (InvoiceItem i : invoices) {
 			aux.addInvoiceItemDTO(i.getId(),i.getInconsistency());

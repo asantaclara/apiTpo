@@ -74,6 +74,7 @@ public class CompositeClaim extends Claim{
 		aux.setClientId(client.getId());
 		aux.setDescription(description);
 		aux.setDate(date);
+		aux.setState(this.getActualState().name());
 		
 		for (Claim claim : claims) {
 			aux.addIndividualClaimId(claim.getClaimId());

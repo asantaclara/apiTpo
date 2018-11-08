@@ -27,6 +27,7 @@ public class IncompatibleZoneClaim extends IndividualClaim {
 		aux.setDescription(description);
 		aux.setZoneId(zone.getId());
 		aux.setDate(date);
+		aux.setState(actualState.name());
 		
 		return aux;
 	}
