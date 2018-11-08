@@ -1,5 +1,8 @@
 package services;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import backEnd.Client;
 import dao.ClientDAO;
 import dao.ZoneDAO;
@@ -57,5 +60,14 @@ public class ClientService {
 		} catch (InvalidClientException e) {
 			return false;
 		}
+	}
+
+	public List<ClientDTO> getAllClients() throws ConnectionException, AccessException, InvalidClientException {
+		List<Client> clients =  new ClientDAO().getAllClients();
+		List<ClientDTO> aux = new LinkedList<>();
+		for (Client client : clients) {
+			aux.add(client.toDTO());
+		}
+		return aux;
 	}
 }

@@ -168,4 +168,7 @@ public class Controller {
 	public UserDTO getUserByUsernameAndPassword(UserDTO dto) throws AccessException, ConnectionException, InvalidRoleException {
 		return UserService.getIntance().getUserByUsernameAndPassword(dto);
 	}
+	public List<ClientDTO> getAllClients() throws ConnectionException, AccessException, InvalidClientException{
+		return ClientService.getIntance().getAllClients();
+	}
 }
