@@ -63,5 +63,16 @@ public class ProductService {
 		
 		return returnList;
 	}
+
+	public List<ProductDTO> getAllProducts() throws ConnectionException, AccessException, InvalidProductException {
+		List<Product> aux =  new ProductDAO().getAllProducts();
+		List<ProductDTO> returnList = new LinkedList<>();
+		
+		for (Product product : aux) {
+			returnList.add(product.toDTO());
+		}
+		
+		return returnList;
+	}
 	
 }

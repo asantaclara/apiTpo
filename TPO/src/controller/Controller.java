@@ -171,4 +171,7 @@ public class Controller {
 	public List<ClientDTO> getAllClients() throws ConnectionException, AccessException, InvalidClientException{
 		return ClientService.getIntance().getAllClients();
 	}
+	public List<ProductDTO> getAllProducts() throws ConnectionException, AccessException, InvalidProductException{
+		return ProductService.getIntance().getAllProducts();
+	}
 }
