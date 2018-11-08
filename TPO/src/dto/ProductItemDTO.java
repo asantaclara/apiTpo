@@ -17,4 +17,12 @@ public class ProductItemDTO {
 		return quantity;
 	}
 	
+	public String[] toDataRow() {
+		String[] aux = new String[2];
+		
+		aux[0] = String.valueOf(productId);
+		aux[1] = String.valueOf(quantity);
+		
+		return aux;
+	}
 }
