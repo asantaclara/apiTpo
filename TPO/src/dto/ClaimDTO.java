@@ -42,5 +42,16 @@ public abstract class ClaimDTO {
 		return date;
 	}
 	
+	public String[] toDataRow() {
+		String[] aux = new String[4];
+		
+		aux[0] = String.valueOf(claimId);
+		aux[1] = String.valueOf(clientId);
+		aux[2] = date.toString();
+		aux[3] = description;
+		
+		return aux;
+	}
+	
 	
 }
