@@ -28,8 +28,8 @@ public class InvoiceDTO {
 		this.date = date;
 	}
 	
-	public void addProductItemDTO(int productId, int quantity) {
-		productItems.add(new ProductItemDTO(productId, quantity));
+	public void addProductItemDTO(ProductDTO product, int quantity) {
+		productItems.add(new ProductItemDTO(product, quantity));
 	}
 	
 	public int getInvoiceId() {

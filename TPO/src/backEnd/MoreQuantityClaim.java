@@ -50,7 +50,7 @@ public class MoreQuantityClaim extends IndividualClaim {
 		aux.setState(actualState.name());
 		
 		for (ProductItem p : products) {
-			aux.addProductItemDTO(p.getId(), p.getQuantity());
+			aux.addProductItemDTO(p.getProduct().toDTO(), p.getQuantity());
 		}
 		
 		return aux;

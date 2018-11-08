@@ -94,7 +94,7 @@ public class Invoice {
 		aux.setDate(date);
 		
 		for (ProductItem p : items) {
-			aux.addProductItemDTO(p.getProduct().getProductId(), p.getQuantity());
+			aux.addProductItemDTO(p.getProduct().toDTO(), p.getQuantity());
 		}
 		
 		return aux;

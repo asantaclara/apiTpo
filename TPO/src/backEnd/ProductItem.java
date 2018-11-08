@@ -26,7 +26,7 @@ public class ProductItem {
 	}
 	
 	public ProductItemDTO toDTO() {
-		return new ProductItemDTO(product.getProductId(), quantity);
+		return new ProductItemDTO(product.toDTO(), quantity);
 	}
 	
 	public void save() throws ConnectionException, AccessException, InvalidProductException {

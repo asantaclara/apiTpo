@@ -23,8 +23,8 @@ public class MoreQuantityClaimDTO extends ClaimDTO {
 		this.claimType = claimType;
 	}
 	
-	public void addProductItemDTO(int productId, int quantity) {
-		products.add(new ProductItemDTO(productId, quantity));
+	public void addProductItemDTO(ProductDTO product, int quantity) {
+		products.add(new ProductItemDTO(product, quantity));
 	}
 	
 	public int getInvoiceId() {

@@ -2,16 +2,16 @@ package dto;
 
 public class ProductItemDTO {
 
-	private int productId;
+	private ProductDTO product;
 	private int quantity;
 	
-	public ProductItemDTO(int productId, int quantity) {
-		this.productId = productId;
+	public ProductItemDTO(ProductDTO product, int quantity) {
+		this.product = product;
 		this.quantity = quantity;
 	}
 	
-	public int getProductId() {
-		return productId;
+	public ProductDTO getProduct() {
+		return product;
 	}
 	public int getQuantity() {
 		return quantity;
@@ -20,7 +20,7 @@ public class ProductItemDTO {
 	public String[] toDataRow() {
 		String[] aux = new String[2];
 		
-		aux[0] = String.valueOf(productId);
+		aux[0] = String.valueOf(product.getTitle());
 		aux[1] = String.valueOf(quantity);
 		
 		return aux;

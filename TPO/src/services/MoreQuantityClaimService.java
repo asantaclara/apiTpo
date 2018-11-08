@@ -52,7 +52,7 @@ int 	clientId = dto.getClientId(); //Con este clientId tengo que traer al client
 		MoreQuantityClaim newClaim = new MoreQuantityClaim(existingClient, new Date(), description, claimType, existingInvoice);
 		
 		for (ProductItemDTO productItemDTO : productItemsDTO) {
-			newClaim.addProductItem(new ProductDAO().getProduct(productItemDTO.getProductId()), productItemDTO.getQuantity());
+			newClaim.addProductItem(new ProductDAO().getProduct(productItemDTO.getProduct().getProductId()), productItemDTO.getQuantity());
 		}
 		
 		newClaim.save();

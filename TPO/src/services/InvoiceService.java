@@ -11,6 +11,7 @@ import dao.InvoiceDAO;
 import dao.ProductDAO;
 import dto.ClientDTO;
 import dto.InvoiceDTO;
+import dto.ProductDTO;
 import dto.ProductItemDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
@@ -41,8 +42,8 @@ public class InvoiceService {
 		Invoice newInvoice = new Invoice(existingClient, dto.getDate());
 		
 		for (ProductItemDTO productItemDTO : itemsDTO) {
-			int productId = productItemDTO.getProductId();
-			Product existingProduct = new ProductDAO().getProduct(productId);
+			ProductDTO product = productItemDTO.getProduct();
+			Product existingProduct = new ProductDAO().getProduct(product.getProductId());
 			
 			int productQuantity = productItemDTO.getQuantity();
 			
