@@ -35,6 +35,7 @@ public class CompositeClaimDAO {
 			claim.setClaimId(SqlUtils.lastId("Claims", "ClaimId") + 1);
 			
 			try {
+				con.setAutoCommit(false);
 				prepStm = con.prepareStatement("insert into Claims values(?,?,?,?,?)");
 				prepStm.setInt(1, claim.getClaimId());
 				prepStm.setString(2,claim.getActualState().name());
@@ -53,35 +54,44 @@ public class CompositeClaimDAO {
 			}
 			
 			for (Claim c : claim.getIndividualClaims()) {
-				addCompositePart(claim.getClaimId(), c.getClaimId());
-			}			
+				addCompositePart(con, claim.getClaimId(), c.getClaimId());
+			}	
+			
+	
+			try {
+				con.commit();
+			} catch (Exception e) {
+				try {
+					con.rollback();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+					throw new AccessException("DB Error");
+				}
+				throw new AccessException("Save error");
+			}
+
 		} finally {
 			SqlUtils.closeConnection(con);
 		}
 	}
 	
-	private static void addCompositePart(int idComposite, int idIndividual) throws ConnectionException, AccessException {
-		Connection con = SqlUtils.getConnection();
+	private static void addCompositePart(Connection con, int idComposite, int idIndividual) throws ConnectionException, AccessException {
 		PreparedStatement prepStm;
 		try {
-			try {
-				
-				prepStm = con.prepareStatement("insert into CompositeClaims values(?,?)");
-				prepStm.setInt(1, idComposite);
-				prepStm.setInt(2, idIndividual);
-				
-			} catch (SQLException e) {
-				throw new AccessException("Access error");
-			}		
 			
-			try {
-				prepStm.execute();
-			} catch (SQLException e) {
-				throw new AccessException("Save error");
-			}			
-		} finally {
-			SqlUtils.closeConnection(con);
-		}
+			prepStm = con.prepareStatement("insert into CompositeClaims values(?,?)");
+			prepStm.setInt(1, idComposite);
+			prepStm.setInt(2, idIndividual);
+			
+		} catch (SQLException e) {
+			throw new AccessException("Access error");
+		}		
+		
+		try {
+			prepStm.execute();
+		} catch (SQLException e) {
+			throw new AccessException("Save error");
+		}			
 	}
 
 	private static List<Claim> getListOfClaims(int claimId) throws AccessException, ConnectionException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException{

@@ -58,6 +58,7 @@ public class UserDAO {
 				try {
 					con.rollback();		
 				} catch (SQLException e2) {
+					e.printStackTrace();
 					throw new AccessException("DB Error");
 				}
 				if(e.getErrorCode() == 2627) {
