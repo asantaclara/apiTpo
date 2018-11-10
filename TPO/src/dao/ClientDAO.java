@@ -85,9 +85,7 @@ public class ClientDAO {
 		if(client.getId() != 0) {
 			throw new InvalidClientException("Client already in data base");
 		}
-		
-		int zoneId = new ZoneDAO().fixZone(client.getZone().getName()); //Si la zona que tiene el cliente ya esta cargada en la BD no pasa nada, sino la crea.
-		
+
 		client.setId(SqlUtils.lastId("Clients", "ClientId") + 1); 
 		try {
 			prepStm = con.prepareStatement("insert into Clients values(?,?,?,?,?,?,?,?)");
@@ -97,7 +95,7 @@ public class ClientDAO {
 			prepStm.setString(4, client.getAddress());
 			prepStm.setString(5, client.getPhoneNumber());
 			prepStm.setString(6, client.getEmail());
-			prepStm.setInt(7, zoneId);
+			prepStm.setInt(7, client.getZone().getId());
 			prepStm.setByte(8, (byte) ((client.isActive() == true) ? 1 : 0));
 			
 		} catch (SQLException e) {
@@ -118,9 +116,7 @@ public class ClientDAO {
 		if(client.getId() == 0) {
 			throw new InvalidClientException("Client not in data base");
 		}
-		
-		int zoneId = new ZoneDAO().fixZone(client.getZone().getName()); //Si la zona que tiene el cliente ya esta cargada en la BD no pasa nada, sino la crea.
-		
+
 		try {
 			prepStm = con.prepareStatement("UPDATE Clients SET Name = ?, Cuit = ?, Address = ?, Phone = ?, Mail = ?, ZoneId = ?, Active = ? WHERE ClientId = " + client.getId());
 			prepStm.setString(1, client.getName());
@@ -128,7 +124,7 @@ public class ClientDAO {
 			prepStm.setString(3, client.getAddress());
 			prepStm.setString(4, client.getPhoneNumber());
 			prepStm.setString(5, client.getEmail());
-			prepStm.setInt(6, zoneId);
+			prepStm.setInt(6, client.getZone().getId());
 			prepStm.setByte(7, (byte) ((client.isActive() == true) ? 1 : 0));
 			
 		} catch (SQLException e) {

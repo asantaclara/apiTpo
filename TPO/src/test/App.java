@@ -2,9 +2,8 @@ package test;
 
 import java.sql.SQLException;
 
-import backEnd.State;
 import controller.Controller;
-import dto.TransitionDTO;
+import dto.ClientDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
@@ -29,19 +28,19 @@ public class App {
 //		dtoAddClient.setAddress("Lima 123");
 //		dtoAddClient.setPhoneNumber("1234-4234");
 //		dtoAddClient.setEmail("hola@hola.com");
-//		dtoAddClient.setZone("Saavedra");
+//		dtoAddClient.setZone("Puerto Madero");
 //		c.addClient(dtoAddClient);
 		
 // test modifyClient
-//		ClientDTO dtoModifyClient = new ClientDTO();
-//		dtoModifyClient.setId(2);
+		ClientDTO dtoModifyClient = new ClientDTO();
+		dtoModifyClient.setId(6);
 //		dtoModifyClient.setCuit("33-33333333-3");
 //		dtoModifyClient.setName("Jimena");
 //		dtoModifyClient.setAddress("Lima 123");
 //		dtoModifyClient.setPhoneNumber("1234-4234");
 //		dtoModifyClient.setEmail("chau@chau.com");
-//		dtoModifyClient.setZone("Saavedra");
-//		c.modifyClient(dtoModifyClient);
+		dtoModifyClient.setZone("Saavedra");
+		c.modifyClient(dtoModifyClient);
 		
 // test removeClient
 //		ClientDTO dtoRemoveClient = new ClientDTO();
@@ -128,7 +127,7 @@ public class App {
 //		c.treatClaim(dtoTransition);
 		
 // test getClaimState
-		System.out.println(c.getClaimState(3));
+//		System.out.println(c.getClaimState(3));
 
 // test getInvoicesByClient
 //		for (InvoiceDTO i : c.getInvoicesByClient(2)) {

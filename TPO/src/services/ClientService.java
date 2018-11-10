@@ -28,7 +28,7 @@ public class ClientService {
 	}
 	
 	public int addClient (ClientDTO dto) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
-		Client c = new Client(dto.getCuit(), dto.getName(), dto.getAddress(), dto.getPhoneNumber(), dto.getEmail(), new ZoneDAO().getZone(dto.getZone()));
+		Client c = new Client(dto.getCuit(), dto.getName(), dto.getAddress(), dto.getPhoneNumber(), dto.getEmail(), ZoneService.getIntance().getZoneByName(dto.getZone()));
 		c.saveInDB();
 		return c.getId();
 	}
@@ -38,7 +38,7 @@ public class ClientService {
 		Client existingClient =  new ClientDAO().getClient(dto.getId());
 		
 		if (existingClient != null) {
-			existingClient.modify(dto.getCuit(), dto.getName(), dto.getAddress(), dto.getPhoneNumber(), dto.getEmail(), (dto.getZone() != null) ? new ZoneDAO().getZone(dto.getZone()) : null);
+			existingClient.modify(dto.getCuit(), dto.getName(), dto.getAddress(), dto.getPhoneNumber(), dto.getEmail(), (dto.getZone() != null) ? ZoneService.getIntance().getZoneByName(dto.getZone()) : null);
 		}
 	}
 
