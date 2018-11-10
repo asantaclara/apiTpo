@@ -61,21 +61,12 @@ public class TransitionDAO {
 
 	public List<Transition> getAllTransitionOfClaim(int claimId) throws ConnectionException, AccessException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException{
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = null;  
+		Statement stmt = SqlUtils.createStatement(con);  
 		ResultSet rs = null;
 		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
-			throw new AccessException("Access error");
-		}
+		String sql = "SELECT * FROM Transitions WHERE ClaimId = " + claimId; 
 		
-		String SQL = "SELECT * FROM Transitions WHERE ClaimId = " + claimId; 
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			throw new AccessException("Query error");
-		}
+		rs = SqlUtils.executeQuery(stmt, con, sql);
 		
 		try {
 			List<Transition> returnList = new LinkedList<>();
@@ -96,22 +87,13 @@ public class TransitionDAO {
 
 	public Transition getTransitionById(int transitionId) throws AccessException, InvalidUserException, ConnectionException, InvalidTransitionException, InvalidRoleException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = null;  
+		Statement stmt = SqlUtils.createStatement(con);  
 		ResultSet rs = null;
 		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
-			throw new AccessException("Access error");
-		}
+		String sql = "SELECT * FROM Transitions WHERE TransitionId = " + transitionId;
 		
-		String SQL = "SELECT * FROM Transitions WHERE TransitionId = " + transitionId;
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-			throw new AccessException("Query error");
-		}
+		rs = SqlUtils.executeQuery(stmt, con, sql);
+		
 		try {
 			if(rs.next()){
 				Transition newTransition = new Transition(rs.getInt(2), State.valueOf(rs.getString(3)), State.valueOf(rs.getString(4)), 

@@ -28,6 +28,7 @@ public class CompositeClaimDAO {
 		PreparedStatement prepStm;
 	
 		if(claim.getClaimId() != 0) {
+			SqlUtils.closeConnection(con);
 			throw new InvalidClaimException("Claim already in data base");
 		}
 		
@@ -42,18 +43,22 @@ public class CompositeClaimDAO {
 			prepStm.setDate(5, new java.sql.Date(claim.getDate().getTime()));
 			
 		} catch (SQLException e) {
+			SqlUtils.closeConnection(con);
 			throw new AccessException("Access error");
 		}		
 		
 		try {
 			prepStm.execute();
 		} catch (SQLException e) {
+			SqlUtils.closeConnection(con);
 			throw new AccessException("Save error");
 		}
 		
 		for (Claim c : claim.getIndividualClaims()) {
 			addCompositePart(claim.getClaimId(), c.getClaimId());
 		}
+		
+		SqlUtils.closeConnection(con);
 	}
 	
 	private static void addCompositePart(int idComposite, int idIndividual) throws ConnectionException, AccessException {
@@ -67,6 +72,7 @@ public class CompositeClaimDAO {
 			prepStm.setInt(2, idIndividual);
 			
 		} catch (SQLException e) {
+			SqlUtils.closeConnection(con);
 			throw new AccessException("Access error");
 		}		
 		
@@ -74,30 +80,23 @@ public class CompositeClaimDAO {
 			prepStm.execute();
 		} catch (SQLException e) {
 			throw new AccessException("Save error");
+		} finally {
+			SqlUtils.closeConnection(con);
 		}
 	}
 
 	private static List<Claim> getListOfClaims(int claimId) throws AccessException, ConnectionException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException{
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = null;  
+		Statement stmt = SqlUtils.createStatement(con);  
 		ResultSet rs = null;
-		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
-			throw new AccessException("Access error");
-		}
 		
 		String SQL = "SELECT * FROM Claims LEFT JOIN WrongInvoiceClaims ON CLAIMS.ClaimId = WrongInvoiceClaims.WrongInvoiceId "
 				+ "LEFT JOIN IncompatibleZoneClaims ON Claims.ClaimId = IncompatibleZoneClaims.IncompatibleZoneId "
 				+ "LEFT JOIN CompositeClaims ON Claims.ClaimId = CompositeClaims.CompositeClaimId "
 				+ "LEFT JOIN MoreQuantityClaims ON Claims.ClaimId = MoreQuantityClaims.MoreQuantityId WHERE CompositeClaims.CompositeClaimId = " + claimId;
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-			throw new AccessException("Query error");
-		}
+		
+		rs = SqlUtils.executeQuery(stmt, con, SQL);
+		
 		try {
 			List<Claim> claimList = new LinkedList<>();
 			while(rs.next()){
@@ -107,28 +106,21 @@ public class CompositeClaimDAO {
 			return claimList;
 		} catch (SQLException e) {
 			throw new ConnectionException("Data not reachable");
+		} finally {
+			SqlUtils.closeConnection(con);
 		}
 		
 	}
 	
 	public CompositeClaim getCompositeClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = null;  
+		Statement stmt = SqlUtils.createStatement(con);  
 		ResultSet rs = null;
-		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
-			throw new AccessException("Access error");
-		}
-		
+	
 		String SQL = "SELECT * FROM CompositeClaims JOIN Claims ON CompositeClaims.CompositeClaimId = Claims.ClaimId WHERE CompositeClaims.CompositeClaimId = " + claimId;
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-			throw new AccessException("Query error");
-		}
+		
+		rs = SqlUtils.executeQuery(stmt, con, SQL);
+		
 		try {
 			if(rs.next()){
 				Client client = new ClientDAO().getClient(rs.getInt(5));
@@ -145,27 +137,20 @@ public class CompositeClaimDAO {
 			
 		} catch (SQLException e) {
 			throw new ConnectionException("Data not reachable");
+		} finally {
+			SqlUtils.closeConnection(con);
 		}
 	}
 
 	public List<CompositeClaim> getAllClaims() throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException{
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = null;  
+		Statement stmt = SqlUtils.createStatement(con);  
 		ResultSet rs = null;
 		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
-			throw new AccessException("Access error");
-		}
-		
 		String SQL = "SELECT * FROM CompositeClaims";
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-			throw new AccessException("Query error");
-		}
+		
+		rs = SqlUtils.executeQuery(stmt, con, SQL);
+		
 		try {
 			List<CompositeClaim> returnList = new LinkedList<>();
 			CompositeClaim newClaim;
@@ -176,6 +161,33 @@ public class CompositeClaimDAO {
 			return returnList;
 		} catch (SQLException e) {
 			throw new ConnectionException("Data not reachable");
+		} finally {
+			SqlUtils.closeConnection(con);
+		}
+	}
+	
+	public List<CompositeClaim> getAllClaimsByIndividualClaim(int individualClaimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException{
+		Connection con = SqlUtils.getConnection();  
+		Statement stmt = SqlUtils.createStatement(con);  
+		ResultSet rs = null;
+		
+		String SQL = "SELECT * FROM CompositeClaims WHERE ClaimId = " + individualClaimId;
+		
+		rs = SqlUtils.executeQuery(stmt, con, SQL);
+		
+		try {
+			List<CompositeClaim> returnList = new LinkedList<>();
+			CompositeClaim newClaim;
+
+			while(rs.next()){
+				newClaim = getCompositeClaim(rs.getInt(1));
+				returnList.add(newClaim);
+			}
+			return returnList;
+		} catch (SQLException e) {
+			throw new ConnectionException("Data not reachable");
+		} finally {
+			SqlUtils.closeConnection(con);
 		}
 	}
 }

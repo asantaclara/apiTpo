@@ -66,22 +66,13 @@ public class MoreQuantityClaimDAO {
 
 	public MoreQuantityClaim getMoreQuantityClaim(int claimId) throws AccessException, ConnectionException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException{
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = null;  
+		Statement stmt = SqlUtils.createStatement(con);  
 		ResultSet rs = null;
 		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
-			throw new AccessException("Access error");
-		}
+		String sql = "SELECT * FROM MoreQuantityClaims JOIN Claims ON MoreQuantityClaims.MoreQuantityId = Claims.ClaimId WHERE Claims.ClaimId = " + claimId;
 		
-		String SQL = "SELECT * FROM MoreQuantityClaims JOIN Claims ON MoreQuantityClaims.MoreQuantityId = Claims.ClaimId WHERE Claims.ClaimId = " + claimId;
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-			throw new AccessException("Query error");
-		}
+		rs = SqlUtils.executeQuery(stmt, con, sql);
+		
 		try {
 			if(rs.next()){
 				Client client = new ClientDAO().getClient(rs.getInt(6));

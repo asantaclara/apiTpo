@@ -24,6 +24,7 @@ public class IncompatibleZoneClaimDAO {
 		PreparedStatement prepStm2;
 	
 		if(claim.getClaimId() != 0) {
+			SqlUtils.closeConnection(con);
 			throw new InvalidClaimException("Claim already in data base");
 		}
 		
@@ -43,6 +44,7 @@ public class IncompatibleZoneClaimDAO {
 			prepStm2.setInt(2, claim.getZone().getId());
 			
 		} catch (SQLException e) {
+			SqlUtils.closeConnection(con);
 			throw new AccessException("Access error");
 		}		
 		
@@ -54,28 +56,21 @@ public class IncompatibleZoneClaimDAO {
 			con.rollback();
 			e.printStackTrace();
 			throw new AccessException("Save error");
+		} finally {
+			SqlUtils.closeConnection(con);
 		}
 		
 	}
 
 	public IncompatibleZoneClaim getIncompatibleZoneClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = null;  
+		Statement stmt = SqlUtils.createStatement(con);  
 		ResultSet rs = null;
 		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
-			throw new AccessException("Access error");
-		}
-		
-		String SQL = "SELECT * FROM IncompatibleZoneClaims JOIN Claims ON Claims.ClaimId = IncompatibleZoneClaims.IncompatibleZoneId WHERE Claims.ClaimId = " + claimId;
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-			throw new AccessException("Query error");
-		}
+		String sql = "SELECT * FROM IncompatibleZoneClaims JOIN Claims ON Claims.ClaimId = IncompatibleZoneClaims.IncompatibleZoneId WHERE Claims.ClaimId = " + claimId;
+
+		rs = SqlUtils.executeQuery(stmt, con, sql);
+
 		try {
 			if(rs.next()){
 				Client client = new ClientDAO().getClient(rs.getInt(5));
@@ -90,6 +85,8 @@ public class IncompatibleZoneClaimDAO {
 			
 		} catch (SQLException e) {
 			throw new ConnectionException("Data not reachable");
+		} finally {
+			SqlUtils.closeConnection(con);
 		}
 	}
 }

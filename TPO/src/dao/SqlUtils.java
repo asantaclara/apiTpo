@@ -20,6 +20,20 @@ public class SqlUtils {
 		}
 	}
 	
+	public static Statement createStatement(Connection con) throws AccessException, ConnectionException {
+		
+		try {
+			return con.createStatement();
+		} catch (SQLException e1) {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				throw new ConnectionException("Close error");
+			}
+			throw new AccessException("Access error");
+		}
+	}
+	
 	public static int lastId(String table, String column) throws ConnectionException, AccessException {
 		Connection con = SqlUtils.getConnection();
 		Statement stmt = null;  
@@ -50,5 +64,22 @@ public class SqlUtils {
 		
 	}
 
+	public static void closeConnection(Connection con) throws ConnectionException {
+		try {
+			con.close();
+		} catch (SQLException e) {
+			throw new ConnectionException("Close error");
+		}
+	}
+	
+	public static ResultSet executeQuery(Statement stmt, Connection con, String sql) throws ConnectionException, AccessException {		
+		try {
+			return stmt.executeQuery(sql);
+		} catch (SQLException e1) {
+			closeConnection(con);
+			e1.printStackTrace();
+			throw new AccessException("Query error");
+		}
+	}
 	
 }

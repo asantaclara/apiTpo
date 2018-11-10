@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import backEnd.Claim;
+import backEnd.CompositeClaim;
 import backEnd.State;
 import dao.ClaimDAO;
 import dao.UserDAO;
@@ -42,12 +43,24 @@ public class ClaimService {
 		return claim.getActualState().name();
 	}
 	
-	public void treatClaim(TransitionDTO dto) throws InvalidTransitionException, ConnectionException, AccessException, SQLException, InvalidUserException, InvalidRoleException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
+	public List<ClaimDTO> treatClaim(TransitionDTO dto) throws InvalidTransitionException, ConnectionException, AccessException, SQLException, InvalidUserException, InvalidRoleException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
+		//Este metodo me esta devolviendo una List<ClaimDTO> con todas las claims que se vieron modificadas en el proceso.
+		
 		if(dto.getResponsableId() == 0 || dto.getNewState() == null || dto.getClaimId() == 0 || dto.getDescription() == null) {
 			throw new InvalidTransitionException("Missing parameters");
 		}
+		List<ClaimDTO> returnList = new LinkedList<>();
+		
 		Claim aux = new ClaimDAO().getClaim(dto.getClaimId());
 		aux.treatClaim(new UserDAO().getUser(dto.getResponsableId()), State.valueOf(dto.getNewState()), dto.getDescription());
+		returnList.add(aux.toDTO());
+		
+		
+		for (CompositeClaim claim : CompositeClaimService.getIntance().updateCompositeClaims(aux.getClaimId())) {
+			returnList.add(claim.toDTO());
+		}
+		
+		return returnList;
 		
 	}
 

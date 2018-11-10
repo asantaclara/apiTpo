@@ -25,21 +25,13 @@ public class RoleDAO {
 	
 	public int idByRole(Roles role) throws AccessException, ConnectionException, InvalidRoleException {
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = null;  
+		Statement stmt = SqlUtils.createStatement(con);  
 		ResultSet rs = null;
 		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
-			throw new AccessException("Access error");
-		}
+		String sql = "SELECT * FROM Roles WHERE Role = '" + role.toString() + "'"; 
 		
-		String SQL = "SELECT * FROM Roles WHERE Role = '" + role.toString() + "'"; 
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			throw new AccessException("Query error");
-		}
+		rs = SqlUtils.executeQuery(stmt, con, sql);
+		
 		try {
 			if(rs.next()){
 				return rs.getInt(1);

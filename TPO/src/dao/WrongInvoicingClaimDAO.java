@@ -65,22 +65,13 @@ public class WrongInvoicingClaimDAO {
 
 	public WrongInvoicingClaim getWrongInvoicingClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = null;  
+		Statement stmt = SqlUtils.createStatement(con);  
 		ResultSet rs = null;
 		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
-			throw new AccessException("Access error");
-		}
+		String sql = "SELECT * FROM WrongInvoiceClaims JOIN Claims ON Claims.ClaimId = WrongInvoiceClaims.WrongInvoiceId WHERE Claims.ClaimId = " + claimId;
 		
-		String SQL = "SELECT * FROM WrongInvoiceClaims JOIN Claims ON Claims.ClaimId = WrongInvoiceClaims.WrongInvoiceId WHERE Claims.ClaimId = " + claimId;
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-			throw new AccessException("Query error");
-		}
+		rs = SqlUtils.executeQuery(stmt, con, sql);
+		
 		try {
 			if(rs.next()){
 				Client client = new ClientDAO().getClient(rs.getInt(4));

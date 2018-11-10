@@ -45,21 +45,13 @@ public class ProductItemDAO {
 	
 	public static ProductItem getProductItem(int id) throws ConnectionException, AccessException, InvalidProductException{
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = null;  
+		Statement stmt = SqlUtils.createStatement(con);  
 		ResultSet rs = null;
 		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
-			throw new AccessException("Access error");
-		}
+		String sql = "SELECT * FROM ProductsItems WHERE ProductItemId = " + id; 
 		
-		String SQL = "SELECT * FROM ProductsItems WHERE ProductItemId = " + id; 
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			throw new AccessException("Query error");
-		}
+		rs = SqlUtils.executeQuery(stmt, con, sql);
+				
 		try {
 			if(rs.next()){
 				ProductItem newProduct = new ProductItem(new ProductDAO().getProduct(rs.getInt(2)), rs.getInt(3));
@@ -87,23 +79,12 @@ public class ProductItemDAO {
 		return getAllProductItems(SQL);
 	}
 	
-	private static List<ProductItem> getAllProductItems(String SQL) throws ConnectionException, AccessException, InvalidProductException{
+	private static List<ProductItem> getAllProductItems(String sql) throws ConnectionException, AccessException, InvalidProductException{
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = null;  
+		Statement stmt = SqlUtils.createStatement(con);  
 		ResultSet rs = null;
 		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
-			throw new AccessException("Access error");
-		}
-	
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-			throw new AccessException("Query error");
-		}
+		rs = SqlUtils.executeQuery(stmt, con, sql);
 		
 		try {
 			List<ProductItem> returnList = new LinkedList<>();

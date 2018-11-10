@@ -50,21 +50,13 @@ public class InvoiceItemDAO {
 	
 	public InvoiceItem getInvoiceItem(int invoiceItemId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidInvoiceItemException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = null;  
+		Statement stmt = SqlUtils.createStatement(con);  
 		ResultSet rs = null;
 		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
-			throw new AccessException("Access error");
-		}
+		String sql = "SELECT * FROM InvoicesItems WHERE InvoiceItemId = " + invoiceItemId; 
 		
-		String SQL = "SELECT * FROM InvoicesItems WHERE InvoiceItemId = " + invoiceItemId; 
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			throw new AccessException("Query error");
-		}
+		rs = SqlUtils.executeQuery(stmt, con, sql);
+		
 		try {
 			if(rs.next()){
 				InvoiceItem newInvoiceItem = new InvoiceItem(new InvoiceDAO().getInvoice(rs.getInt(2)), rs.getString(3));
@@ -82,24 +74,13 @@ public class InvoiceItemDAO {
 
 	public List<InvoiceItem> getAllInvoiceItemsOfClaim(WrongInvoicingClaim claim) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException{
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = null;  
+		Statement stmt = SqlUtils.createStatement(con);  
 		ResultSet rs = null;
 		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
-			throw new AccessException("Access error");
-		}
-		
-		String SQL = "SELECT * FROM InvoicesItems JOIN WrongInvoiceClaims ON InvoicesItems.ClaimId = WrongInvoiceClaims.WrongInvoiceId"
+		String sql = "SELECT * FROM InvoicesItems JOIN WrongInvoiceClaims ON InvoicesItems.ClaimId = WrongInvoiceClaims.WrongInvoiceId"
 							+ " WHERE WrongInvoiceClaims.WrongInvoiceId = " + claim.getClaimId();
 		
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-			throw new AccessException("Query error");
-		}
+		rs = SqlUtils.executeQuery(stmt, con, sql);
 		
 		try {
 			List<InvoiceItem> returnList = new LinkedList<>();

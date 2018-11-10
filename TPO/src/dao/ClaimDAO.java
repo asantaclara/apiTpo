@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import backEnd.Claim;
-import dto.ClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
@@ -23,25 +22,16 @@ public class ClaimDAO {
 
 	public Claim getClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = null;  
+		Statement stmt = SqlUtils.createStatement(con);  
 		ResultSet rs = null;
-		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
-			throw new AccessException("Access error");
-		}
 		
 		String SQL = "SELECT * FROM Claims LEFT JOIN WrongInvoiceClaims ON CLAIMS.ClaimId = WrongInvoiceClaims.WrongInvoiceId "
 				+ "LEFT JOIN IncompatibleZoneClaims ON Claims.ClaimId = IncompatibleZoneClaims.IncompatibleZoneId "
 				+ "LEFT JOIN CompositeClaims ON Claims.ClaimId = CompositeClaims.CompositeClaimId "
 				+ "LEFT JOIN MoreQuantityClaims ON Claims.ClaimId = MoreQuantityClaims.MoreQuantityId WHERE CLAIMS.ClaimId = " + claimId;
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-			throw new AccessException("Query error");
-		}
+
+		rs = SqlUtils.executeQuery(stmt, con, SQL);
+		
 		try {
 			if(rs.next()){
 				if(rs.getInt(9) != 0) {
@@ -62,30 +52,23 @@ public class ClaimDAO {
 			
 		} catch (SQLException e) {
 			throw new ConnectionException("Data not reachable");
+		} finally {
+			SqlUtils.closeConnection(con);
 		}
 	}
 
 	public List<Claim> getClaimsFromCLient(int clientId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = null;  
+		Statement stmt = SqlUtils.createStatement(con);  
 		ResultSet rs = null;
-		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
-			throw new AccessException("Access error");
-		}
 		
 		String SQL = "SELECT * FROM Claims LEFT JOIN WrongInvoiceClaims ON CLAIMS.ClaimId = WrongInvoiceClaims.WrongInvoiceId "
 				+ "LEFT JOIN IncompatibleZoneClaims ON Claims.ClaimId = IncompatibleZoneClaims.IncompatibleZoneId "
 				+ "LEFT JOIN CompositeClaims ON Claims.ClaimId = CompositeClaims.CompositeClaimId "
 				+ "LEFT JOIN MoreQuantityClaims ON Claims.ClaimId = MoreQuantityClaims.MoreQuantityId WHERE CLAIMS.ClientId = " + clientId;
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-			throw new AccessException("Query error");
-		}
+		
+		rs = SqlUtils.executeQuery(stmt, con, SQL);
+		
 		List<Claim> claims = new LinkedList<>();
 		try {
 			while(rs.next()){
@@ -104,28 +87,29 @@ public class ClaimDAO {
 			
 		} catch (SQLException e) {
 			throw new ConnectionException("Data not reachable");
+		} finally {
+			SqlUtils.closeConnection(con);
 		}
 		return claims;
 	}
 	
-	public void updateState(Claim c) throws AccessException, ConnectionException, SQLException {
+	public void updateState(Claim c) throws AccessException, ConnectionException {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm1;
 		
 		try {
-			con.setAutoCommit(false);
-			
 			prepStm1 = con.prepareStatement("UPDATE Claims SET State='" + c.getActualState().name() +"' WHERE ClaimId = " + c.getClaimId());
 		} catch (SQLException e) {
+			SqlUtils.closeConnection(con);
 			throw new AccessException("Access error");
 		}		
 		
 		try {
 			prepStm1.execute();
-			con.setAutoCommit(false);
 		} catch (SQLException e) {
-			con.setAutoCommit(false);
 			throw new AccessException("Save error");
+		} finally {
+			SqlUtils.closeConnection(con);
 		}
 		
 	}

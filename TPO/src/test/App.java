@@ -2,9 +2,9 @@ package test;
 
 import java.sql.SQLException;
 
-import backEnd.Roles;
+import backEnd.State;
 import controller.Controller;
-import dto.UserDTO;
+import dto.TransitionDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
@@ -122,16 +122,16 @@ public class App {
 // test treatClaim
 //		TransitionDTO dtoTransition = new TransitionDTO();
 //		dtoTransition.setResponsableId(1);
-//		dtoTransition.setNewState(State.IN_TREATMENT.name());
+//		dtoTransition.setNewState(State.CLOSED.name());
 //		dtoTransition.setDescription("Estoy haciendo una prueba");
 //		dtoTransition.setClaimId(8);
 //		c.treatClaim(dtoTransition);
 		
 // test getClaimState
-//		System.out.println(c.getClaimState(1));
+		System.out.println(c.getClaimState(3));
 
 // test getInvoicesByClient
-//		for (InvoiceDTO i : c.getInvoicesByClient(95)) {
+//		for (InvoiceDTO i : c.getInvoicesByClient(2)) {
 //			System.out.println(i.getClientId());
 //		}
 	
@@ -183,13 +183,27 @@ public class App {
 //		c.addMoreQuantityClaim(dto);
 		
 // test getUserByUsernameAndPassword
-		UserDTO dto = new UserDTO();
-		dto.setUserName("Matias3");
-		dto.setPassword("123");
-		UserDTO aux = c.getUserByUsernameAndPassword(dto);
-		System.out.println((aux == null) ? "No existe" : aux.getName());
+//		UserDTO dto = new UserDTO();
+//		dto.setUserName("Matias3");
+//		dto.setPassword("123");
+//		UserDTO aux = c.getUserByUsernameAndPassword(dto);
+//		System.out.println((aux == null) ? "No existe" : aux.getName());
 		
+// test addCompositeClaim
+//		CompositeClaimDTO aux = new CompositeClaimDTO();
+//		aux.addIndividualClaimId(8);
+//		aux.addIndividualClaimId(10);
+//		aux.setClientId(3);
+//		aux.setDescription("Test CompositeClaim");
+//		c.addCompositeClaim(aux);
 		
+// test IncompatibleZoneClaim
+//		IncompatibleZoneClaimDTO dto = new IncompatibleZoneClaimDTO();
+//		dto.setClientId(3);
+//		dto.setDescription("Hola");
+//		c.addIncompatibleZoneClaim(dto);
+		
+
 		
 	System.out.println("END");
 	}

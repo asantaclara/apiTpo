@@ -21,7 +21,7 @@ public class UserDAO {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm1;
 		PreparedStatement prepStm2;
-		System.out.println("Entro al DAO");
+
 		if(user.getId() != 0) {
 			throw new InvalidUserException("User already in data base");
 		}
@@ -48,12 +48,11 @@ public class UserDAO {
 		}		
 		
 		try {
-			System.out.println("Arranco a ejecutar los statements");
-//			
+	
 			prepStm1.execute();
 			prepStm2.execute();
 			con.commit();
-			System.out.println("Termino de ejecutar los statements");
+
 		} catch (SQLException e) {
 			try {
 				con.rollback();		
@@ -108,25 +107,16 @@ public class UserDAO {
 	}
 	public User getUser(int userId) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = null;  
+		Statement stmt = SqlUtils.createStatement(con);  
 		ResultSet rs = null;
 		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
-			throw new AccessException("Access error");
-		}
-
-		String SQL = "SELECT Users.UserId, Users.Name, Users.Active as UserActive, Role1.Role as Role1, Role2.Role as Role2, "
+		String sql = "SELECT Users.UserId, Users.Name, Users.Active as UserActive, Role1.Role as Role1, Role2.Role as Role2, "
 				+ "UserLogin.name as Username, UserLogin.password as password FROM Users JOIN Roles AS Role1 ON "
 				+ "Users.RolId1 = Role1.RoleId JOIN Roles AS Role2 ON Users.RolId2 = Role2.RoleId JOIN "
 				+ "UserLogin on Users.UserId = UserLogin.userId WHERE Users.UserId = " + userId; 
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-			throw new AccessException("Query error");
-		}
+		
+		rs = SqlUtils.executeQuery(stmt, con, sql);
+		
 		try {
 			if(rs.next()){
 				if(rs.getByte(3) == 1) { 
@@ -166,23 +156,12 @@ public class UserDAO {
 
 	}
 	
-	private static List<User> getAllUsersPrivate(String SQL) throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException{
+	private static List<User> getAllUsersPrivate(String sql) throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException{
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = null;  
+		Statement stmt = SqlUtils.createStatement(con);  
 		ResultSet rs = null;
 		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
-			throw new AccessException("Access error");
-		}
-		
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-			throw new AccessException("Query error");
-		}
+		rs = SqlUtils.executeQuery(stmt, con, sql);
 		
 		try {
 			List<User> returnList = new LinkedList<>();
@@ -203,25 +182,16 @@ public class UserDAO {
 
 	public User getUserByUsername(String userName) throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException {
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = null;  
+		Statement stmt = SqlUtils.createStatement(con);  
 		ResultSet rs = null;
-		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
-			throw new AccessException("Access error");
-		}
 
-		String SQL = "SELECT Users.UserId, Users.Name, Users.Active as UserActive, Role1.Role as Role1, Role2.Role as Role2, "
+		String sql = "SELECT Users.UserId, Users.Name, Users.Active as UserActive, Role1.Role as Role1, Role2.Role as Role2, "
 				+ "UserLogin.name as Username, UserLogin.password as password FROM Users JOIN Roles AS Role1 ON "
 				+ "Users.RolId1 = Role1.RoleId JOIN Roles AS Role2 ON Users.RolId2 = Role2.RoleId JOIN "
 				+ "UserLogin on Users.UserId = UserLogin.userId WHERE UserLogin.name = '" + userName + "'"; 
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-			throw new AccessException("Query error");
-		}
+		
+		rs = SqlUtils.executeQuery(stmt, con, sql);
+		
 		try {
 			if(rs.next()){
 				if(rs.getByte(3) == 1) { 

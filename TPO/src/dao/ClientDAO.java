@@ -21,21 +21,12 @@ public class ClientDAO {
 	
 	public List<Client> getAllClients() throws ConnectionException, AccessException, InvalidClientException{
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = null;  
+		Statement stmt = SqlUtils.createStatement(con);  
 		ResultSet rs = null;
-		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
-			throw new AccessException("Access error");
-		}
-		
+
 		String SQL = "SELECT * FROM Clients JOIN Zones ON Clients.ZoneId = Zones.ZoneId WHERE Active = 1"; 
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			throw new AccessException("Query error");
-		}
+
+		rs = SqlUtils.executeQuery(stmt, con, SQL);
 		
 		try {
 			List<Client> returnList = new LinkedList<>();
@@ -50,26 +41,20 @@ public class ClientDAO {
 			
 		} catch (SQLException e) {
 			throw new ConnectionException("Data not reachable");
+		} finally {
+			SqlUtils.closeConnection(con);
 		}
 	}
 	
 	public Client getClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = null;  
+		Statement stmt = SqlUtils.createStatement(con);  
 		ResultSet rs = null;
 		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
-			throw new AccessException("Access error");
-		}
-		
 		String SQL = "SELECT * FROM Clients JOIN Zones ON Clients.ZoneId = Zones.ZoneId where clientId = " + clientId; 
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			throw new AccessException("Query error");
-		}
+		
+		rs = SqlUtils.executeQuery(stmt, con, SQL);
+		
 		try {
 			if(rs.next()){
 				if(rs.getByte(8) == 1) {					

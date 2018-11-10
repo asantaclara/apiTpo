@@ -22,31 +22,19 @@ import exceptions.InvalidZoneException;
 public class InvoiceDAO {
 
 	public List<Invoice> getAllInvoices() throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException{
-		String SQL = "SELECT * FROM Invoices WHERE Active = 1"; 
-		return getAllInvoicesPrivate(SQL);
+		String sql = "SELECT * FROM Invoices WHERE Active = 1"; 
+		return getAllInvoicesPrivate(sql);
 	}
 	
 	public List<Invoice> getAllInvoicesFromClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException{
-		String SQL = "SELECT * FROM Invoices WHERE clientId = " + clientId + " AND Active = 1" ; 
-		return getAllInvoicesPrivate(SQL);
+		String sql = "SELECT * FROM Invoices WHERE clientId = " + clientId + " AND Active = 1" ; 
+		return getAllInvoicesPrivate(sql);
 	}
 	
-	private static List<Invoice> getAllInvoicesPrivate(String SQL) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException {
+	private static List<Invoice> getAllInvoicesPrivate(String sql) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = null;  
-		ResultSet rs = null;
-		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
-			throw new AccessException("Access error");
-		}
-		
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			throw new AccessException("Query error");
-		}
+		Statement stmt = SqlUtils.createStatement(con);  
+		ResultSet rs = SqlUtils.executeQuery(stmt, con, sql);
 		
 		try {
 			List<Invoice> returnList = new LinkedList<>();
@@ -65,27 +53,20 @@ public class InvoiceDAO {
 			
 		} catch (SQLException e) {
 			throw new ConnectionException("Data not reachable");
+		} finally {
+			SqlUtils.closeConnection(con);
 		}
 	}
 
 	public Invoice getInvoice(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = null;  
+		Statement stmt = SqlUtils.createStatement(con);  
 		ResultSet rs = null;
 		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e1) {
-			throw new AccessException("Access error");
-		}
+		String sql = "SELECT * FROM Invoices WHERE InvoiceId = " + invoiceId;
 		
-		String SQL = "SELECT * FROM Invoices WHERE InvoiceId = " + invoiceId;
-		try {
-			rs = stmt.executeQuery(SQL);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-			throw new AccessException("Query error");
-		}
+		SqlUtils.executeQuery(stmt, con, sql);
+		
 		try {
 			if(rs.next()){
 				if(rs.getByte(4) == 1) {	
@@ -106,6 +87,8 @@ public class InvoiceDAO {
 			
 		} catch (SQLException e) {
 			throw new ConnectionException("Data not reachable");
+		} finally {
+			SqlUtils.closeConnection(con);
 		}
 	}
 	
@@ -113,11 +96,8 @@ public class InvoiceDAO {
 		Connection con = SqlUtils.getConnection();
 		PreparedStatement prepStm;
 	
-		/*
-		 * Si el cliente no tiene el clientId cargado quiere decir que es un cliente nuevo por lo tanto busco el ultimo
-		 * clientId que hay en la base de datos, le sumo uno y se lo asigno a este cliente nuevo para despues guardarlo.
-		 */
 		if(invoice.getId() != 0) {
+			SqlUtils.closeConnection(con);
 			throw new InvalidInvoiceException("Invoice already in data base");
 		}
 		
@@ -131,6 +111,7 @@ public class InvoiceDAO {
 			prepStm.setByte(4, (byte) ((invoice.isActive() == true) ? 1 : 0));
 			
 		} catch (SQLException e) {
+			SqlUtils.closeConnection(con);
 			throw new AccessException("Access error");
 		}		
 		
@@ -138,6 +119,7 @@ public class InvoiceDAO {
 			prepStm.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			SqlUtils.closeConnection(con);
 			throw new AccessException("Save error");
 		}
 		
@@ -146,6 +128,8 @@ public class InvoiceDAO {
 			new InvoiceProductItemDAO().save(invoice.getId(), pi.getId());
 		}
 		
+		SqlUtils.closeConnection(con);
+		
 	}
 	
 	public void modify(Invoice invoice) throws ConnectionException, AccessException, InvalidInvoiceException {
@@ -153,6 +137,7 @@ public class InvoiceDAO {
 		PreparedStatement prepStm;
 		
 		if(invoice.getId() == 0) {
+			SqlUtils.closeConnection(con);
 			throw new InvalidInvoiceException("Invoice not in data base");
 		}
 
@@ -163,12 +148,15 @@ public class InvoiceDAO {
 			prepStm.setByte(3, (byte) ((invoice.isActive() == true) ? 1 : 0));
 			
 		} catch (SQLException e) {
+			SqlUtils.closeConnection(con);
 			throw new AccessException("Access error");
 		}
 		try {
 			prepStm.execute();
 		} catch (SQLException e) {
 			throw new AccessException("Save error");
+		} finally {
+			SqlUtils.closeConnection(con);
 		}
 	}
 }
