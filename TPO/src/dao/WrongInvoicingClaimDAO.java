@@ -27,68 +27,77 @@ public class WrongInvoicingClaimDAO {
 
 	public void save(WrongInvoicingClaim claim) throws ConnectionException, AccessException, InvalidProductException, InvalidInvoiceItemException, InvalidClaimException {
 		Connection con = SqlUtils.getConnection();
-		PreparedStatement prepStm1;
-		PreparedStatement prepStm2;
-	
-		if(claim.getClaimId() != 0) {
-			throw new InvalidClaimException("Claim already in data base");
-		}
-		
-		claim.setClaimId(SqlUtils.lastId("Claims", "ClaimId") + 1);
-		
 		try {
-			prepStm1 = con.prepareStatement("insert into Claims values(?,?,?,?,?)");
-			prepStm1.setInt(1, claim.getClaimId());
-			prepStm1.setString(2,claim.getActualState().name());
-			prepStm1.setInt(3, claim.getClient().getId());
-			prepStm1.setString(4, claim.getDescription());
-			prepStm1.setDate(5, new java.sql.Date(claim.getDate().getTime()));
+			PreparedStatement prepStm1;
+			PreparedStatement prepStm2;
 			
-			prepStm2 = con.prepareStatement("insert into WrongInvoiceClaims values(?)");
-			prepStm2.setInt(1, claim.getClaimId());
+			if(claim.getClaimId() != 0) {
+				throw new InvalidClaimException("Claim already in data base");
+			}
 			
-		} catch (SQLException e) {
-			throw new AccessException("Access error");
-		}		
-		
-		try {
-			prepStm1.execute();
-			prepStm2.execute();
-		} catch (SQLException e) {
-			throw new AccessException("Save error");
-		}
-		
-		for (InvoiceItem i : claim.getInvoices()) {
-			i.save(claim.getClaimId());
+			claim.setClaimId(SqlUtils.lastId("Claims", "ClaimId") + 1);
+			
+			try {
+				prepStm1 = con.prepareStatement("insert into Claims values(?,?,?,?,?)");
+				prepStm1.setInt(1, claim.getClaimId());
+				prepStm1.setString(2,claim.getActualState().name());
+				prepStm1.setInt(3, claim.getClient().getId());
+				prepStm1.setString(4, claim.getDescription());
+				prepStm1.setDate(5, new java.sql.Date(claim.getDate().getTime()));
+				
+				prepStm2 = con.prepareStatement("insert into WrongInvoiceClaims values(?)");
+				prepStm2.setInt(1, claim.getClaimId());
+				
+			} catch (SQLException e) {
+				throw new AccessException("Access error");
+			}		
+			
+			try {
+				prepStm1.execute();
+				prepStm2.execute();
+			} catch (SQLException e) {
+				throw new AccessException("Save error");
+			}
+			
+			for (InvoiceItem i : claim.getInvoices()) {
+				i.save(claim.getClaimId());
+			}
+			
+		} finally {
+			SqlUtils.closeConnection(con);
 		}
 	}
 
 	public WrongInvoicingClaim getWrongInvoicingClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = SqlUtils.createStatement(con);  
-		ResultSet rs = null;
-		
-		String sql = "SELECT * FROM WrongInvoiceClaims JOIN Claims ON Claims.ClaimId = WrongInvoiceClaims.WrongInvoiceId WHERE Claims.ClaimId = " + claimId;
-		
-		rs = SqlUtils.executeQuery(stmt, con, sql);
-		
 		try {
-			if(rs.next()){
-				Client client = new ClientDAO().getClient(rs.getInt(4));
-				WrongInvoicingClaim newClaim = new WrongInvoicingClaim(client, new Date(rs.getDate(6).getTime()), rs.getString(5));
-				newClaim.setClaimId(rs.getInt(1));
-				newClaim.setActualState(State.valueOf(rs.getString(3)));
-				for (InvoiceItem i : new InvoiceItemDAO().getAllInvoiceItemsOfClaim(newClaim)) {
-					newClaim.addInovice(i.getInvoice(), i.getInconsistency());
-				}		
-				return newClaim;
+			Statement stmt = SqlUtils.createStatement(con);  
+			ResultSet rs = null;
+			
+			String sql = "SELECT * FROM WrongInvoiceClaims JOIN Claims ON Claims.ClaimId = WrongInvoiceClaims.WrongInvoiceId WHERE Claims.ClaimId = " + claimId;
+			
+			rs = SqlUtils.executeQuery(stmt, con, sql);
+			
+			try {
+				if(rs.next()){
+					Client client = new ClientDAO().getClient(rs.getInt(4));
+					WrongInvoicingClaim newClaim = new WrongInvoicingClaim(client, new Date(rs.getDate(6).getTime()), rs.getString(5));
+					newClaim.setClaimId(rs.getInt(1));
+					newClaim.setActualState(State.valueOf(rs.getString(3)));
+					for (InvoiceItem i : new InvoiceItemDAO().getAllInvoiceItemsOfClaim(newClaim)) {
+						newClaim.addInovice(i.getInvoice(), i.getInconsistency());
+					}		
+					return newClaim;
+				}
+				else{
+					throw new InvalidClaimException("Claim not found");
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new ConnectionException("Data not reachable");
 			}
-			else{
-				throw new InvalidClaimException("Claim not found");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new ConnectionException("Data not reachable");
+		} finally {
+			SqlUtils.closeConnection(con);
 		}
 	}
 }

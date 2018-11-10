@@ -1,8 +1,10 @@
 package test;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import controller.Controller;
+import dao.SqlUtils;
 import dto.ClientDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
@@ -201,8 +203,6 @@ public class App {
 //		dto.setClientId(3);
 //		dto.setDescription("Hola");
 //		c.addIncompatibleZoneClaim(dto);
-		
-
 		
 	System.out.println("END");
 	}

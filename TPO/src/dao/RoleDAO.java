@@ -25,23 +25,28 @@ public class RoleDAO {
 	
 	public int idByRole(Roles role) throws AccessException, ConnectionException, InvalidRoleException {
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = SqlUtils.createStatement(con);  
-		ResultSet rs = null;
-		
-		String sql = "SELECT * FROM Roles WHERE Role = '" + role.toString() + "'"; 
-		
-		rs = SqlUtils.executeQuery(stmt, con, sql);
-		
 		try {
-			if(rs.next()){
-				return rs.getInt(1);
-			}
-			else{
-				throw new InvalidRoleException("Role not found");
+			Statement stmt = SqlUtils.createStatement(con);  
+			ResultSet rs = null;
+			
+			String sql = "SELECT * FROM Roles WHERE Role = '" + role.toString() + "'"; 
+			
+			rs = SqlUtils.executeQuery(stmt, con, sql);
+			
+			try {
+				if(rs.next()){
+					return rs.getInt(1);
+				}
+				else{
+					throw new InvalidRoleException("Role not found");
+				}
+				
+			} catch (SQLException e) {
+				throw new ConnectionException("Data not reachable");
 			}
 			
-		} catch (SQLException e) {
-			throw new ConnectionException("Data not reachable");
+		} finally {
+			SqlUtils.closeConnection(con);
 		}
 		
 	}

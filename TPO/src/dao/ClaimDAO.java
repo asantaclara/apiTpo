@@ -59,58 +59,60 @@ public class ClaimDAO {
 
 	public List<Claim> getClaimsFromCLient(int clientId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
 		Connection con = SqlUtils.getConnection();  
-		Statement stmt = SqlUtils.createStatement(con);  
-		ResultSet rs = null;
-		
-		String SQL = "SELECT * FROM Claims LEFT JOIN WrongInvoiceClaims ON CLAIMS.ClaimId = WrongInvoiceClaims.WrongInvoiceId "
-				+ "LEFT JOIN IncompatibleZoneClaims ON Claims.ClaimId = IncompatibleZoneClaims.IncompatibleZoneId "
-				+ "LEFT JOIN CompositeClaims ON Claims.ClaimId = CompositeClaims.CompositeClaimId "
-				+ "LEFT JOIN MoreQuantityClaims ON Claims.ClaimId = MoreQuantityClaims.MoreQuantityId WHERE CLAIMS.ClientId = " + clientId;
-		
-		rs = SqlUtils.executeQuery(stmt, con, SQL);
-		
-		List<Claim> claims = new LinkedList<>();
 		try {
-			while(rs.next()){
-				if(rs.getInt(9) != 0) {
-					claims.add(new CompositeClaimDAO().getCompositeClaim(rs.getInt(1)));
-				} else if(rs.getInt(7) != 0){
-					claims.add(new IncompatibleZoneClaimDAO().getIncompatibleZoneClaim(rs.getInt(1)));
-				} else if(rs.getInt(6) != 0) {
-					claims.add(new WrongInvoicingClaimDAO().getWrongInvoicingClaim(rs.getInt(1)));
-				} else if(rs.getInt(11) != 0) {
-					claims.add(new MoreQuantityClaimDAO().getMoreQuantityClaim(rs.getInt(1)));
-				} else {
-					throw new InvalidClaimException("Claim not found");
-				}
-			}
+			Statement stmt = SqlUtils.createStatement(con);  
+			ResultSet rs = null;
+			String sqlQuery = "SELECT * FROM Claims LEFT JOIN WrongInvoiceClaims ON CLAIMS.ClaimId = WrongInvoiceClaims.WrongInvoiceId "
+					+ "LEFT JOIN IncompatibleZoneClaims ON Claims.ClaimId = IncompatibleZoneClaims.IncompatibleZoneId "
+					+ "LEFT JOIN CompositeClaims ON Claims.ClaimId = CompositeClaims.CompositeClaimId "
+					+ "LEFT JOIN MoreQuantityClaims ON Claims.ClaimId = MoreQuantityClaims.MoreQuantityId WHERE CLAIMS.ClientId = " + clientId;
 			
-		} catch (SQLException e) {
-			throw new ConnectionException("Data not reachable");
+			rs = SqlUtils.executeQuery(stmt, con, sqlQuery);
+			
+			List<Claim> claims = new LinkedList<>();
+			try {
+				while(rs.next()){
+					if(rs.getInt(9) != 0) { // If is a CompositeClaim
+						claims.add(new CompositeClaimDAO().getCompositeClaim(rs.getInt(1)));
+					} else if(rs.getInt(7) != 0){ // If is a IncompatibleZoneClaim
+						claims.add(new IncompatibleZoneClaimDAO().getIncompatibleZoneClaim(rs.getInt(1)));
+					} else if(rs.getInt(6) != 0) { // If is a WrongInvoicingClaim
+						claims.add(new WrongInvoicingClaimDAO().getWrongInvoicingClaim(rs.getInt(1)));
+					} else if(rs.getInt(11) != 0) { // If is a MoreQuantityClaim
+						claims.add(new MoreQuantityClaimDAO().getMoreQuantityClaim(rs.getInt(1)));
+					} else {
+						throw new InvalidClaimException("Claim not found");
+					}
+				}
+				return claims;
+			} catch (SQLException e) {
+				throw new ConnectionException("Data not reachable");
+			}
 		} finally {
 			SqlUtils.closeConnection(con);
 		}
-		return claims;
+		
+		
 	}
 	
 	public void updateState(Claim c) throws AccessException, ConnectionException {
 		Connection con = SqlUtils.getConnection();
-		PreparedStatement prepStm1;
-		
 		try {
-			prepStm1 = con.prepareStatement("UPDATE Claims SET State='" + c.getActualState().name() +"' WHERE ClaimId = " + c.getClaimId());
-		} catch (SQLException e) {
-			SqlUtils.closeConnection(con);
-			throw new AccessException("Access error");
-		}		
-		
-		try {
-			prepStm1.execute();
-		} catch (SQLException e) {
-			throw new AccessException("Save error");
+			PreparedStatement prepStm1;
+			
+			try {
+				prepStm1 = con.prepareStatement("UPDATE Claims SET State='" + c.getActualState().name() +"' WHERE ClaimId = " + c.getClaimId());
+			} catch (SQLException e) {
+				throw new AccessException("Access error");
+			}		
+			
+			try {
+				prepStm1.execute();
+			} catch (SQLException e) {
+				throw new AccessException("Save error");
+			}					
 		} finally {
 			SqlUtils.closeConnection(con);
 		}
-		
 	}
 }

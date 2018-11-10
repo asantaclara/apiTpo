@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -25,11 +26,8 @@ public class SqlUtils {
 		try {
 			return con.createStatement();
 		} catch (SQLException e1) {
-			try {
-				con.close();
-			} catch (SQLException e) {
-				throw new ConnectionException("Close error");
-			}
+			closeConnection(con);
+			e1.printStackTrace();
 			throw new AccessException("Access error");
 		}
 	}
@@ -68,6 +66,7 @@ public class SqlUtils {
 		try {
 			con.close();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new ConnectionException("Close error");
 		}
 	}
