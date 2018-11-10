@@ -1,7 +1,11 @@
 package services;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import backEnd.Zone;
 import dao.ZoneDAO;
+import dto.ZoneDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidZoneException;
@@ -27,5 +31,16 @@ public class ZoneService {
 	
 	public Zone getZoneByName(String zoneName) throws AccessException, ConnectionException, InvalidZoneException {
 		return new ZoneDAO().getZone(zoneName);
+	}
+
+	public List<ZoneDTO> getAllZones() throws ConnectionException, AccessException {
+		List<Zone> aux =  new ZoneDAO().getAllZones();
+		List<ZoneDTO> zonesDTOList = new LinkedList<>();
+		
+		for (Zone zone : aux) {
+			zonesDTOList.add(zone.toDTO());
+		}
+		
+		return zonesDTOList;
 	}
 }

@@ -74,5 +74,9 @@ public class ProductService {
 		
 		return returnList;
 	}
+
+	public ProductDTO getProductById(int productId) throws ConnectionException, AccessException, InvalidProductException {
+		return new ProductDAO().getProduct(productId).toDTO();
+	}
 	
 }

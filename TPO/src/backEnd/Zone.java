@@ -1,6 +1,7 @@
 package backEnd;
 
 import dao.ZoneDAO;
+import dto.ZoneDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidZoneException;
@@ -29,5 +30,14 @@ public class Zone {
 	public void save() throws ConnectionException, AccessException, InvalidZoneException {
 		new ZoneDAO().save(this);
 		
+	}
+	
+	public ZoneDTO toDTO() {
+		ZoneDTO aux = new ZoneDTO();
+		
+		aux.setName(name);
+		aux.setZoneId(id);
+		
+		return aux;
 	}
 }

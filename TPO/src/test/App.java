@@ -32,15 +32,15 @@ public class App {
 //		c.addClient(dtoAddClient);
 		
 // test modifyClient
-		ClientDTO dtoModifyClient = new ClientDTO();
-		dtoModifyClient.setId(6);
+//		ClientDTO dtoModifyClient = new ClientDTO();
+//		dtoModifyClient.setId(6);
 //		dtoModifyClient.setCuit("33-33333333-3");
 //		dtoModifyClient.setName("Jimena");
 //		dtoModifyClient.setAddress("Lima 123");
 //		dtoModifyClient.setPhoneNumber("1234-4234");
 //		dtoModifyClient.setEmail("chau@chau.com");
-		dtoModifyClient.setZone("Saavedra");
-		c.modifyClient(dtoModifyClient);
+//		dtoModifyClient.setZone("Saavedra");
+//		c.modifyClient(dtoModifyClient);
 		
 // test removeClient
 //		ClientDTO dtoRemoveClient = new ClientDTO();

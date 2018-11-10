@@ -14,6 +14,7 @@ import dto.RoleDTO;
 import dto.TransitionDTO;
 import dto.UserDTO;
 import dto.WrongInvoicingClaimDTO;
+import dto.ZoneDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
@@ -36,6 +37,7 @@ import services.ProductService;
 import services.RoleService;
 import services.UserService;
 import services.WrongInvoicingClaimService;
+import services.ZoneService;
 
 public class Controller {
 	
@@ -173,5 +175,11 @@ public class Controller {
 	}
 	public List<ProductDTO> getAllProducts() throws ConnectionException, AccessException, InvalidProductException{
 		return ProductService.getIntance().getAllProducts();
+	}
+	public List<ZoneDTO> getAllZones() throws ConnectionException, AccessException{
+		return ZoneService.getIntance().getAllZones();
+	}
+	public ProductDTO getProductById(int productId) throws ConnectionException, AccessException, InvalidProductException{
+		return ProductService.getIntance().getProductById(productId);
 	}
 }
