@@ -38,6 +38,7 @@ public class WrongInvoicingClaimDAO {
 			claim.setClaimId(SqlUtils.lastId("Claims", "ClaimId") + 1);
 			
 			try {
+				con.setAutoCommit(false);
 				prepStm1 = con.prepareStatement("insert into Claims values(?,?,?,?,?)");
 				prepStm1.setInt(1, claim.getClaimId());
 				prepStm1.setString(2,claim.getActualState().name());
@@ -55,7 +56,14 @@ public class WrongInvoicingClaimDAO {
 			try {
 				prepStm1.execute();
 				prepStm2.execute();
+				con.commit();
 			} catch (SQLException e) {
+				try {
+					con.rollback();		
+				} catch (SQLException e2) {
+					e.printStackTrace();
+					throw new AccessException("DB Error");
+				}
 				throw new AccessException("Save error");
 			}
 			
