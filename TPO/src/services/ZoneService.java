@@ -60,4 +60,11 @@ public class ZoneService extends Observable{
 		updateObservers(zoneToSend);
 	}
 
+	public void modifyZone(ZoneDTO dto) throws AccessException, InvalidZoneException, ConnectionException {
+		Zone existingZone = new ZoneDAO().getZone(dto.getZoneId());
+		existingZone.setName(dto.getName());
+		existingZone.modify();
+		updateObservers(existingZone);
+	}
+
 }

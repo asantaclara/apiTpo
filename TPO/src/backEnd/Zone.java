@@ -32,6 +32,14 @@ public class Zone {
 		
 	}
 	
+	public void modify() throws AccessException, InvalidZoneException, ConnectionException {
+		new ZoneDAO().modify(this);
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	public ZoneDTO toDTO() {
 		ZoneDTO aux = new ZoneDTO();
 		

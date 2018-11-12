@@ -8,10 +8,12 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
+import backEnd.Product;
 import backEnd.Zone;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClientException;
+import exceptions.InvalidProductException;
 import exceptions.InvalidZoneException;
 
 public class ZoneDAO {
@@ -134,6 +136,32 @@ public class ZoneDAO {
 				throw new ConnectionException("Data not reachable");
 			}
 			
+		} finally {
+			SqlUtils.closeConnection(con);
+		}
+	}
+
+	public void modify(Zone zone) throws AccessException, InvalidZoneException, ConnectionException{
+		Connection con = SqlUtils.getConnection();
+		try {
+			PreparedStatement prepStm;
+			
+			if(zone.getId() == 0) {
+				throw new InvalidZoneException("Zone not in data base");
+			}
+			
+			try {
+				prepStm = con.prepareStatement("UPDATE Zones SET Name = ? WHERE ZoneId = " + zone.getId());
+				prepStm.setString(1, zone.getName());
+				
+			} catch (SQLException e) {
+				throw new AccessException("Access error");
+			}
+			try {
+				prepStm.execute();
+			} catch (SQLException e) {
+				throw new AccessException("Save error");
+			}
 		} finally {
 			SqlUtils.closeConnection(con);
 		}
