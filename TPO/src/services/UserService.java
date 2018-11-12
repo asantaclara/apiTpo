@@ -1,6 +1,7 @@
 package services;
 
-import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 import backEnd.Roles;
 import backEnd.User;
@@ -10,8 +11,9 @@ import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidRoleException;
 import exceptions.InvalidUserException;
+import observer.Observable;
 
-public class UserService {
+public class UserService extends Observable{
 
 	private static UserService  instance = null;
 	
@@ -30,9 +32,8 @@ public class UserService {
 		if(dto.getName() != null && dto.getPrincipalRole() != null && dto.getUserName() != null && dto.getPassword() != null) {			
 			User u = new User(dto.getName(),Roles.valueOf(dto.getPrincipalRole()), dto.getUserName(), dto.getPassword());
 			u.saveInDB();
-			int i = u.getId();
-			System.out.println("Termino con el addUser en el servicio");
-			return i;
+			updateObservers(u);
+			return u.getId();
 		} else {
 			throw new InvalidUserException("Parameters missing");
 		}
@@ -44,6 +45,7 @@ public class UserService {
 		
 		if (existingUser != null) {
 			existingUser.modify(dto.getName(), (dto.getPrincipalRole() == null) ? null : Roles.valueOf(dto.getPrincipalRole()), dto.getUserName(), dto.getPassword());
+			updateObservers(existingUser);
 		}
 	}
 
@@ -51,6 +53,7 @@ public class UserService {
 		User userToRemove = new UserDAO().getUser(dto.getUserId());
 		
 		userToRemove.deactivateUser(); //Aca desactivo al usuario para que no se pueda usar mas en el programa.
+		updateObservers(userToRemove);
 	}
 
 	public boolean userExists(UserDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
@@ -86,4 +89,9 @@ public class UserService {
 		}
 	}
 
+	private void updateObservers(User u) {
+		List<UserDTO> userToSend = new LinkedList<>();
+		userToSend.add(u.toDTO());
+		updateObservers(userToSend);
+	}
 }

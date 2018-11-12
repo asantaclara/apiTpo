@@ -5,11 +5,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import backEnd.Claim;
+import backEnd.Client;
 import backEnd.CompositeClaim;
 import backEnd.State;
 import dao.ClaimDAO;
 import dao.UserDAO;
 import dto.ClaimDTO;
+import dto.ClientDTO;
 import dto.TransitionDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
@@ -22,8 +24,10 @@ import exceptions.InvalidRoleException;
 import exceptions.InvalidTransitionException;
 import exceptions.InvalidUserException;
 import exceptions.InvalidZoneException;
+import observer.Observable;
+import observer.Observer;
 
-public class ClaimService {
+public class ClaimService extends Observable{
 
 	private static ClaimService  instance = null;
 	
@@ -43,34 +47,33 @@ public class ClaimService {
 		return claim.getActualState().name();
 	}
 	
-	public List<ClaimDTO> treatClaim(TransitionDTO dto) throws InvalidTransitionException, ConnectionException, AccessException, SQLException, InvalidUserException, InvalidRoleException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
+	public void treatClaim(TransitionDTO dto) throws InvalidTransitionException, ConnectionException, AccessException, SQLException, InvalidUserException, InvalidRoleException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
 		//Este metodo me esta devolviendo una List<ClaimDTO> con todas las claims que se vieron modificadas en el proceso.
 		
 		if(dto.getResponsableId() == 0 || dto.getNewState() == null || dto.getClaimId() == 0 || dto.getDescription() == null) {
 			throw new InvalidTransitionException("Missing parameters");
 		}
-		List<ClaimDTO> returnList = new LinkedList<>();
 		
 		Claim aux = new ClaimDAO().getClaim(dto.getClaimId());
 		aux.treatClaim(new UserDAO().getUser(dto.getResponsableId()), State.valueOf(dto.getNewState()), dto.getDescription());
-		returnList.add(aux.toDTO());
+		updateObservers(aux);
 		
-		
-		for (CompositeClaim claim : CompositeClaimService.getIntance().updateCompositeClaims(aux.getClaimId())) {
-			returnList.add(claim.toDTO());
-		}
-		
-		return returnList;
-		
+		CompositeClaimService.getIntance().updateCompositeClaims(aux.getClaimId());
 	}
 
 	public List<ClaimDTO> getClaimsFromClient(int clientId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
 		List<ClaimDTO> claims = new LinkedList<>();
 		
-		for (Claim c : new ClaimDAO().getClaimsFromCLient(clientId)) {
+		for (Claim c : new ClaimDAO().getClaimsFromClient(clientId)) {
 			claims.add(c.toDTO());
 		}
 		
 		return claims;
+	}
+	
+	private void updateObservers(Claim claim) {
+		List<ClaimDTO> claimToSend = new LinkedList<>();
+		claimToSend.add(claim.toDTO());
+		updateObservers(claimToSend);
 	}
 }

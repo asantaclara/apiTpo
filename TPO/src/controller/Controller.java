@@ -182,4 +182,7 @@ public class Controller {
 	public ProductDTO getProductById(int productId) throws ConnectionException, AccessException, InvalidProductException{
 		return ProductService.getIntance().getProductById(productId);
 	}
+	public int addZone(String zoneName) throws ConnectionException, AccessException, InvalidZoneException {
+		return ZoneService.getIntance().addZone(zoneName);
+	}
 }

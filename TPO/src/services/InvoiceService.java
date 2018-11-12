@@ -4,12 +4,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import backEnd.Client;
+import backEnd.IncompatibleZoneClaim;
 import backEnd.Invoice;
 import backEnd.Product;
 import dao.ClientDAO;
 import dao.InvoiceDAO;
 import dao.ProductDAO;
-import dto.ClientDTO;
+import dto.ClaimDTO;
 import dto.InvoiceDTO;
 import dto.ProductDTO;
 import dto.ProductItemDTO;
@@ -19,8 +20,9 @@ import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidProductException;
 import exceptions.InvalidZoneException;
+import observer.Observable;
 
-public class InvoiceService {
+public class InvoiceService extends Observable{
 	private static InvoiceService  instance = null;
 	
 	public static InvoiceService getIntance() {
@@ -51,10 +53,13 @@ public class InvoiceService {
 		}		
 		
 		newInvoice.save();
+		updateObservers(newInvoice);
 		return newInvoice.getId();
 	}
 	public void removeInvoice(InvoiceDTO dto) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException {
-		new InvoiceDAO().getInvoice(dto.getInvoiceId()).deactivateInvoice();
+		Invoice existingInvoice = new InvoiceDAO().getInvoice(dto.getInvoiceId());
+		existingInvoice.deactivateInvoice();
+		updateObservers(existingInvoice);
 	}
 
 	public List<InvoiceDTO> getInvoicesByClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException {
@@ -66,6 +71,12 @@ public class InvoiceService {
 		}
 		return aux;
 		
+	}
+	
+	private void updateObservers(Invoice invoice) {
+		List<InvoiceDTO> invoiceToSend = new LinkedList<>();
+		invoiceToSend.add(invoice.toDTO());
+		updateObservers(invoiceToSend);
 	}
 	
 }

@@ -11,8 +11,9 @@ import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidZoneException;
+import observer.Observable;
 
-public class ClientService {
+public class ClientService extends Observable{
 
 	private static ClientService  instance = null;
 	
@@ -30,6 +31,7 @@ public class ClientService {
 	public int addClient (ClientDTO dto) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
 		Client c = new Client(dto.getCuit(), dto.getName(), dto.getAddress(), dto.getPhoneNumber(), dto.getEmail(), ZoneService.getIntance().getZoneByName(dto.getZone()));
 		c.saveInDB();
+		updateObservers(c);
 		return c.getId();
 	}
 	
@@ -40,6 +42,7 @@ public class ClientService {
 		if (existingClient != null) {
 			existingClient.modify(dto.getCuit(), dto.getName(), dto.getAddress(), dto.getPhoneNumber(), dto.getEmail(), (dto.getZone() != null) ? ZoneService.getIntance().getZoneByName(dto.getZone()) : null);
 		}
+		updateObservers(existingClient);
 	}
 
 	public void removeClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
@@ -47,8 +50,15 @@ public class ClientService {
 		Client existingClient =  new ClientDAO().getClient(clientId);
 		
 		existingClient.deactivateClient();
+		updateObservers(existingClient);
 	}
 
+	private void updateObservers(Client client) {
+		List<ClientDTO> clientToSend = new LinkedList<>();
+		clientToSend.add(client.toDTO());
+		updateObservers(clientToSend);
+	}
+	
 	public ClientDTO getClientById(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
 			return new ClientDAO().getClient(clientId).toDTO();
 	}

@@ -1,15 +1,18 @@
 package services;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import backEnd.ClaimType;
 import backEnd.Client;
+import backEnd.IncompatibleZoneClaim;
 import backEnd.Invoice;
 import backEnd.MoreQuantityClaim;
 import dao.ClientDAO;
 import dao.InvoiceDAO;
 import dao.ProductDAO;
+import dto.ClaimDTO;
 import dto.MoreQuantityClaimDTO;
 import dto.ProductItemDTO;
 import exceptions.AccessException;
@@ -20,8 +23,9 @@ import exceptions.InvalidInvoiceException;
 import exceptions.InvalidProductException;
 import exceptions.InvalidProductItemException;
 import exceptions.InvalidZoneException;
+import observer.Observable;
 
-public class MoreQuantityClaimService {
+public class MoreQuantityClaimService extends Observable{
 	private static MoreQuantityClaimService  instance = null;
 	
 	public static MoreQuantityClaimService getIntance() {
@@ -36,7 +40,7 @@ public class MoreQuantityClaimService {
 	}
 	
 	public int addMoreQuantityClaim(MoreQuantityClaimDTO dto) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidClaimException {
-int 	clientId = dto.getClientId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
+		int clientId = dto.getClientId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
 		
 		Client existingClient =  new ClientDAO().getClient(clientId);
 		
@@ -56,7 +60,13 @@ int 	clientId = dto.getClientId(); //Con este clientId tengo que traer al client
 		}
 		
 		newClaim.save();
-		
+		updateObservers(newClaim);
 		return newClaim.getClaimId();
+	}
+	
+	private void updateObservers(MoreQuantityClaim claim) {
+		List<MoreQuantityClaimDTO> claimToSend = new LinkedList<>();
+		claimToSend.add(claim.toDTO());
+		updateObservers(claimToSend);
 	}
 }

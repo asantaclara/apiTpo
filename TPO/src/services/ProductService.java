@@ -8,6 +8,7 @@ import backEnd.Product;
 import backEnd.ProductItem;
 import dao.InvoiceDAO;
 import dao.ProductDAO;
+import dto.InvoiceDTO;
 import dto.ProductDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
@@ -15,8 +16,9 @@ import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidProductException;
 import exceptions.InvalidZoneException;
+import observer.Observable;
 
-public class ProductService {
+public class ProductService extends Observable{
 	
 	private static ProductService  instance = null;
 	
@@ -34,6 +36,7 @@ public class ProductService {
 	public int addProduct(ProductDTO dto) throws ConnectionException, AccessException, InvalidProductException {
 		Product p = new Product(dto.getTitle(), dto.getDescription(), dto.getPrice());
 		p.saveInDB();
+		updateObservers(p);
 		return p.getProductId();
 	}
 	public void modifyProduct(ProductDTO dto) throws ConnectionException, AccessException, InvalidProductException {
@@ -45,12 +48,14 @@ public class ProductService {
 		
 		if(existingProduct != null) {
 			existingProduct.modify(dto.getTitle(), dto.getDescription(), dto.getPrice());
+			updateObservers(existingProduct);
 		}
 	}
 	public void removeProduct(ProductDTO dto) throws ConnectionException, AccessException, InvalidProductException {
 		Product productToRemove = new ProductDAO().getProduct(dto.getProductId());
 		
 		productToRemove.deactivateProduct();
+		updateObservers(productToRemove);
 	}
 
 	public List<ProductDTO> getInvoiceProducts(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException {
@@ -77,6 +82,12 @@ public class ProductService {
 
 	public ProductDTO getProductById(int productId) throws ConnectionException, AccessException, InvalidProductException {
 		return new ProductDAO().getProduct(productId).toDTO();
+	}
+	
+	private void updateObservers(Product p) {
+		List<ProductDTO> productToSend = new LinkedList<>();
+		productToSend.add(p.toDTO());
+		updateObservers(productToSend);
 	}
 	
 }

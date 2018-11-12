@@ -3,14 +3,17 @@ package services;
 import java.util.LinkedList;
 import java.util.List;
 
+import backEnd.WrongInvoicingClaim;
 import backEnd.Zone;
 import dao.ZoneDAO;
+import dto.WrongInvoicingClaimDTO;
 import dto.ZoneDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidZoneException;
+import observer.Observable;
 
-public class ZoneService {
+public class ZoneService extends Observable{
 
 	private static ZoneService  instance = null;
 	
@@ -43,4 +46,18 @@ public class ZoneService {
 		
 		return zonesDTOList;
 	}
+	
+	public int addZone(String zoneName) throws ConnectionException, AccessException, InvalidZoneException {
+		Zone newZone = new Zone(zoneName);
+		newZone.save();
+		updateObservers(newZone);
+		return newZone.getId();
+	}
+	
+	private void updateObservers(Zone z) {
+		List<ZoneDTO> zoneToSend = new LinkedList<>();
+		zoneToSend.add(z.toDTO());
+		updateObservers(zoneToSend);
+	}
+
 }

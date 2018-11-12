@@ -6,6 +6,7 @@ import java.util.List;
 
 import dao.MoreQuantityClaimDAO;
 import dto.MoreQuantityClaimDTO;
+import dto.ProductItemDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
@@ -50,7 +51,7 @@ public class MoreQuantityClaim extends IndividualClaim {
 		aux.setState(actualState.name());
 		
 		for (ProductItem p : products) {
-			aux.addProductItemDTO(p.getProduct().toDTO(), p.getQuantity());
+			aux.addProductItemDTO(new ProductItemDTO(p.getProduct().toDTO(), p.getQuantity()));
 		}
 		
 		return aux;

@@ -1,15 +1,20 @@
 package services;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import backEnd.Roles;
 import backEnd.User;
 import dao.UserDAO;
 import dto.RoleDTO;
+import dto.UserDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidRoleException;
 import exceptions.InvalidUserException;
+import observer.Observable;
 
-public class RoleService {
+public class RoleService extends Observable{
 	private static RoleService  instance = null;
 	
 	public static RoleService getIntance() {
@@ -33,6 +38,7 @@ public class RoleService {
 	
 			existingUser.addRole(Roles.valueOf(dto.getRole()));
 			existingUser.modifyInDB();
+			updateObservers(existingUser);
 		}
 	}
 	
@@ -46,6 +52,13 @@ public class RoleService {
 		if(existingUser != null) {			
 			existingUser.removeRole();
 			existingUser.modifyInDB();
+			updateObservers(existingUser);
 		}
+	}
+	
+	private void updateObservers(User u) {
+		List<UserDTO> userToSend = new LinkedList<>();
+		userToSend.add(u.toDTO());
+		updateObservers(userToSend);
 	}
 }

@@ -1,7 +1,6 @@
-/backEnd/
 /dto/
-/controller/
-/test/
-/services/
 /exceptions/
-/dao/
+/observer/
+/services/
+/test/
+/controller/

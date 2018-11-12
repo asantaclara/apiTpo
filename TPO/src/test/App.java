@@ -1,11 +1,8 @@
 package test;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import controller.Controller;
-import dao.SqlUtils;
-import dto.ClientDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;

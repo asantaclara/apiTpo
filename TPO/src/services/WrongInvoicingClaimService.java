@@ -1,13 +1,16 @@
 package services;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import backEnd.Client;
 import backEnd.Invoice;
+import backEnd.MoreQuantityClaim;
 import backEnd.WrongInvoicingClaim;
 import dao.ClientDAO;
 import dao.InvoiceDAO;
+import dto.ClaimDTO;
 import dto.InvoiceItemDTO;
 import dto.WrongInvoicingClaimDTO;
 import exceptions.AccessException;
@@ -18,8 +21,9 @@ import exceptions.InvalidInvoiceException;
 import exceptions.InvalidInvoiceItemException;
 import exceptions.InvalidProductException;
 import exceptions.InvalidZoneException;
+import observer.Observable;
 
-public class WrongInvoicingClaimService {
+public class WrongInvoicingClaimService extends Observable{
 
 	private static WrongInvoicingClaimService  instance = null;
 	
@@ -55,7 +59,13 @@ public class WrongInvoicingClaimService {
 			}
 		}
 		newClaim.save();
-		
+		updateObservers(newClaim);
 		return newClaim.getClaimId();
+	}
+	
+	private void updateObservers(WrongInvoicingClaim claim) {
+		List<WrongInvoicingClaimDTO> claimToSend = new LinkedList<>();
+		claimToSend.add(claim.toDTO());
+		updateObservers(claimToSend);
 	}
 }

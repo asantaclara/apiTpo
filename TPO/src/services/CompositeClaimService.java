@@ -5,10 +5,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import backEnd.Claim;
+import backEnd.Client;
 import backEnd.CompositeClaim;
 import dao.ClaimDAO;
 import dao.ClientDAO;
 import dao.CompositeClaimDAO;
+import dto.ClientDTO;
 import dto.CompositeClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
@@ -18,8 +20,9 @@ import exceptions.InvalidInvoiceException;
 import exceptions.InvalidProductException;
 import exceptions.InvalidProductItemException;
 import exceptions.InvalidZoneException;
+import observer.Observable;
 
-public class CompositeClaimService {
+public class CompositeClaimService extends Observable{
 	private static CompositeClaimService  instance = null;
 	
 	public static CompositeClaimService getIntance() {
@@ -47,6 +50,8 @@ public class CompositeClaimService {
 			}
 		}
 		claim.save();
+		updateObservers(claim);
+		
 		return claim.getClaimId();
 	}
 	
@@ -55,6 +60,13 @@ public class CompositeClaimService {
 		for (CompositeClaim compositeClaim : compositeClaims) {
 			new ClaimDAO().updateState(compositeClaim);
 		}
+		updateObservers(compositeClaims);
 		return compositeClaims;
+	}
+	
+	private void updateObservers(CompositeClaim compositeClaim) {
+		List<CompositeClaimDTO> compositeClaimToSend = new LinkedList<>();
+		compositeClaimToSend.add(compositeClaim.toDTO());
+		updateObservers(compositeClaimToSend);
 	}
 }

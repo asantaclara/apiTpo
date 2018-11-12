@@ -2,18 +2,23 @@ package services;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
+import backEnd.Claim;
 import backEnd.Client;
 import backEnd.IncompatibleZoneClaim;
 import dao.ClientDAO;
+import dto.ClaimDTO;
 import dto.IncompatibleZoneClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidZoneException;
+import observer.Observable;
 
-public class IncompatibleZoneClaimService {
+public class IncompatibleZoneClaimService extends Observable{
 	private static IncompatibleZoneClaimService  instance = null;
 	
 	public static IncompatibleZoneClaimService getIntance() {
@@ -36,10 +41,17 @@ public class IncompatibleZoneClaimService {
 			
 			IncompatibleZoneClaim newClaim = new IncompatibleZoneClaim(existingClient, new Date(), description, existingClient.getZone());
 			newClaim.save();
+			updateObservers(newClaim);
 			return newClaim.getClaimId();
 		
 		}
 		throw new InvalidClientException("Client not found");
+	}
+	
+	private void updateObservers(IncompatibleZoneClaim claim) {
+		List<IncompatibleZoneClaimDTO> claimToSend = new LinkedList<>();
+		claimToSend.add(claim.toDTO());
+		updateObservers(claimToSend);
 	}
 	
 }
