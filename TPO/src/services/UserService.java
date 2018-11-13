@@ -6,6 +6,7 @@ import java.util.List;
 import backEnd.Roles;
 import backEnd.User;
 import dao.UserDAO;
+import dto.RoleDTO;
 import dto.UserDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
@@ -86,6 +87,34 @@ public class UserService extends Observable{
 		} catch (InvalidUserException e) {
 			System.out.println("User not found");
 			return null;
+		}
+	}
+	
+	public void addRoleToUser(RoleDTO dto) throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException {
+		if(dto.getUserId() == 0 || dto.getRole() == null) {
+			throw new InvalidRoleException("Missing parameters");
+		}
+		User existingUser =  new UserDAO().getUser(dto.getUserId());
+		
+		if(existingUser != null) {
+	
+			existingUser.addRole(Roles.valueOf(dto.getRole()));
+			existingUser.modifyInDB();
+			updateObservers(existingUser);
+		}
+	}
+	
+	public void removeRoleToUser(RoleDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
+		if(dto.getUserId() == 0) {
+			throw new InvalidRoleException("Missing userId");
+		}
+		
+		User existingUser = new UserDAO().getUser(dto.getUserId());
+		
+		if(existingUser != null) {			
+			existingUser.removeRole();
+			existingUser.modifyInDB();
+			updateObservers(existingUser);
 		}
 	}
 

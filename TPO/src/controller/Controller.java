@@ -103,11 +103,11 @@ public class Controller {
 	//------------------------------------------------------------ START ROLE ------------------------------------------------------------
 	public void addRole(RoleDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
 	// id y role
-		RoleService.getIntance().addRole(dto);	
+		UserService.getIntance().addRoleToUser(dto);	
 	}
 	public void removeRole(RoleDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
 	// id
-		RoleService.getIntance().removeRole(dto);
+		UserService.getIntance().removeRoleToUser(dto);
 	}
 	//------------------------------------------------------------ END ROLE ------------------------------------------------------------
 	
