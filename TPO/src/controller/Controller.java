@@ -185,7 +185,7 @@ public class Controller {
 	public int addZone(String zoneName) throws ConnectionException, AccessException, InvalidZoneException {
 		return ZoneService.getIntance().addZone(zoneName);
 	}
-	public void modifyZone(ZoneDTO dto) {
+	public void modifyZone(ZoneDTO dto) throws AccessException, InvalidZoneException, ConnectionException {
 		ZoneService.getIntance().modifyZone(dto);
 	}
 }

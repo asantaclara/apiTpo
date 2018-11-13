@@ -2,7 +2,7 @@ package observer;
 
 import java.util.List;
 
-public interface Observer<T> {
+public interface Observer {
 
-	public void update(List<T> listObject);
+	public void update(List<?> listObject);
 }
