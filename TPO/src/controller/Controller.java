@@ -142,6 +142,12 @@ public class Controller {
 	public int addCompositeClaim(CompositeClaimDTO dto) throws InvalidClaimException, ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException {
 		return CompositeClaimService.getIntance().addCompositeClaim(dto);	
 	}
+	public int addZone(String zoneName) throws ConnectionException, AccessException, InvalidZoneException {
+		return ZoneService.getIntance().addZone(zoneName);
+	}
+	public void modifyZone(ZoneDTO dto) throws AccessException, InvalidZoneException, ConnectionException {
+		ZoneService.getIntance().modifyZone(dto);
+	}
 	
 	//------------------------------------------------------------ START GUI ------------------------------------------------------------
 	
@@ -180,11 +186,5 @@ public class Controller {
 	}
 	public ProductDTO getProductById(int productId) throws ConnectionException, AccessException, InvalidProductException{
 		return ProductService.getIntance().getProductById(productId);
-	}
-	public int addZone(String zoneName) throws ConnectionException, AccessException, InvalidZoneException {
-		return ZoneService.getIntance().addZone(zoneName);
-	}
-	public void modifyZone(ZoneDTO dto) throws AccessException, InvalidZoneException, ConnectionException {
-		ZoneService.getIntance().modifyZone(dto);
 	}
 }
