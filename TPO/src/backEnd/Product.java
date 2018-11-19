@@ -55,14 +55,13 @@ public class Product {
 		return aux;
 	}
 	
-	public void saveInDB() throws ConnectionException, AccessException, InvalidProductException {
+	public void save() throws ConnectionException, AccessException, InvalidProductException {
 		new ProductDAO().save(this);
 	}
 	
-	public void modifyInDB() throws ConnectionException, AccessException, InvalidProductException {
+	public void modify() throws ConnectionException, AccessException, InvalidProductException {
 		new ProductDAO().modify(this);
 	}
-	
 
 	public void deactivateProduct() throws ConnectionException, AccessException, InvalidProductException {
 		activeProduct = false;
@@ -84,10 +83,6 @@ public class Product {
 
 	public float getPrice() {
 		return price;
-	}
-
-	public boolean isActiveProduct() {
-		return activeProduct;
 	}
 
 	public void setProductId(int productId) {

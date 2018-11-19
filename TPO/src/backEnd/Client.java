@@ -62,11 +62,11 @@ public class Client {
 		this.id = id;
 	}
 	
-	public void saveInDB() throws ConnectionException, AccessException, InvalidClientException {
+	public void save() throws ConnectionException, AccessException, InvalidClientException {
 		new ClientDAO().save(this);
 	}
 	
-	public void modifyInDB() throws ConnectionException, AccessException, InvalidClientException {
+	public void modify() throws ConnectionException, AccessException, InvalidClientException {
 		new ClientDAO().modify(this);
 	}
 	

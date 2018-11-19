@@ -35,7 +35,7 @@ public class ProductService extends Observable{
 	
 	public int addProduct(ProductDTO dto) throws ConnectionException, AccessException, InvalidProductException {
 		Product p = new Product(dto.getTitle(), dto.getDescription(), dto.getPrice());
-		p.saveInDB();
+		p.save();
 		updateObservers(p);
 		return p.getProductId();
 	}

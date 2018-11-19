@@ -45,10 +45,6 @@ public class Invoice {
 		return date;
 	}
 
-	public boolean isActiveInvoice() {
-		return activeInvoice;
-	}
-
 	public int getId() {
 		return invoiceId;
 	}

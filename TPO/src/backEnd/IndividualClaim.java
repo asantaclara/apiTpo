@@ -19,7 +19,6 @@ public abstract class IndividualClaim extends Claim {
 	
 	protected List<Transition> transitions;
 	protected State actualState;
-	protected ClaimType claimType;
 	
 	public IndividualClaim(Client client, Date date, String description) throws InvalidClaimException {
 		super(client, date, description);
@@ -40,6 +39,7 @@ public abstract class IndividualClaim extends Claim {
 		
 		Transition newTran = new Transition(claimId, actualState, newState, date, description, responsable);
 		newTran.save();
+		transitions.add(newTran);
 		actualState = newState;
 		new ClaimDAO().updateState(this);
 	}

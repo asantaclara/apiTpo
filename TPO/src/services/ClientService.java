@@ -30,7 +30,7 @@ public class ClientService extends Observable{
 	
 	public int addClient (ClientDTO dto) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
 		Client c = new Client(dto.getCuit(), dto.getName(), dto.getAddress(), dto.getPhoneNumber(), dto.getEmail(), ZoneService.getIntance().getZoneByName(dto.getZone()));
-		c.saveInDB();
+		c.save();
 		updateObservers(c);
 		return c.getId();
 	}

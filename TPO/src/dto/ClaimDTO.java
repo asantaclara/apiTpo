@@ -1,6 +1,8 @@
 package dto;
 
 import java.util.Date;
+import java.util.List;
+import java.util.LinkedList;
 
 public abstract class ClaimDTO {
 
