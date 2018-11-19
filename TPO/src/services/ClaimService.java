@@ -38,7 +38,7 @@ public class ClaimService extends Observable{
 		
 	}
 	
-	public String getClaimState(int claimNumber) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
+	public String getClaimState(int claimNumber) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException {
 		Claim claim = new ClaimDAO().getClaim(claimNumber);
 		return claim.getActualState().name();
 	}
@@ -57,7 +57,7 @@ public class ClaimService extends Observable{
 		CompositeClaimService.getIntance().updateCompositeClaims(aux.getClaimId());
 	}
 
-	public List<ClaimDTO> getClaimsFromClient(int clientId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
+	public List<ClaimDTO> getClaimsFromClient(int clientId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException {
 		List<ClaimDTO> claims = new LinkedList<>();
 		
 		for (Claim c : new ClaimDAO().getClaimsFromClient(clientId)) {
