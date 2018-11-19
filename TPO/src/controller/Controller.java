@@ -34,7 +34,6 @@ import services.IncompatibleZoneClaimService;
 import services.InvoiceService;
 import services.MoreQuantityClaimService;
 import services.ProductService;
-import services.RoleService;
 import services.UserService;
 import services.WrongInvoicingClaimService;
 import services.ZoneService;
