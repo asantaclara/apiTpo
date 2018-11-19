@@ -128,7 +128,7 @@ public class InvoiceDAO {
 			
 			for (ProductItem pi : invoice.getItems()) {
 				pi.save();
-				new InvoiceProductItemDAO().save(invoice.getId(), pi.getId());
+				new InvoiceProductItemDAO().save(invoice, pi);
 			}	
 		} finally {
 			SqlUtils.closeConnection(con);

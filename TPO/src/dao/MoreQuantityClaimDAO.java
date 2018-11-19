@@ -73,7 +73,7 @@ public class MoreQuantityClaimDAO {
 			
 			for (ProductItem pi : claim.getProducts()) {
 				pi.save();
-				new MoreQuantityClaimProductItemDAO().save(claim.getClaimId(), pi.getId());
+				new MoreQuantityClaimProductItemDAO().save(claim, pi);
 			}
 			
 		} finally {
