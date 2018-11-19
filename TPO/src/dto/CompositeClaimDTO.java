@@ -20,14 +20,12 @@ public class CompositeClaimDTO extends ClaimDTO{
 	}
 
 	@Override
-	List<TransitionDTO> getTransitions() {
-		// TODO Auto-generated method stub
+	public List<TransitionDTO> getTransitions() {
 		return null;
 	}
 
 	@Override
-	void addTransition(TransitionDTO dto) {
-		// TODO Auto-generated method stub
+	public void addTransition(TransitionDTO dto) {
 		
 	}
 	

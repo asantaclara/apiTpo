@@ -17,8 +17,8 @@ public abstract class ClaimDTO {
 		
 	}
 	
-	abstract List<TransitionDTO> getTransitions();
-	abstract void addTransition(TransitionDTO dto);
+	public abstract List<TransitionDTO> getTransitions();
+	public abstract void addTransition(TransitionDTO dto);
 	
 	public void setClaimId(int claimId) {
 		this.claimId = claimId;

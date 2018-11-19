@@ -19,12 +19,12 @@ public class IncompatibleZoneClaimDTO extends ClaimDTO {
 	}
 
 	@Override
-	List<TransitionDTO> getTransitions() {
+	public List<TransitionDTO> getTransitions() {
 		return transitions;
 	}
 
 	@Override
-	void addTransition(TransitionDTO dto) {
+	public void addTransition(TransitionDTO dto) {
 		transitions.add(dto);
 	}
 	
