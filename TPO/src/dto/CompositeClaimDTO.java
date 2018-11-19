@@ -18,5 +18,17 @@ public class CompositeClaimDTO extends ClaimDTO{
 	public List<Integer> getInidividualClaimsId() {
 		return individualClaimsId;
 	}
+
+	@Override
+	List<TransitionDTO> getTransitions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	void addTransition(TransitionDTO dto) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

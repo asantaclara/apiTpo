@@ -1,8 +1,8 @@
 package dto;
 
 import java.util.Date;
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
 
 public abstract class ClaimDTO {
 
@@ -11,10 +11,14 @@ public abstract class ClaimDTO {
 	protected String description;
 	protected Date date;
 	protected String state;
+	protected List<TransitionDTO> transitions = new LinkedList<>();
 	
 	public ClaimDTO() {
 		
 	}
+	
+	abstract List<TransitionDTO> getTransitions();
+	abstract void addTransition(TransitionDTO dto);
 	
 	public void setClaimId(int claimId) {
 		this.claimId = claimId;

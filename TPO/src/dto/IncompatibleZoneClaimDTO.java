@@ -1,5 +1,7 @@
 package dto;
 
+import java.util.List;
+
 public class IncompatibleZoneClaimDTO extends ClaimDTO {
 
 	private int zoneId;
@@ -14,6 +16,16 @@ public class IncompatibleZoneClaimDTO extends ClaimDTO {
 	
 	public int getZoneId() {
 		return zoneId;
+	}
+
+	@Override
+	List<TransitionDTO> getTransitions() {
+		return transitions;
+	}
+
+	@Override
+	void addTransition(TransitionDTO dto) {
+		transitions.add(dto);
 	}
 	
 }

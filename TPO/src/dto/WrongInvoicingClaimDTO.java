@@ -1,6 +1,5 @@
 package dto;
 
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,5 +18,15 @@ public class WrongInvoicingClaimDTO extends ClaimDTO {
 	
 	public void addInvoiceItemDTO(int invoiceId, String inconsistency) {
 		invoices.add(new InvoiceItemDTO(invoiceId, inconsistency));
+	}
+	
+	@Override
+	List<TransitionDTO> getTransitions() {
+		return transitions;
+	}
+
+	@Override
+	void addTransition(TransitionDTO dto) {
+		transitions.add(dto);
 	}
 }

@@ -38,5 +38,15 @@ public class MoreQuantityClaimDTO extends ClaimDTO {
 		return claimType;
 	}
 	
+	@Override
+	List<TransitionDTO> getTransitions() {
+		return transitions;
+	}
+
+	@Override
+	void addTransition(TransitionDTO dto) {
+		transitions.add(dto);
+	}
+	
 	
 }
