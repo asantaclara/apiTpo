@@ -54,6 +54,10 @@ public class MoreQuantityClaim extends IndividualClaim {
 			aux.addProductItemDTO(new ProductItemDTO(p.getProduct().toDTO(), p.getQuantity()));
 		}
 		
+		for (Transition transition : transitions) {
+			aux.addTransition(transition.toDTO());
+		}
+		
 		return aux;
 	}
 

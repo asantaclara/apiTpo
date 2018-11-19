@@ -39,6 +39,10 @@ public class WrongInvoicingClaim extends IndividualClaim {
 			aux.addInvoiceItemDTO(i.getId(),i.getInconsistency());
 		}
 		
+		for (Transition transition : transitions) {
+			aux.addTransition(transition.toDTO());
+		}
+		
 		return aux;
 	}
 
