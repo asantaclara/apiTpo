@@ -10,10 +10,17 @@ import java.util.Date;
 import backEnd.Client;
 import backEnd.IncompatibleZoneClaim;
 import backEnd.State;
+import backEnd.Transition;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
 import exceptions.InvalidClientException;
+import exceptions.InvalidInvoiceException;
+import exceptions.InvalidProductException;
+import exceptions.InvalidProductItemException;
+import exceptions.InvalidRoleException;
+import exceptions.InvalidTransitionException;
+import exceptions.InvalidUserException;
 import exceptions.InvalidZoneException;
 
 public class IncompatibleZoneClaimDAO {
@@ -62,7 +69,7 @@ public class IncompatibleZoneClaimDAO {
 		
 	}
 
-	public IncompatibleZoneClaim getIncompatibleZoneClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidZoneException {
+	public IncompatibleZoneClaim getIncompatibleZoneClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException {
 		Connection con = SqlUtils.getConnection();  
 		try {
 			Statement stmt = SqlUtils.createStatement(con);  
@@ -78,6 +85,9 @@ public class IncompatibleZoneClaimDAO {
 					IncompatibleZoneClaim newClaim = new IncompatibleZoneClaim(client, new Date(rs.getDate(7).getTime()), rs.getString(6), new ZoneDAO().getZone(rs.getInt(2)));
 					newClaim.setClaimId(rs.getInt(1));
 					newClaim.setActualState(State.valueOf(rs.getString(4)));
+					for (Transition t : new TransitionDAO().getAllTransitionOfClaim(rs.getInt(1))) {
+						newClaim.addTransition(t);
+					}
 					return newClaim;
 				}
 				else{

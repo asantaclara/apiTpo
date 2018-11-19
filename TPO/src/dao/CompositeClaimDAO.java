@@ -19,6 +19,9 @@ import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidProductException;
 import exceptions.InvalidProductItemException;
+import exceptions.InvalidRoleException;
+import exceptions.InvalidTransitionException;
+import exceptions.InvalidUserException;
 import exceptions.InvalidZoneException;
 
 public class CompositeClaimDAO {
@@ -94,7 +97,7 @@ public class CompositeClaimDAO {
 		}			
 	}
 
-	private static List<Claim> getListOfClaims(int claimId) throws AccessException, ConnectionException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException{
+	private static List<Claim> getListOfClaims(int claimId) throws AccessException, ConnectionException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException{
 		Connection con = SqlUtils.getConnection();  
 		try {
 			Statement stmt = SqlUtils.createStatement(con);  
@@ -123,7 +126,7 @@ public class CompositeClaimDAO {
 		
 	}
 	
-	public CompositeClaim getCompositeClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
+	public CompositeClaim getCompositeClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException {
 		Connection con = SqlUtils.getConnection();  
 		try {
 			Statement stmt = SqlUtils.createStatement(con);  
@@ -155,7 +158,7 @@ public class CompositeClaimDAO {
 		}
 	}
 
-	public List<CompositeClaim> getAllClaims() throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException{
+	public List<CompositeClaim> getAllClaims() throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException{
 		Connection con = SqlUtils.getConnection();  
 		try {
 			Statement stmt = SqlUtils.createStatement(con);  
@@ -181,7 +184,7 @@ public class CompositeClaimDAO {
 		}
 	}
 	
-	public List<CompositeClaim> getAllClaimsByIndividualClaim(int individualClaimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException{
+	public List<CompositeClaim> getAllClaimsByIndividualClaim(int individualClaimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException{
 		Connection con = SqlUtils.getConnection();  
 		try {
 			Statement stmt = SqlUtils.createStatement(con);  

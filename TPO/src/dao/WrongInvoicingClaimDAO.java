@@ -10,6 +10,7 @@ import java.util.Date;
 import backEnd.Client;
 import backEnd.InvoiceItem;
 import backEnd.State;
+import backEnd.Transition;
 import backEnd.WrongInvoicingClaim;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
@@ -18,6 +19,10 @@ import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidInvoiceItemException;
 import exceptions.InvalidProductException;
+import exceptions.InvalidProductItemException;
+import exceptions.InvalidRoleException;
+import exceptions.InvalidTransitionException;
+import exceptions.InvalidUserException;
 import exceptions.InvalidZoneException;
 
 public class WrongInvoicingClaimDAO {
@@ -73,7 +78,7 @@ public class WrongInvoicingClaimDAO {
 		}
 	}
 
-	public WrongInvoicingClaim getWrongInvoicingClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException {
+	public WrongInvoicingClaim getWrongInvoicingClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidProductItemException {
 		Connection con = SqlUtils.getConnection();  
 		try {
 			Statement stmt = SqlUtils.createStatement(con);  
@@ -92,6 +97,9 @@ public class WrongInvoicingClaimDAO {
 					for (InvoiceItem i : new InvoiceItemDAO().getAllInvoiceItemsOfClaim(newClaim)) {
 						newClaim.addInovice(i.getInvoice(), i.getInconsistency());
 					}		
+					for (Transition t : new TransitionDAO().getAllTransitionOfClaim(rs.getInt(1))) {
+						newClaim.addTransition(t);
+					}
 					return newClaim;
 				}
 				else{

@@ -12,6 +12,7 @@ import backEnd.Client;
 import backEnd.MoreQuantityClaim;
 import backEnd.ProductItem;
 import backEnd.State;
+import backEnd.Transition;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
@@ -19,6 +20,9 @@ import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidProductException;
 import exceptions.InvalidProductItemException;
+import exceptions.InvalidRoleException;
+import exceptions.InvalidTransitionException;
+import exceptions.InvalidUserException;
 import exceptions.InvalidZoneException;
 
 public class MoreQuantityClaimDAO {
@@ -77,7 +81,7 @@ public class MoreQuantityClaimDAO {
 		}
 	}
 
-	public MoreQuantityClaim getMoreQuantityClaim(int claimId) throws AccessException, ConnectionException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException{
+	public MoreQuantityClaim getMoreQuantityClaim(int claimId) throws AccessException, ConnectionException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException{
 		Connection con = SqlUtils.getConnection();  
 		try {
 			Statement stmt = SqlUtils.createStatement(con);  
@@ -96,6 +100,9 @@ public class MoreQuantityClaimDAO {
 					newClaim.setActualState(State.valueOf(rs.getString(5)));
 					for (ProductItem pi : ProductItemDAO.getProductItemsOfMoreQuantityClaim(newClaim)) {
 						newClaim.addProductItem(pi.getProduct(), pi.getQuantity());
+					}
+					for (Transition t : new TransitionDAO().getAllTransitionOfClaim(rs.getInt(1))) {
+						newClaim.addTransition(t);
 					}
 					return newClaim;
 				}
