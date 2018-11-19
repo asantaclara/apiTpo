@@ -34,6 +34,14 @@ public abstract class IndividualClaim extends Claim {
 	public void setActualState(State actualState) {
 		this.actualState = actualState;
 	}
+	
+	public void addTransition(Transition t) {
+		transitions.add(t);
+	}
+	
+	public List<Transition> getTransitions() {
+		return transitions;
+	}
 
 	public void treatClaim(User responsable, State newState, String description) throws InvalidTransitionException, ConnectionException, AccessException, SQLException {
 		
