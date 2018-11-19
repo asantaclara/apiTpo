@@ -63,12 +63,12 @@ public class User {
 		new UserDAO().modify(this);
 	}
 	
-	public void saveInDB() throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException {
+	public void save() throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException {
 		new UserDAO().save(this);
 		System.out.println("Termino con el save de la clase User");
 	}
 	
-	public void modifyInDB() throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException {
+	public void modify() throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException {
 		new UserDAO().modify(this);
 	}
 	
@@ -110,10 +110,6 @@ public class User {
 
 	public Roles getSecondaryRole() {
 		return secondaryRole;
-	}
-
-	public boolean isActiveUser() {
-		return activeUser;
 	}
 	
 	public String getUserName() {

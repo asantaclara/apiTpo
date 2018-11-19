@@ -32,7 +32,7 @@ public class UserService extends Observable{
 	public int addUser(UserDTO dto) throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException {
 		if(dto.getName() != null && dto.getPrincipalRole() != null && dto.getUserName() != null && dto.getPassword() != null) {			
 			User u = new User(dto.getName(),Roles.valueOf(dto.getPrincipalRole()), dto.getUserName(), dto.getPassword());
-			u.saveInDB();
+			u.save();
 			updateObservers(u);
 			return u.getId();
 		} else {
@@ -99,7 +99,7 @@ public class UserService extends Observable{
 		if(existingUser != null) {
 	
 			existingUser.addRole(Roles.valueOf(dto.getRole()));
-			existingUser.modifyInDB();
+			existingUser.modify();
 			updateObservers(existingUser);
 		}
 	}
@@ -113,7 +113,7 @@ public class UserService extends Observable{
 		
 		if(existingUser != null) {			
 			existingUser.removeRole();
-			existingUser.modifyInDB();
+			existingUser.modify();
 			updateObservers(existingUser);
 		}
 	}
