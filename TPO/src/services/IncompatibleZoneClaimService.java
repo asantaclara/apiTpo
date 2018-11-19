@@ -5,11 +5,9 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import backEnd.Claim;
 import backEnd.Client;
 import backEnd.IncompatibleZoneClaim;
 import dao.ClientDAO;
-import dto.ClaimDTO;
 import dto.IncompatibleZoneClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;

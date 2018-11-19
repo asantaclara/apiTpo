@@ -8,7 +8,6 @@ import backEnd.Product;
 import backEnd.ProductItem;
 import dao.InvoiceDAO;
 import dao.ProductDAO;
-import dto.InvoiceDTO;
 import dto.ProductDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;

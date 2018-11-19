@@ -1,7 +1,5 @@
 package backEnd;
 
-import java.sql.SQLException;
-
 import dao.UserDAO;
 import dto.UserDTO;
 import exceptions.AccessException;

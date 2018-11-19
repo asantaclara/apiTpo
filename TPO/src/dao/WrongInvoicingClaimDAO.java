@@ -7,11 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 
-import backEnd.ClaimType;
 import backEnd.Client;
 import backEnd.InvoiceItem;
-import backEnd.MoreQuantityClaim;
-import backEnd.ProductItem;
 import backEnd.State;
 import backEnd.WrongInvoicingClaim;
 import exceptions.AccessException;

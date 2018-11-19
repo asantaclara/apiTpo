@@ -4,13 +4,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import backEnd.Client;
-import backEnd.IncompatibleZoneClaim;
 import backEnd.Invoice;
 import backEnd.Product;
 import dao.ClientDAO;
 import dao.InvoiceDAO;
 import dao.ProductDAO;
-import dto.ClaimDTO;
 import dto.InvoiceDTO;
 import dto.ProductDTO;
 import dto.ProductItemDTO;

@@ -8,12 +8,9 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
-import backEnd.Product;
 import backEnd.Zone;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
-import exceptions.InvalidClientException;
-import exceptions.InvalidProductException;
 import exceptions.InvalidZoneException;
 
 public class ZoneDAO {

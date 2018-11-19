@@ -3,10 +3,8 @@ package services;
 import java.util.LinkedList;
 import java.util.List;
 
-import backEnd.WrongInvoicingClaim;
 import backEnd.Zone;
 import dao.ZoneDAO;
-import dto.WrongInvoicingClaimDTO;
 import dto.ZoneDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;

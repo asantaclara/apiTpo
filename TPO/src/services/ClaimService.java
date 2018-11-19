@@ -5,13 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import backEnd.Claim;
-import backEnd.Client;
-import backEnd.CompositeClaim;
 import backEnd.State;
 import dao.ClaimDAO;
 import dao.UserDAO;
 import dto.ClaimDTO;
-import dto.ClientDTO;
 import dto.TransitionDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
@@ -25,7 +22,6 @@ import exceptions.InvalidTransitionException;
 import exceptions.InvalidUserException;
 import exceptions.InvalidZoneException;
 import observer.Observable;
-import observer.Observer;
 
 public class ClaimService extends Observable{
 
