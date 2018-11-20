@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import backEnd.Client;
 import backEnd.InvoiceItem;
@@ -24,6 +26,7 @@ import exceptions.InvalidRoleException;
 import exceptions.InvalidTransitionException;
 import exceptions.InvalidUserException;
 import exceptions.InvalidZoneException;
+import services.ClientService;
 
 public class WrongInvoicingClaimDAO {
 
@@ -90,7 +93,7 @@ public class WrongInvoicingClaimDAO {
 			
 			try {
 				if(rs.next()){
-					Client client = new ClientDAO().getClient(rs.getInt(4));
+					Client client = ClientService.getIntance().getClientById(rs.getInt(4));
 					WrongInvoicingClaim newClaim = new WrongInvoicingClaim(client, new Date(rs.getDate(6).getTime()), rs.getString(5));
 					newClaim.setClaimId(rs.getInt(1));
 					newClaim.setActualState(State.valueOf(rs.getString(3)));
@@ -113,4 +116,52 @@ public class WrongInvoicingClaimDAO {
 			SqlUtils.closeConnection(con);
 		}
 	}
+
+	public List<WrongInvoicingClaim> getAllWrongInvoicingClaims() throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException {
+		String sql = "SELECT * FROM WrongInvoiceClaims JOIN Claims ON Claims.ClaimId = WrongInvoiceClaims.WrongInvoiceId";
+		return getAllWrongInvoicingClaims(sql);
+	}
+
+	public List<WrongInvoicingClaim> getAllWrongInvoicingClaimsFromClient(int clientId) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException {
+		String sql = "SELECT * FROM WrongInvoiceClaims JOIN Claims ON Claims.ClaimId = WrongInvoiceClaims.WrongInvoiceId where Claims.ClientId = " + clientId;
+		return getAllWrongInvoicingClaims(sql);
+	}
+	
+	public List<WrongInvoicingClaim> getAllWrongInvoicingClaims(String sql) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException{
+		Connection con = SqlUtils.getConnection();  
+		try {
+			Statement stmt = SqlUtils.createStatement(con);  
+			ResultSet rs = null;
+			
+			rs = SqlUtils.executeQuery(stmt, con, sql);
+			
+			try {
+				List<WrongInvoicingClaim> claims = new LinkedList<>();
+				Client client = null;
+				WrongInvoicingClaim newClaim = null;
+				
+				while(rs.next()){
+					client = ClientService.getIntance().getClientById(rs.getInt(4));
+					newClaim = new WrongInvoicingClaim(client, new Date(rs.getDate(6).getTime()), rs.getString(5));
+					newClaim.setClaimId(rs.getInt(1));
+					newClaim.setActualState(State.valueOf(rs.getString(3)));
+					for (InvoiceItem i : new InvoiceItemDAO().getAllInvoiceItemsOfClaim(newClaim)) {
+						newClaim.addInovice(i.getInvoice(), i.getInconsistency());
+					}		
+					for (Transition t : new TransitionDAO().getAllTransitionOfClaim(rs.getInt(1))) {
+						newClaim.addTransition(t);
+					}
+					claims.add(newClaim);
+				}
+				return claims;
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new ConnectionException("Data not reachable");
+			}
+		} finally {
+			SqlUtils.closeConnection(con);
+		}
+		
+	}
+	
 }

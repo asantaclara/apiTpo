@@ -9,6 +9,7 @@ import backEnd.Invoice;
 import backEnd.WrongInvoicingClaim;
 import dao.ClientDAO;
 import dao.InvoiceDAO;
+import dao.WrongInvoicingClaimDAO;
 import dto.InvoiceItemDTO;
 import dto.WrongInvoicingClaimDTO;
 import exceptions.AccessException;
@@ -18,6 +19,10 @@ import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidInvoiceItemException;
 import exceptions.InvalidProductException;
+import exceptions.InvalidProductItemException;
+import exceptions.InvalidRoleException;
+import exceptions.InvalidTransitionException;
+import exceptions.InvalidUserException;
 import exceptions.InvalidZoneException;
 import observer.Observable;
 
@@ -65,5 +70,23 @@ public class WrongInvoicingClaimService extends Observable{
 		List<WrongInvoicingClaimDTO> claimToSend = new LinkedList<>();
 		claimToSend.add(claim.toDTO());
 		updateObservers(claimToSend);
+	}
+
+	public List<WrongInvoicingClaimDTO> getAllWrongInvoicingClaimsDTO() throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException {
+		List<WrongInvoicingClaimDTO> claimsDTO =  new LinkedList<>();
+		
+		for (WrongInvoicingClaim w : new WrongInvoicingClaimDAO().getAllWrongInvoicingClaims()) {
+			claimsDTO.add(w.toDTO());
+		}
+		return claimsDTO;
+	}
+
+	public List<WrongInvoicingClaimDTO> getAllWrongInvoicingClaimsDTOFromClient(int clientId) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException {
+		List<WrongInvoicingClaimDTO> claimsDTO =  new LinkedList<>();
+		
+		for (WrongInvoicingClaim w : new WrongInvoicingClaimDAO().getAllWrongInvoicingClaimsFromClient(clientId)) {
+			claimsDTO.add(w.toDTO());
+		}
+		return claimsDTO;
 	}
 }
