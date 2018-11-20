@@ -40,21 +40,21 @@ public class MoreQuantityClaimService extends Observable{
 	public int addMoreQuantityClaim(MoreQuantityClaimDTO dto) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidClaimException {
 		int clientId = dto.getClientId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
 		
-		Client existingClient =  new ClientDAO().getClient(clientId);
+		Client existingClient = ClientService.getIntance().getClientById(clientId);
 		
 		List<ProductItemDTO> productItemsDTO = dto.getProducts();
 		
 		ClaimType claimType = ClaimType.valueOf(dto.getClaimType());
 		
 		int invoiceId = dto.getInvoiceId();
-		Invoice existingInvoice = new InvoiceDAO().getInvoice(invoiceId);
+		Invoice existingInvoice = InvoiceService.getIntance().getInvoiceById(invoiceId);
 		
 		String description = dto.getDescription();
 		
 		MoreQuantityClaim newClaim = new MoreQuantityClaim(existingClient, new Date(), description, claimType, existingInvoice);
 		
 		for (ProductItemDTO productItemDTO : productItemsDTO) {
-			newClaim.addProductItem(new ProductDAO().getProduct(productItemDTO.getProduct().getProductId()), productItemDTO.getQuantity());
+			newClaim.addProductItem(ProductService.getIntance().getProductById(productItemDTO.getProduct().getProductId()), productItemDTO.getQuantity());
 		}
 		
 		newClaim.save();

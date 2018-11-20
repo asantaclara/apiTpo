@@ -50,8 +50,8 @@ public class ClaimService extends Observable{
 			throw new InvalidTransitionException("Missing parameters");
 		}
 		
-		Claim aux = new ClaimDAO().getClaim(dto.getClaimId());
-		aux.treatClaim(new UserDAO().getUser(dto.getResponsableId()), State.valueOf(dto.getNewState()), dto.getDescription());
+		Claim aux = getClaim(dto.getClaimId());
+		aux.treatClaim(UserService.getIntance().getUserById(dto.getResponsableId()), State.valueOf(dto.getNewState()), dto.getDescription());
 		updateObservers(aux);
 		
 		CompositeClaimService.getIntance().updateCompositeClaims(aux.getClaimId());
@@ -71,5 +71,9 @@ public class ClaimService extends Observable{
 		List<ClaimDTO> claimToSend = new LinkedList<>();
 		claimToSend.add(claim.toDTO());
 		updateObservers(claimToSend);
+	}
+	
+	public Claim getClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException {
+		return new ClaimDAO().getClaim(claimId);
 	}
 }

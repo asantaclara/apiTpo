@@ -169,7 +169,7 @@ public class Controller {
 		return ClaimService.getIntance().getClaimsFromClient(clientId);
 	}
 	public UserDTO getUserById(int userId) throws AccessException, InvalidRoleException, ConnectionException {
-		return UserService.getIntance().getUserById(userId);
+		return UserService.getIntance().getUserDTOById(userId);
 	}
 	public UserDTO getUserByUsernameAndPassword(UserDTO dto) throws AccessException, ConnectionException, InvalidRoleException {
 		return UserService.getIntance().getUserByUsernameAndPassword(dto);

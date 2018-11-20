@@ -41,9 +41,9 @@ public class CompositeClaimService extends Observable{
 		if(dto.getClientId() == 0 || dto.getDescription() == null) {
 			throw new InvalidClaimException("Missing parameters");
 		}
-		CompositeClaim claim = new CompositeClaim(new ClientDAO().getClient(dto.getClientId()), new Date(), dto.getDescription());
+		CompositeClaim claim = new CompositeClaim(ClientService.getIntance().getClientById(dto.getClientId()), new Date(), dto.getDescription());
 		for (Integer i : dto.getInidividualClaimsId()) {
-			Claim claimAux = new ClaimDAO().getClaim(i.intValue());
+			Claim claimAux = ClaimService.getIntance().getClaim(i.intValue());
 			if(claim.getClient().getId() == dto.getClientId()) {				
 				claim.addClaim(claimAux);
 			} else {

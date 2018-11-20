@@ -31,8 +31,7 @@ public class IncompatibleZoneClaimService extends Observable{
 	}
 	
 	public int addIncompatibleZoneClaim(IncompatibleZoneClaimDTO dto) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidClaimException, SQLException {
-		int clientId = dto.getClientId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
-		Client existingClient =  new ClientDAO().getClient(clientId);
+		Client existingClient = ClientService.getIntance().getClientById(dto.getClientId());
 		
 		if(existingClient != null) {
 			String description = dto.getDescription();

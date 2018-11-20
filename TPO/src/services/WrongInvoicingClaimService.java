@@ -39,7 +39,7 @@ public class WrongInvoicingClaimService extends Observable{
 	public int addWrongInvoicingClaim(WrongInvoicingClaimDTO dto) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidClaimException, InvalidInvoiceException, InvalidProductException, InvalidInvoiceItemException {
 		
 		int clientId = dto.getClientId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
-		Client existingClient =  new ClientDAO().getClient(clientId);
+		Client existingClient =  ClientService.getIntance().getClientById(clientId);
 		
 		WrongInvoicingClaim newClaim = new WrongInvoicingClaim(existingClient, new Date(), dto.getDescription());
 		
@@ -47,7 +47,7 @@ public class WrongInvoicingClaimService extends Observable{
 		
 		for (InvoiceItemDTO invoiceItemDTO : invoiceItems) {
 			int invoiceId = invoiceItemDTO.getInvoiceId();
-			Invoice existingInvoice = new InvoiceDAO().getInvoice(invoiceId);
+			Invoice existingInvoice = InvoiceService.getIntance().getInvoiceById(invoiceId);
 			
 			if(existingInvoice.validateClient(existingClient)) { //Si el cliente pertenece a la factura que me mandaron
 				String inconsistency = invoiceItemDTO.getInconsistency();

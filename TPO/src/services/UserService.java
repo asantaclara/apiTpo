@@ -66,7 +66,7 @@ public class UserService extends Observable{
 		return true;
 	}
 
-	public UserDTO getUserById(int userId) throws ConnectionException, AccessException, InvalidRoleException {
+	public UserDTO getUserDTOById(int userId) throws ConnectionException, AccessException, InvalidRoleException {
 		try {
 			return new UserDAO().getUser(userId).toDTO();			
 		} catch (InvalidUserException e) {
@@ -122,5 +122,9 @@ public class UserService extends Observable{
 		List<UserDTO> userToSend = new LinkedList<>();
 		userToSend.add(u.toDTO());
 		updateObservers(userToSend);
+	}
+
+	public User getUserById(int userId) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
+		return new UserDAO().getUser(userId);
 	}
 }
