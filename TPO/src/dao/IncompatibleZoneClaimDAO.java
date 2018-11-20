@@ -6,9 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import backEnd.Client;
 import backEnd.IncompatibleZoneClaim;
+import backEnd.Invoice;
+import backEnd.ProductItem;
 import backEnd.State;
 import backEnd.Transition;
 import exceptions.AccessException;
@@ -22,6 +26,8 @@ import exceptions.InvalidRoleException;
 import exceptions.InvalidTransitionException;
 import exceptions.InvalidUserException;
 import exceptions.InvalidZoneException;
+import services.ClientService;
+import services.ZoneService;
 
 public class IncompatibleZoneClaimDAO {
 
@@ -81,8 +87,8 @@ public class IncompatibleZoneClaimDAO {
 			
 			try {
 				if(rs.next()){
-					Client client = new ClientDAO().getClient(rs.getInt(5));
-					IncompatibleZoneClaim newClaim = new IncompatibleZoneClaim(client, new Date(rs.getDate(7).getTime()), rs.getString(6), new ZoneDAO().getZone(rs.getInt(2)));
+					Client client = ClientService.getIntance().getClientById(rs.getInt(5));
+					IncompatibleZoneClaim newClaim = new IncompatibleZoneClaim(client, new Date(rs.getDate(7).getTime()), rs.getString(6), ZoneService.getIntance().getZoneById(rs.getInt(2)));
 					newClaim.setClaimId(rs.getInt(1));
 					newClaim.setActualState(State.valueOf(rs.getString(4)));
 					for (Transition t : new TransitionDAO().getAllTransitionOfClaim(rs.getInt(1))) {
@@ -97,6 +103,39 @@ public class IncompatibleZoneClaimDAO {
 			} catch (SQLException e) {
 				throw new ConnectionException("Data not reachable");
 			}
+		} finally {
+			SqlUtils.closeConnection(con);
+		}
+	}
+
+	
+	public List<IncompatibleZoneClaim> getAllIncompatibleZoneClaims() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException {
+		Connection con = SqlUtils.getConnection();  
+		try {
+			Statement stmt = SqlUtils.createStatement(con);  
+			String sql = "SELECT * FROM IncompatibleZoneClaims JOIN Claims ON Claims.ClaimId = IncompatibleZoneClaims.IncompatibleZoneId";
+			ResultSet rs = SqlUtils.executeQuery(stmt, con, sql);
+			
+			try {
+				List<IncompatibleZoneClaim> returnList = new LinkedList<>();
+				IncompatibleZoneClaim newClaim = null;
+				Client client = null;
+				
+				while(rs.next()){	
+					client = ClientService.getIntance().getClientById(rs.getInt(5));
+					newClaim = new IncompatibleZoneClaim(client, new Date(rs.getDate(7).getTime()), rs.getString(6), ZoneService.getIntance().getZoneById(rs.getInt(2)));
+					newClaim.setClaimId(rs.getInt(1));
+					newClaim.setActualState(State.valueOf(rs.getString(4)));
+					for (Transition t : new TransitionDAO().getAllTransitionOfClaim(rs.getInt(1))) {
+						newClaim.addTransition(t);
+					}
+					returnList.add(newClaim);
+				}
+				return returnList;
+				
+			} catch (SQLException e) {
+				throw new ConnectionException("Data not reachable");
+			}			
 		} finally {
 			SqlUtils.closeConnection(con);
 		}

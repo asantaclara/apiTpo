@@ -8,11 +8,18 @@ import java.util.List;
 import backEnd.Client;
 import backEnd.IncompatibleZoneClaim;
 import dao.ClientDAO;
+import dao.IncompatibleZoneClaimDAO;
 import dto.IncompatibleZoneClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
 import exceptions.InvalidClientException;
+import exceptions.InvalidInvoiceException;
+import exceptions.InvalidProductException;
+import exceptions.InvalidProductItemException;
+import exceptions.InvalidRoleException;
+import exceptions.InvalidTransitionException;
+import exceptions.InvalidUserException;
 import exceptions.InvalidZoneException;
 import observer.Observable;
 
@@ -49,6 +56,16 @@ public class IncompatibleZoneClaimService extends Observable{
 		List<IncompatibleZoneClaimDTO> claimToSend = new LinkedList<>();
 		claimToSend.add(claim.toDTO());
 		updateObservers(claimToSend);
+	}
+
+	public List<IncompatibleZoneClaimDTO> getAllIncompatibleZoneClaimsDTO() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException {
+		List<IncompatibleZoneClaim> claims = new IncompatibleZoneClaimDAO().getAllIncompatibleZoneClaims();
+		List<IncompatibleZoneClaimDTO> claimsDTO =  new LinkedList<>();
+		
+		for (IncompatibleZoneClaim i : claims) {
+			claimsDTO.add(i.toDTO());
+		}
+		return claimsDTO;
 	}
 	
 }

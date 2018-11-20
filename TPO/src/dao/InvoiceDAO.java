@@ -18,6 +18,7 @@ import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidProductException;
 import exceptions.InvalidZoneException;
+import services.ClientService;
 
 public class InvoiceDAO {
 
@@ -42,7 +43,7 @@ public class InvoiceDAO {
 				Invoice newInvoice = null;
 				
 				while(rs.next()){	
-					Client client = new ClientDAO().getClient(rs.getInt(2));
+					Client client = ClientService.getIntance().getClientById(rs.getInt(2));
 					newInvoice = new Invoice(client,new Date(rs.getDate(3).getTime())); //Con esto paso de sql a utils
 					newInvoice.setId(rs.getInt(1));
 					for (ProductItem pi : ProductItemDAO.getProductItemsOfInvoice(newInvoice)) {

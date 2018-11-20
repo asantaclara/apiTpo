@@ -186,4 +186,14 @@ public class Controller {
 	public ProductDTO getProductById(int productId) throws ConnectionException, AccessException, InvalidProductException{
 		return ProductService.getIntance().getProductDTOById(productId);
 	}
+	
+	//------------------------------
+	// IncompatibleZoneClaim
+	public List<IncompatibleZoneClaimDTO> getAllIncompatibleZoneClaimsDTO() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException{
+		return IncompatibleZoneClaimService.getIntance().getAllIncompatibleZoneClaimsDTO();
+	}
+	// MoreQuantityClaim
+	// WrongInvoicingClaim
+	
+	
 }
