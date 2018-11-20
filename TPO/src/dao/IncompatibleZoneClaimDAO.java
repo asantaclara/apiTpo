@@ -110,10 +110,19 @@ public class IncompatibleZoneClaimDAO {
 
 	
 	public List<IncompatibleZoneClaim> getAllIncompatibleZoneClaims() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException {
+		String sql = "SELECT * FROM IncompatibleZoneClaims JOIN Claims ON Claims.ClaimId = IncompatibleZoneClaims.IncompatibleZoneId";
+		return getAllIncompatibleZoneClaims(sql);
+	}
+
+	public List<IncompatibleZoneClaim> getAllIncompatibleZoneClaimsFromClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidClaimException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException {
+		String sql = "SELECT * FROM IncompatibleZoneClaims JOIN Claims ON Claims.ClaimId = IncompatibleZoneClaims.IncompatibleZoneId where claims.ClientId = " + clientId;
+		return getAllIncompatibleZoneClaims(sql);
+	}
+	
+	private List<IncompatibleZoneClaim> getAllIncompatibleZoneClaims(String sql) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidClaimException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException{
 		Connection con = SqlUtils.getConnection();  
 		try {
 			Statement stmt = SqlUtils.createStatement(con);  
-			String sql = "SELECT * FROM IncompatibleZoneClaims JOIN Claims ON Claims.ClaimId = IncompatibleZoneClaims.IncompatibleZoneId";
 			ResultSet rs = SqlUtils.executeQuery(stmt, con, sql);
 			
 			try {
