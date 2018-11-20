@@ -30,7 +30,7 @@ public class StatisticsDAO {
 				ClientDTO client = null;
 				int ranking = 1;
 				while(rs.next()){	
-					client = ClientService.getIntance().getClientById(rs.getInt(5)).toDTO();
+					client = ClientService.getIntance().getClientById(rs.getInt(1)).toDTO();
 					client.setRanking(ranking++);
 					client.setClaimsCount(rs.getInt(2));
 					returnList.add(client);

@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import controller.Controller;
 import dto.ClaimQuantityPerMonthDTO;
+import dto.ClientDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
@@ -201,9 +202,14 @@ public class App {
 //		dto.setClientId(3);
 //		dto.setDescription("Hola");
 //		c.addIncompatibleZoneClaim(dto);
+
+// test rankingPer Month
+//		for (ClaimQuantityPerMonthDTO d : c.getRankingClaimsPerMonth()) {
+//			System.out.println("Mes " + d.getMonth() + " Cantidad: " + d.getQuantity());
+//		}
 		
-		for (ClaimQuantityPerMonthDTO d : c.getRankingClaimsPerMonth()) {
-			System.out.println("Mes " + d.getMonth() + " Cantidad: " + d.getQuantity());
+		for (ClientDTO d : c.getRankingClientsOfClaims()) {
+			System.out.println(d.getName() + " " + d.getRanking() + " " + d.getClaimsCount());
 		}
 		
 	System.out.println("END");
