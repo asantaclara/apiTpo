@@ -58,8 +58,12 @@ public class ClientService extends Observable{
 		updateObservers(clientToSend);
 	}
 	
-	public ClientDTO getClientById(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
-			return new ClientDAO().getClient(clientId).toDTO();
+	public Client getClientById(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
+		return new ClientDAO().getClient(clientId);
+	}
+	
+	public ClientDTO getClientDTOById(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
+			return getClientById(clientId).toDTO();
 	}
 
 	public boolean clientExists(int clientId) throws ConnectionException, AccessException, InvalidZoneException {

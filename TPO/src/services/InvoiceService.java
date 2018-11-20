@@ -37,13 +37,13 @@ public class InvoiceService extends Observable{
 	public int addInvoice(InvoiceDTO dto) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidProductException, InvalidClientException, InvalidZoneException {
 		List<ProductItemDTO> itemsDTO = dto.getProductItems(); //Esta lista de ProductItemDTO la tengo para despues traerme los product de la BD.
 		int clientId = dto.getClientId(); //Este es el id que uso para traerme al cliente de la BD.
-		Client existingClient =  new ClientDAO().getClient(clientId);
+		Client existingClient =  ClientService.getIntance().getClientById(clientId);
 		
 		Invoice newInvoice = new Invoice(existingClient, dto.getDate());
 		
 		for (ProductItemDTO productItemDTO : itemsDTO) {
 			ProductDTO product = productItemDTO.getProduct();
-			Product existingProduct = new ProductDAO().getProduct(product.getProductId());
+			Product existingProduct = ProductService.getIntance().getProductById(product.getProductId());
 			
 			int productQuantity = productItemDTO.getQuantity();
 			

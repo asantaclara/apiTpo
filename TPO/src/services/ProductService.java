@@ -79,8 +79,12 @@ public class ProductService extends Observable{
 		return returnList;
 	}
 
-	public ProductDTO getProductById(int productId) throws ConnectionException, AccessException, InvalidProductException {
-		return new ProductDAO().getProduct(productId).toDTO();
+	public ProductDTO getProductDTOById(int productId) throws ConnectionException, AccessException, InvalidProductException {
+		return getProductById(productId).toDTO();
+	}
+	
+	public Product getProductById(int productId) throws ConnectionException, AccessException, InvalidProductException {
+		return new ProductDAO().getProduct(productId);
 	}
 	
 	private void updateObservers(Product p) {

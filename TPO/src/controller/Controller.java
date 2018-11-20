@@ -70,9 +70,8 @@ public class Controller {
 	//------------------------------------------------------------ START USER ------------------------------------------------------------
 	public int addUser(UserDTO dto) throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException {
 	// name - principalRole	
-		int i = UserService.getIntance().addUser(dto);
-		System.out.println("Termino con el addUser en el controller");
-		return i;
+		return UserService.getIntance().addUser(dto);
+		
 	}
 	public void modifyUser(UserDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
 	// id - lo que quiera cambiar
@@ -161,7 +160,7 @@ public class Controller {
 		return ProductService.getIntance().getInvoiceProducts(invoiceId);
 	}
 	public ClientDTO getClientById(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
-		return ClientService.getIntance().getClientById(clientId);
+		return ClientService.getIntance().getClientDTOById(clientId);
 	}
 	public boolean clientExists(int clientId) throws ConnectionException, AccessException, InvalidZoneException {
 		return ClientService.getIntance().clientExists(clientId);
@@ -185,6 +184,6 @@ public class Controller {
 		return ZoneService.getIntance().getAllZones();
 	}
 	public ProductDTO getProductById(int productId) throws ConnectionException, AccessException, InvalidProductException{
-		return ProductService.getIntance().getProductById(productId);
+		return ProductService.getIntance().getProductDTOById(productId);
 	}
 }
