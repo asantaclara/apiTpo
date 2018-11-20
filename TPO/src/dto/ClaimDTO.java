@@ -50,12 +50,13 @@ public abstract class ClaimDTO {
 	}
 	
 	public String[] toDataRow() {
-		String[] aux = new String[4];
+		String[] aux = new String[5];
 		
 		aux[0] = String.valueOf(claimId);
 		aux[1] = String.valueOf(clientId);
 		aux[2] = date.toString();
 		aux[3] = description;
+		aux[4] = state;
 		
 		return aux;
 	}
