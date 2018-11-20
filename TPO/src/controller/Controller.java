@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import dto.ClaimDTO;
+import dto.ClaimQuantityPerMonthDTO;
 import dto.ClientDTO;
 import dto.CompositeClaimDTO;
 import dto.IncompatibleZoneClaimDTO;
@@ -205,8 +206,11 @@ public class Controller {
 	public List<WrongInvoicingClaimDTO> getAllWrongInvoicingClaimsDTOFromClient(int clientId) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException{
 		return WrongInvoicingClaimService.getIntance().getAllWrongInvoicingClaimsDTOFromClient(clientId);
 	}
-	public List<ClientDTO> getRankingOfClaims() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException{
-		return StatisticsService.getIntance().getRankingOfClaims();
+	public List<ClientDTO> getRankingClientsOfClaims() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException{
+		return StatisticsService.getIntance().getRankingClientsOfClaims();
+	}
+	public List<ClaimQuantityPerMonthDTO> getRankingClaimsPerMonth() throws ConnectionException, AccessException{
+		return StatisticsService.getIntance().getRankingClaimsPerMonth();
 	}
 	
 	

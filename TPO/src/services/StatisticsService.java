@@ -3,6 +3,7 @@ package services;
 import java.util.List;
 
 import dao.StatisticsDAO;
+import dto.ClaimQuantityPerMonthDTO;
 import dto.ClientDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
@@ -24,7 +25,11 @@ public class StatisticsService {
 		
 	}
 
-	public List<ClientDTO> getRankingOfClaims() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
-		return new StatisticsDAO().getRankingOfClaims();
+	public List<ClientDTO> getRankingClientsOfClaims() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
+		return new StatisticsDAO().getRankingClientsOfClaims();
+	}
+
+	public List<ClaimQuantityPerMonthDTO> getRankingClaimsPerMonth() throws ConnectionException, AccessException {
+		return new StatisticsDAO().getRankingClaimsPerMonth();
 	}
 }
