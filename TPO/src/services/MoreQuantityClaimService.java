@@ -10,6 +10,7 @@ import backEnd.Invoice;
 import backEnd.MoreQuantityClaim;
 import dao.ClientDAO;
 import dao.InvoiceDAO;
+import dao.MoreQuantityClaimDAO;
 import dao.ProductDAO;
 import dto.MoreQuantityClaimDTO;
 import dto.ProductItemDTO;
@@ -20,6 +21,9 @@ import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidProductException;
 import exceptions.InvalidProductItemException;
+import exceptions.InvalidRoleException;
+import exceptions.InvalidTransitionException;
+import exceptions.InvalidUserException;
 import exceptions.InvalidZoneException;
 import observer.Observable;
 
@@ -67,4 +71,22 @@ public class MoreQuantityClaimService extends Observable{
 		claimToSend.add(claim.toDTO());
 		updateObservers(claimToSend);
 	}
+
+	public List<MoreQuantityClaimDTO> getAllMoreQuantityClaimsDTO() throws ConnectionException, InvalidClaimException, InvalidInvoiceException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidProductItemException {
+		List<MoreQuantityClaimDTO> claimsDTO = new LinkedList<>();
+		
+		for (MoreQuantityClaim m : new MoreQuantityClaimDAO().getAllMoreQuantityClaims()) {
+			claimsDTO.add(m.toDTO());
+		}
+		return claimsDTO;
+	}
+	public List<MoreQuantityClaimDTO> getAllMoreQuantityClaimsDTOFromClient(int clientId) throws ConnectionException, InvalidClaimException, InvalidInvoiceException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidProductItemException {
+		List<MoreQuantityClaimDTO> claimsDTO = new LinkedList<>();
+		
+		for (MoreQuantityClaim m : new MoreQuantityClaimDAO().getAllMoreQuantityClaimsFromClient(clientId)) {
+			claimsDTO.add(m.toDTO());
+		}
+		return claimsDTO;
+	}
+	
 }

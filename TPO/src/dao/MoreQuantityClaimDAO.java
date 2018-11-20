@@ -6,9 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import backEnd.ClaimType;
 import backEnd.Client;
+import backEnd.IncompatibleZoneClaim;
 import backEnd.MoreQuantityClaim;
 import backEnd.ProductItem;
 import backEnd.State;
@@ -24,6 +27,8 @@ import exceptions.InvalidRoleException;
 import exceptions.InvalidTransitionException;
 import exceptions.InvalidUserException;
 import exceptions.InvalidZoneException;
+import services.ClientService;
+import services.ZoneService;
 
 public class MoreQuantityClaimDAO {
 
@@ -93,7 +98,7 @@ public class MoreQuantityClaimDAO {
 			
 			try {
 				if(rs.next()){
-					Client client = new ClientDAO().getClient(rs.getInt(6));
+					Client client = ClientService.getIntance().getClientById(rs.getInt(6));
 					MoreQuantityClaim newClaim = new MoreQuantityClaim(client, new Date(rs.getDate(8).getTime()), rs.getString(7), 
 							ClaimType.valueOf(rs.getString(2)), new InvoiceDAO().getInvoice(rs.getInt(3)));
 					newClaim.setClaimId(rs.getInt(1));
@@ -109,6 +114,52 @@ public class MoreQuantityClaimDAO {
 				else{
 					throw new InvalidInvoiceException("Invoice not found");
 				}
+				
+			} catch (SQLException e) {
+				throw new ConnectionException("Data not reachable");
+			}			
+		} finally {
+			SqlUtils.closeConnection(con);
+		}
+	}
+
+	
+	public List<MoreQuantityClaim> getAllMoreQuantityClaims() throws ConnectionException, InvalidClaimException, InvalidInvoiceException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidProductItemException{
+		String sql = "SELECT * FROM MoreQuantityClaims JOIN Claims ON MoreQuantityClaims.MoreQuantityId = Claims.ClaimId";
+		return getAllMoreQuantityClaims(sql);
+	}
+	
+	public List<MoreQuantityClaim> getAllMoreQuantityClaimsFromClient(int clientId) throws ConnectionException, InvalidClaimException, InvalidInvoiceException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidProductItemException{
+		String sql = "SELECT * FROM MoreQuantityClaims JOIN Claims ON MoreQuantityClaims.MoreQuantityId = Claims.ClaimId where claims.ClientId = " + clientId;
+		return getAllMoreQuantityClaims(sql);
+	}
+	
+	private List<MoreQuantityClaim> getAllMoreQuantityClaims(String sql) throws ConnectionException, InvalidClaimException, InvalidInvoiceException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidProductItemException {
+		Connection con = SqlUtils.getConnection();  
+		try {
+			Statement stmt = SqlUtils.createStatement(con);  
+			ResultSet rs = SqlUtils.executeQuery(stmt, con, sql);
+			
+			try {
+				List<MoreQuantityClaim> returnList = new LinkedList<>();
+				MoreQuantityClaim newClaim = null;
+				Client client = null;
+				
+				while(rs.next()){	
+					client = ClientService.getIntance().getClientById(rs.getInt(6));
+					newClaim = new MoreQuantityClaim(client, new Date(rs.getDate(8).getTime()), rs.getString(7), 
+							ClaimType.valueOf(rs.getString(2)), new InvoiceDAO().getInvoice(rs.getInt(3)));
+					newClaim.setClaimId(rs.getInt(1));
+					newClaim.setActualState(State.valueOf(rs.getString(5)));
+					for (ProductItem pi : ProductItemDAO.getProductItemsOfMoreQuantityClaim(newClaim)) {
+						newClaim.addProductItem(pi.getProduct(), pi.getQuantity());
+					}
+					for (Transition t : new TransitionDAO().getAllTransitionOfClaim(rs.getInt(1))) {
+						newClaim.addTransition(t);
+					}
+					returnList.add(newClaim);
+				}
+				return returnList;
 				
 			} catch (SQLException e) {
 				throw new ConnectionException("Data not reachable");

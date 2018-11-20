@@ -193,7 +193,12 @@ public class Controller {
 		return IncompatibleZoneClaimService.getIntance().getAllIncompatibleZoneClaimsDTOFromClient(clientId);
 	}
 	// MoreQuantityClaim
-	
+	public List<MoreQuantityClaimDTO> getAllMoreQuantityClaimsDTO() throws ConnectionException, InvalidClaimException, InvalidInvoiceException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidProductItemException{
+		return MoreQuantityClaimService.getIntance().getAllMoreQuantityClaimsDTO();
+	}
+	public List<MoreQuantityClaimDTO> getAllMoreQuantityClaimsDTOFromClient(int clientId) throws ConnectionException, InvalidClaimException, InvalidInvoiceException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidProductItemException{
+		return MoreQuantityClaimService.getIntance().getAllMoreQuantityClaimsDTOFromClient(clientId);
+	}
 	// WrongInvoicingClaim
 	
 	
