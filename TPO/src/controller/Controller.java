@@ -34,6 +34,7 @@ import services.IncompatibleZoneClaimService;
 import services.InvoiceService;
 import services.MoreQuantityClaimService;
 import services.ProductService;
+import services.StatisticsService;
 import services.UserService;
 import services.WrongInvoicingClaimService;
 import services.ZoneService;
@@ -203,6 +204,9 @@ public class Controller {
 	}
 	public List<WrongInvoicingClaimDTO> getAllWrongInvoicingClaimsDTOFromClient(int clientId) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException{
 		return WrongInvoicingClaimService.getIntance().getAllWrongInvoicingClaimsDTOFromClient(clientId);
+	}
+	public List<ClientDTO> getRankingOfClaims() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException{
+		return StatisticsService.getIntance().getRankingOfClaims();
 	}
 	
 	

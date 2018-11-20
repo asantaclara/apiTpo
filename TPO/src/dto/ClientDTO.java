@@ -9,12 +9,21 @@ public class ClientDTO {
 	private String phoneNumber;
 	private String email;
 	private String zone;
+	private int ranking;
+	private int claimsCount;
 	
 	
 	public ClientDTO() {
 
 	}
 
+	public int getClaimsCount() {
+		return claimsCount;
+	}
+	
+	public int getRanking() {
+		return ranking;
+	}
 	
 	public int getId() {
 		return id;
@@ -83,6 +92,14 @@ public class ClientDTO {
 
 	public void setZone(String zone) {
 		this.zone = zone;
+	}
+	
+	public void setClaimsCount(int claimsCount) {
+		this.claimsCount = claimsCount;
+	}
+	
+	public void setRanking(int ranking) {
+		this.ranking = ranking;
 	}
 	
 	
