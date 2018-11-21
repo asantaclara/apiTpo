@@ -1,10 +1,10 @@
 package test;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import controller.Controller;
-import dto.ClaimQuantityPerMonthDTO;
-import dto.ClientDTO;
+import dto.WrongInvoicingClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
@@ -208,10 +208,16 @@ public class App {
 //			System.out.println("Mes " + d.getMonth() + " Cantidad: " + d.getQuantity());
 //		}
 		
-		for (ClientDTO d : c.getRankingClientsOfClaims()) {
-			System.out.println(d.getName() + " " + d.getRanking() + " " + d.getClaimsCount());
-		}
+// test rankingOfClient
+//		for (ClientDTO d : c.getRankingClientsOfClaims()) {
+//			System.out.println(d.getName() + " " + d.getRanking() + " " + d.getClaimsCount());
+//		}
 		
+// test getAllWrongInvoicingClaimsDTOFromClient
+		
+		
+		List<WrongInvoicingClaimDTO> claims = c.getAllWrongInvoicingClaimsDTOFromClient(3);
+		System.out.println();
 	System.out.println("END");
 	}
 }

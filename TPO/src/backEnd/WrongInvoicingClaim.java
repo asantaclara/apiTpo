@@ -24,6 +24,7 @@ public class WrongInvoicingClaim extends IndividualClaim {
 	public void addInovice(Invoice invoice, String inconsistency) {
 		invoices.add(new InvoiceItem(invoice, inconsistency));
 	}
+	
 
 	@Override
 	public WrongInvoicingClaimDTO toDTO() {
@@ -53,6 +54,10 @@ public class WrongInvoicingClaim extends IndividualClaim {
 	
 	public List<InvoiceItem> getInvoices() {
 		return invoices;
+	}
+
+	public void addInvoiceItem(InvoiceItem i) {
+		invoices.add(i);
 	}
 
 }

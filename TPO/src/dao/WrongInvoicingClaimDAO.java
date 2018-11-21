@@ -98,7 +98,7 @@ public class WrongInvoicingClaimDAO {
 					newClaim.setClaimId(rs.getInt(1));
 					newClaim.setActualState(State.valueOf(rs.getString(3)));
 					for (InvoiceItem i : new InvoiceItemDAO().getAllInvoiceItemsOfClaim(newClaim)) {
-						newClaim.addInovice(i.getInvoice(), i.getInconsistency());
+						newClaim.addInvoiceItem(i);
 					}		
 					for (Transition t : new TransitionDAO().getAllTransitionOfClaim(rs.getInt(1))) {
 						newClaim.addTransition(t);
@@ -149,7 +149,7 @@ public class WrongInvoicingClaimDAO {
 					newClaim.setClaimId(rs.getInt(1));
 					newClaim.setActualState(State.valueOf(rs.getString(3)));
 					for (InvoiceItem i : new InvoiceItemDAO().getAllInvoiceItemsOfClaim(newClaim)) {
-						newClaim.addInovice(i.getInvoice(), i.getInconsistency());
+						newClaim.addInvoiceItem(i);
 					}		
 					for (Transition t : new TransitionDAO().getAllTransitionOfClaim(rs.getInt(1))) {
 						newClaim.addTransition(t);
