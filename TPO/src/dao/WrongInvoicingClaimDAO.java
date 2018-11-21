@@ -121,13 +121,16 @@ public class WrongInvoicingClaimDAO {
 		String sql = "SELECT * FROM WrongInvoiceClaims JOIN Claims ON Claims.ClaimId = WrongInvoiceClaims.WrongInvoiceId";
 		return getAllWrongInvoicingClaims(sql);
 	}
-
 	public List<WrongInvoicingClaim> getAllWrongInvoicingClaimsFromClient(int clientId) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException {
 		String sql = "SELECT * FROM WrongInvoiceClaims JOIN Claims ON Claims.ClaimId = WrongInvoiceClaims.WrongInvoiceId where Claims.ClientId = " + clientId;
 		return getAllWrongInvoicingClaims(sql);
 	}
+	public List<WrongInvoicingClaim> getAllClaimsForInvoiceResponsable() throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException {
+		String sql = "SELECT * FROM WrongInvoiceClaims JOIN Claims ON Claims.ClaimId = WrongInvoiceClaims.WrongInvoiceId where claims.state IN ('ENTERED','IN_TREATMENT')";
+		return getAllWrongInvoicingClaims(sql);
+	}
 	
-	public List<WrongInvoicingClaim> getAllWrongInvoicingClaims(String sql) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException{
+	private List<WrongInvoicingClaim> getAllWrongInvoicingClaims(String sql) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException{
 		Connection con = SqlUtils.getConnection();  
 		try {
 			Statement stmt = SqlUtils.createStatement(con);  
@@ -164,9 +167,6 @@ public class WrongInvoicingClaimDAO {
 		
 	}
 
-	public List<WrongInvoicingClaim> getAllClaimsForInvoiceResponsable() throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException {
-		String sql = "SELECT * FROM WrongInvoiceClaims JOIN Claims ON Claims.ClaimId = WrongInvoiceClaims.WrongInvoiceId where claims.state IN ('ENTERED','IN_TREATMENT')";
-		return getAllWrongInvoicingClaims(sql);
-	}
+	
 	
 }

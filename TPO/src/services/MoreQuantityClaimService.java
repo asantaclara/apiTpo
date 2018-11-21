@@ -6,12 +6,14 @@ import java.util.List;
 
 import backEnd.ClaimType;
 import backEnd.Client;
+import backEnd.IncompatibleZoneClaim;
 import backEnd.Invoice;
 import backEnd.MoreQuantityClaim;
 import dao.ClientDAO;
 import dao.InvoiceDAO;
 import dao.MoreQuantityClaimDAO;
 import dao.ProductDAO;
+import dto.IncompatibleZoneClaimDTO;
 import dto.MoreQuantityClaimDTO;
 import dto.ProductItemDTO;
 import exceptions.AccessException;
@@ -73,27 +75,20 @@ public class MoreQuantityClaimService extends Observable{
 	}
 
 	public List<MoreQuantityClaimDTO> getAllMoreQuantityClaimsDTO() throws ConnectionException, InvalidClaimException, InvalidInvoiceException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidProductItemException {
-		List<MoreQuantityClaimDTO> claimsDTO = new LinkedList<>();
-		
-		for (MoreQuantityClaim m : new MoreQuantityClaimDAO().getAllMoreQuantityClaims()) {
-			claimsDTO.add(m.toDTO());
-		}
-		return claimsDTO;
+		return listOfClaimsTODTO(new MoreQuantityClaimDAO().getAllMoreQuantityClaims());
 	}
 	public List<MoreQuantityClaimDTO> getAllMoreQuantityClaimsDTOFromClient(int clientId) throws ConnectionException, InvalidClaimException, InvalidInvoiceException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidProductItemException {
-		List<MoreQuantityClaimDTO> claimsDTO = new LinkedList<>();
-		
-		for (MoreQuantityClaim m : new MoreQuantityClaimDAO().getAllMoreQuantityClaimsFromClient(clientId)) {
-			claimsDTO.add(m.toDTO());
-		}
-		return claimsDTO;
+		return listOfClaimsTODTO(new MoreQuantityClaimDAO().getAllMoreQuantityClaimsFromClient(clientId));
 	}
 
 	public List<MoreQuantityClaimDTO> getAllClaimsForDistributionResponsable() throws ConnectionException, InvalidClaimException, InvalidInvoiceException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidProductItemException {
-List<MoreQuantityClaimDTO> claimsDTO = new LinkedList<>();
+		return listOfClaimsTODTO(new MoreQuantityClaimDAO().getAllClaimsForDistributionResponsable());
+	}
+	private List<MoreQuantityClaimDTO> listOfClaimsTODTO(List<MoreQuantityClaim> claims){
+		List<MoreQuantityClaimDTO> claimsDTO =  new LinkedList<>();
 		
-		for (MoreQuantityClaim m : new MoreQuantityClaimDAO().getAllClaimsForDistributionResponsable()) {
-			claimsDTO.add(m.toDTO());
+		for (MoreQuantityClaim i : claims) {
+			claimsDTO.add(i.toDTO());
 		}
 		return claimsDTO;
 	}

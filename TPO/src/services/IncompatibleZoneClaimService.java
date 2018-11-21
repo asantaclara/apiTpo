@@ -59,26 +59,18 @@ public class IncompatibleZoneClaimService extends Observable{
 	}
 
 	public List<IncompatibleZoneClaimDTO> getAllIncompatibleZoneClaimsDTO() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException {
-		List<IncompatibleZoneClaimDTO> claimsDTO =  new LinkedList<>();
-		
-		for (IncompatibleZoneClaim i : new IncompatibleZoneClaimDAO().getAllIncompatibleZoneClaims()) {
-			claimsDTO.add(i.toDTO());
-		}
-		return claimsDTO;
+		return listOfClaimsTODTO(new IncompatibleZoneClaimDAO().getAllIncompatibleZoneClaims());
 	}
 	public List<IncompatibleZoneClaimDTO> getAllIncompatibleZoneClaimsDTOFromClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidClaimException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException {
-		List<IncompatibleZoneClaimDTO> claimsDTO =  new LinkedList<>();
-		
-		for (IncompatibleZoneClaim i : new IncompatibleZoneClaimDAO().getAllIncompatibleZoneClaimsFromClient(clientId)) {
-			claimsDTO.add(i.toDTO());
-		}
-		return claimsDTO;
+		return listOfClaimsTODTO(new IncompatibleZoneClaimDAO().getAllIncompatibleZoneClaimsFromClient(clientId));
 	}
-
 	public List<IncompatibleZoneClaimDTO> getAllClaimsForZoneResponsable() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidClaimException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException {
+		return listOfClaimsTODTO(new IncompatibleZoneClaimDAO().getAllClaimsForZoneResponsable());
+	}
+	private List<IncompatibleZoneClaimDTO> listOfClaimsTODTO(List<IncompatibleZoneClaim> claims){
 		List<IncompatibleZoneClaimDTO> claimsDTO =  new LinkedList<>();
 		
-		for (IncompatibleZoneClaim i : new IncompatibleZoneClaimDAO().getAllClaimsForZoneResponsable()) {
+		for (IncompatibleZoneClaim i : claims) {
 			claimsDTO.add(i.toDTO());
 		}
 		return claimsDTO;

@@ -6,11 +6,13 @@ import java.util.List;
 
 import backEnd.Client;
 import backEnd.Invoice;
+import backEnd.MoreQuantityClaim;
 import backEnd.WrongInvoicingClaim;
 import dao.ClientDAO;
 import dao.InvoiceDAO;
 import dao.WrongInvoicingClaimDAO;
 import dto.InvoiceItemDTO;
+import dto.MoreQuantityClaimDTO;
 import dto.WrongInvoicingClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
@@ -73,28 +75,22 @@ public class WrongInvoicingClaimService extends Observable{
 	}
 
 	public List<WrongInvoicingClaimDTO> getAllWrongInvoicingClaimsDTO() throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException {
-		List<WrongInvoicingClaimDTO> claimsDTO =  new LinkedList<>();
 		
-		for (WrongInvoicingClaim w : new WrongInvoicingClaimDAO().getAllWrongInvoicingClaims()) {
-			claimsDTO.add(w.toDTO());
-		}
-		return claimsDTO;
+		return listOfClaimsTODTO(new WrongInvoicingClaimDAO().getAllWrongInvoicingClaims());
 	}
 
 	public List<WrongInvoicingClaimDTO> getAllWrongInvoicingClaimsDTOFromClient(int clientId) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException {
-		List<WrongInvoicingClaimDTO> claimsDTO =  new LinkedList<>();
-		
-		for (WrongInvoicingClaim w : new WrongInvoicingClaimDAO().getAllWrongInvoicingClaimsFromClient(clientId)) {
-			claimsDTO.add(w.toDTO());
-		}
-		return claimsDTO;
+		return listOfClaimsTODTO(new WrongInvoicingClaimDAO().getAllWrongInvoicingClaimsFromClient(clientId));
 	}
 
 	public List<WrongInvoicingClaimDTO> getAllClaimsForInvoiceResponsable() throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException {
+		return listOfClaimsTODTO(new WrongInvoicingClaimDAO().getAllClaimsForInvoiceResponsable());
+	}
+	private List<WrongInvoicingClaimDTO> listOfClaimsTODTO(List<WrongInvoicingClaim> claims){
 		List<WrongInvoicingClaimDTO> claimsDTO =  new LinkedList<>();
 		
-		for (WrongInvoicingClaim w : new WrongInvoicingClaimDAO().getAllClaimsForInvoiceResponsable()) {
-			claimsDTO.add(w.toDTO());
+		for (WrongInvoicingClaim i : claims) {
+			claimsDTO.add(i.toDTO());
 		}
 		return claimsDTO;
 	}
