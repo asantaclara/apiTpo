@@ -50,7 +50,7 @@ public class InvoiceDTO {
 		
 		aux[0] = String.valueOf(invoiceId);
 		aux[1] = date.toString();
-		aux[1] = String.valueOf(clientId);
+		aux[2] = String.valueOf(clientId);
 		
 		return aux;
 	}

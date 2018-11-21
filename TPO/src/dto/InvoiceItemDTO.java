@@ -17,5 +17,13 @@ public class InvoiceItemDTO {
 		return inconsistency;
 	}
 	
+	public String[] toDataRow() {
+		String[] aux = new String[3];
+		
+		aux[0] = String.valueOf(invoiceId);
+		aux[1] = inconsistency;
+		
+		return aux;
+	}
 	
 }
