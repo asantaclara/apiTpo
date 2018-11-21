@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import controller.Controller;
+import dto.ClaimsPerCategoryDTO;
 import dto.WrongInvoicingClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
@@ -213,11 +214,13 @@ public class App {
 //			System.out.println(d.getName() + " " + d.getRanking() + " " + d.getClaimsCount());
 //		}
 		
-// test getAllWrongInvoicingClaimsDTOFromClient
+// test getAllWrongInvoicingClaimsDTOFromClient	
+//		List<WrongInvoicingClaimDTO> claims = c.getAllWrongInvoicingClaimsDTOFromClient(3);
+//		System.out.println();
 		
+// test getAumountOfClaims
+		ClaimsPerCategoryDTO aux = c.getAmountOfClaimsPerCategory();
 		
-		List<WrongInvoicingClaimDTO> claims = c.getAllWrongInvoicingClaimsDTOFromClient(3);
-		System.out.println();
-	System.out.println("END");
+		System.out.println("END");
 	}
 }

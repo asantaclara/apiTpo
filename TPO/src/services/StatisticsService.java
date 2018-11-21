@@ -4,6 +4,7 @@ import java.util.List;
 
 import dao.StatisticsDAO;
 import dto.ClaimQuantityPerMonthDTO;
+import dto.ClaimsPerCategoryDTO;
 import dto.ClientDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
@@ -32,4 +33,9 @@ public class StatisticsService {
 	public List<ClaimQuantityPerMonthDTO> getRankingClaimsPerMonth() throws ConnectionException, AccessException {
 		return new StatisticsDAO().getRankingClaimsPerMonth();
 	}
+
+	public ClaimsPerCategoryDTO getAmountOfClaimsPerCategory() throws AccessException, ConnectionException {
+		return new StatisticsDAO().getAmountOfClaimsPerCategory();
+	}
+
 }

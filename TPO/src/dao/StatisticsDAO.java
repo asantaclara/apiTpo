@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import dto.ClaimQuantityPerMonthDTO;
+import dto.ClaimsPerCategoryDTO;
 import dto.ClientDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
@@ -62,6 +63,35 @@ public class StatisticsDAO {
 					returnList.add(month);
 				}
 				return returnList;
+				
+			} catch (SQLException e) {
+				throw new ConnectionException("Data not reachable");
+			}			
+		} finally {
+			SqlUtils.closeConnection(con);
+		}
+	}
+
+	public ClaimsPerCategoryDTO getAmountOfClaimsPerCategory() throws AccessException, ConnectionException {
+		Connection con = SqlUtils.getConnection();  
+		try {
+			Statement stmt = SqlUtils.createStatement(con); 
+			String sql = "SELECT count(IncompatibleZoneClaims.IncompatibleZoneId) as IncompatibleZone, count(MoreQuantityClaims.MoreQuantityId) as MoreQuantity, "
+					+ "count(WrongInvoiceClaims.WrongInvoiceId) as WrongInvoicing, count(claims.claimId) as Total FROM Claims "
+					+ "LEFT JOIN WrongInvoiceClaims ON CLAIMS.ClaimId = WrongInvoiceClaims.WrongInvoiceId "
+					+ "LEFT JOIN IncompatibleZoneClaims ON Claims.ClaimId = IncompatibleZoneClaims.IncompatibleZoneId "
+					+ "LEFT JOIN MoreQuantityClaims ON Claims.ClaimId = MoreQuantityClaims.MoreQuantityId";
+			ResultSet rs = SqlUtils.executeQuery(stmt, con, sql);
+			
+			try {
+				ClaimsPerCategoryDTO claims = new ClaimsPerCategoryDTO();
+				if(rs.next()){	
+					claims.setIncompatibleZoneClaims(rs.getInt(1));
+					claims.setMoreQuantityClaims(rs.getInt(2));
+					claims.setWrongInvoicingClaims(rs.getInt(3));
+					claims.setCompositeClaims(rs.getInt(4)-rs.getInt(3)-rs.getInt(2)-rs.getInt(1));
+				}
+				return claims;
 				
 			} catch (SQLException e) {
 				throw new ConnectionException("Data not reachable");

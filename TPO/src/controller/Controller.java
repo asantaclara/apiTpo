@@ -5,6 +5,7 @@ import java.util.List;
 
 import dto.ClaimDTO;
 import dto.ClaimQuantityPerMonthDTO;
+import dto.ClaimsPerCategoryDTO;
 import dto.ClientDTO;
 import dto.CompositeClaimDTO;
 import dto.IncompatibleZoneClaimDTO;
@@ -221,6 +222,8 @@ public class Controller {
 	public List<ClaimQuantityPerMonthDTO> getRankingClaimsPerMonth() throws ConnectionException, AccessException{
 		return StatisticsService.getIntance().getRankingClaimsPerMonth();
 	}
-	
+	public ClaimsPerCategoryDTO getAmountOfClaimsPerCategory() throws AccessException, ConnectionException {
+		return StatisticsService.getIntance().getAmountOfClaimsPerCategory();
+	}
 	
 }
