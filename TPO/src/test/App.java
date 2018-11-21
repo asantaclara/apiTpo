@@ -219,7 +219,8 @@ public class App {
 //		System.out.println();
 		
 // test getAumountOfClaims
-		ClaimsPerCategoryDTO aux = c.getAmountOfClaimsPerCategory();
+//		ClaimsPerCategoryDTO aux = c.getAmountOfClaimsPerCategory();
+//		
 		
 		System.out.println("END");
 	}

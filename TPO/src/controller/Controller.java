@@ -216,6 +216,9 @@ public class Controller {
 	public List<MoreQuantityClaimDTO> getAllClaimsForDistributionResponsable() throws ConnectionException, InvalidClaimException, InvalidInvoiceException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidProductItemException{
 		return MoreQuantityClaimService.getIntance().getAllClaimsForDistributionResponsable();
 	}
+	public ClaimDTO getClaimById(int claimId) {
+		return ClaimService.getIntance().getClaimDTO(claimId);
+	}
 	public List<ClientDTO> getRankingClientsOfClaims() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException{
 		return StatisticsService.getIntance().getRankingClientsOfClaims();
 	}
@@ -225,5 +228,6 @@ public class Controller {
 	public ClaimsPerCategoryDTO getAmountOfClaimsPerCategory() throws AccessException, ConnectionException {
 		return StatisticsService.getIntance().getAmountOfClaimsPerCategory();
 	}
+	
 	
 }

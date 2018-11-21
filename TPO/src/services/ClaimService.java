@@ -76,4 +76,8 @@ public class ClaimService extends Observable{
 	public Claim getClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException {
 		return new ClaimDAO().getClaim(claimId);
 	}
+
+	public ClaimDTO getClaimDTO(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException {
+		return getClaim(claimId).toDTO();
+	}
 }
