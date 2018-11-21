@@ -89,4 +89,13 @@ public class WrongInvoicingClaimService extends Observable{
 		}
 		return claimsDTO;
 	}
+
+	public List<WrongInvoicingClaimDTO> getAllClaimsForInvoiceResponsable() throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException {
+		List<WrongInvoicingClaimDTO> claimsDTO =  new LinkedList<>();
+		
+		for (WrongInvoicingClaim w : new WrongInvoicingClaimDAO().getAllClaimsForInvoiceResponsable()) {
+			claimsDTO.add(w.toDTO());
+		}
+		return claimsDTO;
+	}
 }

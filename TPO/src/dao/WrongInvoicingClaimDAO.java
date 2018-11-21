@@ -163,5 +163,10 @@ public class WrongInvoicingClaimDAO {
 		}
 		
 	}
+
+	public List<WrongInvoicingClaim> getAllClaimsForInvoiceResponsable() throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException {
+		String sql = "SELECT * FROM WrongInvoiceClaims JOIN Claims ON Claims.ClaimId = WrongInvoiceClaims.WrongInvoiceId where claims.state IN ('ENTERED','IN_TREATMENT')";
+		return getAllWrongInvoicingClaims(sql);
+	}
 	
 }

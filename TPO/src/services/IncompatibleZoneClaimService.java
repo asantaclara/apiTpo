@@ -74,5 +74,14 @@ public class IncompatibleZoneClaimService extends Observable{
 		}
 		return claimsDTO;
 	}
+
+	public List<IncompatibleZoneClaimDTO> getAllClaimsForZoneResponsable() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidClaimException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException {
+		List<IncompatibleZoneClaimDTO> claimsDTO =  new LinkedList<>();
+		
+		for (IncompatibleZoneClaim i : new IncompatibleZoneClaimDAO().getAllClaimsForZoneResponsable()) {
+			claimsDTO.add(i.toDTO());
+		}
+		return claimsDTO;
+	}
 	
 }
