@@ -94,4 +94,8 @@ public class WrongInvoicingClaimService extends Observable{
 		}
 		return claimsDTO;
 	}
+
+	public List<WrongInvoicingClaimDTO> getAllOpenWrongInvoicingClaimsByClient(int clientId) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException {
+		return listOfClaimsTODTO(new WrongInvoicingClaimDAO().getAllOpenWrongInvoicingClaimsByClient(clientId));
+	}
 }

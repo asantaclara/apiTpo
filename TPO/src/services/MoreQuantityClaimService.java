@@ -92,5 +92,9 @@ public class MoreQuantityClaimService extends Observable{
 		}
 		return claimsDTO;
 	}
+
+	public List<MoreQuantityClaimDTO> getAllOpenMoreQuantityClaimsByClient(int clientId) throws ConnectionException, InvalidClaimException, InvalidInvoiceException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidProductItemException {
+		return listOfClaimsTODTO(new MoreQuantityClaimDAO().getAllOpenMoreQuantityClaimsByClient(clientId));
+	}
 	
 }

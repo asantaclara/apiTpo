@@ -216,9 +216,24 @@ public class Controller {
 	public List<MoreQuantityClaimDTO> getAllClaimsForDistributionResponsable() throws ConnectionException, InvalidClaimException, InvalidInvoiceException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidProductItemException{
 		return MoreQuantityClaimService.getIntance().getAllClaimsForDistributionResponsable();
 	}
-	public ClaimDTO getClaimById(int claimId) {
+	public ClaimDTO getClaimById(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException {
 		return ClaimService.getIntance().getClaimDTO(claimId);
 	}
+	public List<WrongInvoicingClaimDTO> getAllOpenWrongInvoicingClaimsByClient(int clientId) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException{
+		return WrongInvoicingClaimService.getIntance().getAllOpenWrongInvoicingClaimsByClient(clientId);
+	}
+	public List<IncompatibleZoneClaimDTO> getAllOpenIncompatibleZoneClaimsByClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidClaimException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException{
+		return IncompatibleZoneClaimService.getIntance().getAllOpenIncompatibleZoneClaimsByClient(clientId);
+	}
+	public List<MoreQuantityClaimDTO> getAllOpenMoreQuantityClaimsByClient(int clientId) throws ConnectionException, InvalidClaimException, InvalidInvoiceException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidProductItemException{
+		return MoreQuantityClaimService.getIntance().getAllOpenMoreQuantityClaimsByClient(clientId);
+	}
+	
+	
+	
+	
+	
+	
 	public List<ClientDTO> getRankingClientsOfClaims() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException{
 		return StatisticsService.getIntance().getRankingClientsOfClaims();
 	}

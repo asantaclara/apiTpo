@@ -75,5 +75,9 @@ public class IncompatibleZoneClaimService extends Observable{
 		}
 		return claimsDTO;
 	}
+
+	public List<IncompatibleZoneClaimDTO> getAllOpenIncompatibleZoneClaimsByClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidClaimException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException {
+		return listOfClaimsTODTO(new IncompatibleZoneClaimDAO().getAllOpenIncompatibleZoneClaimsByClient(clientId));
+	}
 	
 }

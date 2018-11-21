@@ -174,4 +174,9 @@ public class MoreQuantityClaimDAO {
 		return getAllMoreQuantityClaims(sql);
 	}
 
+	public List<MoreQuantityClaim> getAllOpenMoreQuantityClaimsByClient(int clientId) throws ConnectionException, InvalidClaimException, InvalidInvoiceException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidProductItemException {
+		String sql = "SELECT * FROM MoreQuantityClaims JOIN Claims ON Claims.ClaimId = MoreQuantityClaims.MoreQuantityId where claims.state IN ('ENTERED','IN_TREATMENT') and claims.ClientId = " + clientId;
+		return getAllMoreQuantityClaims(sql);
+	}
+
 }
