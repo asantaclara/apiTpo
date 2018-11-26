@@ -8,7 +8,27 @@ public class UserDTO {
 	private String secondaryRole;
 	private String userName;
 	private String password;
+	private int ranking;
+	private int avgReponseTime;
 	
+	
+	
+	public int getRanking() {
+		return ranking;
+	}
+
+	public int getAvgReponseTime() {
+		return avgReponseTime;
+	}
+
+	public void setRanking(int ranking) {
+		this.ranking = ranking;
+	}
+
+	public void setAvgReponseTime(int avgReponseTime) {
+		this.avgReponseTime = avgReponseTime;
+	}
+
 	public UserDTO() {
 	
 	}

@@ -5,8 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import backEnd.Claim;
 import exceptions.AccessException;
@@ -73,16 +75,23 @@ public class ClaimDAO {
 			rs = SqlUtils.executeQuery(stmt, con, sqlQuery);
 			
 			List<Claim> claims = new LinkedList<>();
+			List<Integer> claimsId = new LinkedList<>();
 			try {
 				while(rs.next()){
 					if(rs.getInt(9) != 0) { // If is a CompositeClaim
-						claims.add(new CompositeClaimDAO().getCompositeClaim(rs.getInt(1)));
+						if(!claimsId.contains(rs.getInt(1))) {
+							claims.add(new CompositeClaimDAO().getCompositeClaim(rs.getInt(1)));
+							claimsId.add(rs.getInt(1));							
+						}
 					} else if(rs.getInt(7) != 0){ // If is a IncompatibleZoneClaim
 						claims.add(new IncompatibleZoneClaimDAO().getIncompatibleZoneClaim(rs.getInt(1)));
+						claimsId.add(rs.getInt(1));
 					} else if(rs.getInt(6) != 0) { // If is a WrongInvoicingClaim
 						claims.add(new WrongInvoicingClaimDAO().getWrongInvoicingClaim(rs.getInt(1)));
+						claimsId.add(rs.getInt(1));
 					} else if(rs.getInt(11) != 0) { // If is a MoreQuantityClaim
 						claims.add(new MoreQuantityClaimDAO().getMoreQuantityClaim(rs.getInt(1)));
+						claimsId.add(rs.getInt(1));
 					} else {
 						throw new InvalidClaimException("Claim not found");
 					}

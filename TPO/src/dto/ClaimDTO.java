@@ -50,13 +50,14 @@ public abstract class ClaimDTO {
 	}
 	
 	public String[] toDataRow() {
-		String[] aux = new String[5];
+		String[] aux = new String[6];
 		
 		aux[0] = String.valueOf(claimId);
 		aux[1] = String.valueOf(clientId);
 		aux[2] = date.toString();
 		aux[3] = description;
 		aux[4] = state;
+		aux[5] = this.getClass().getName().substring(4).replace("DTO", "");
 		
 		return aux;
 	}

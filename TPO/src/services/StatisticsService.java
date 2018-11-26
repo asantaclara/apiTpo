@@ -6,9 +6,12 @@ import dao.StatisticsDAO;
 import dto.ClaimQuantityPerMonthDTO;
 import dto.ClaimsPerCategoryDTO;
 import dto.ClientDTO;
+import dto.UserDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClientException;
+import exceptions.InvalidRoleException;
+import exceptions.InvalidUserException;
 import exceptions.InvalidZoneException;
 
 public class StatisticsService {
@@ -36,6 +39,10 @@ public class StatisticsService {
 
 	public ClaimsPerCategoryDTO getAmountOfClaimsPerCategory() throws AccessException, ConnectionException {
 		return new StatisticsDAO().getAmountOfClaimsPerCategory();
+	}
+
+	public List<UserDTO> getRankingOfUsers() throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
+		return new StatisticsDAO().getRankingOfUsers();
 	}
 
 }

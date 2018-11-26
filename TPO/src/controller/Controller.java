@@ -242,7 +242,11 @@ public class Controller {
 	}
 	public ClaimsPerCategoryDTO getAmountOfClaimsPerCategory() throws AccessException, ConnectionException {
 		return StatisticsService.getIntance().getAmountOfClaimsPerCategory();
+	}	
+	public List<UserDTO> getRankingOfUsers() throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException{
+		return StatisticsService.getIntance().getRankingOfUsers();
 	}
+	
 	
 	
 }

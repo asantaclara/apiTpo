@@ -65,7 +65,6 @@ public class User {
 	
 	public void save() throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException {
 		new UserDAO().save(this);
-		System.out.println("Termino con el save de la clase User");
 	}
 	
 	public void modify() throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException {
