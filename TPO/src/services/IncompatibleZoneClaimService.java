@@ -45,17 +45,11 @@ public class IncompatibleZoneClaimService extends Observable{
 			
 			IncompatibleZoneClaim newClaim = new IncompatibleZoneClaim(existingClient, new Date(), description, existingClient.getZone());
 			newClaim.save();
-			updateObservers(newClaim);
+			updateObservers();
 			return newClaim.getClaimId();
 		
 		}
 		throw new InvalidClientException("Client not found");
-	}
-	
-	private void updateObservers(IncompatibleZoneClaim claim) {
-		List<IncompatibleZoneClaimDTO> claimToSend = new LinkedList<>();
-		claimToSend.add(claim.toDTO());
-		updateObservers(claimToSend);
 	}
 
 	public List<IncompatibleZoneClaimDTO> getAllIncompatibleZoneClaimsDTO() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException {

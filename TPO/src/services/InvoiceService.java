@@ -51,13 +51,13 @@ public class InvoiceService extends Observable{
 		}		
 		
 		newInvoice.save();
-		updateObservers(newInvoice);
+		updateObservers();
 		return newInvoice.getId();
 	}
 	public void removeInvoice(InvoiceDTO dto) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException {
 		Invoice existingInvoice = new InvoiceDAO().getInvoice(dto.getInvoiceId());
 		existingInvoice.deactivateInvoice();
-		updateObservers(existingInvoice);
+		updateObservers();
 	}
 
 	public List<InvoiceDTO> getInvoicesByClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException {
@@ -70,13 +70,6 @@ public class InvoiceService extends Observable{
 		return aux;
 		
 	}
-	
-	private void updateObservers(Invoice invoice) {
-		List<InvoiceDTO> invoiceToSend = new LinkedList<>();
-		invoiceToSend.add(invoice.toDTO());
-		updateObservers(invoiceToSend);
-	}
-	
 	public Invoice getInvoiceById(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException {
 		return new InvoiceDAO().getInvoice(invoiceId);
 	}

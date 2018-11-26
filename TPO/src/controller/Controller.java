@@ -23,12 +23,14 @@ import exceptions.InvalidClaimException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidInvoiceItemException;
+import exceptions.InvalidObserverException;
 import exceptions.InvalidProductException;
 import exceptions.InvalidProductItemException;
 import exceptions.InvalidRoleException;
 import exceptions.InvalidTransitionException;
 import exceptions.InvalidUserException;
 import exceptions.InvalidZoneException;
+import observer.Observer;
 import services.ClaimService;
 import services.ClientService;
 import services.CompositeClaimService;
@@ -247,6 +249,69 @@ public class Controller {
 		return StatisticsService.getIntance().getRankingOfUsers();
 	}
 	
+	//-------------------------------ADD OBSERVERS-------------------------------------
+	public void addObserverToClaimService(Observer o) throws InvalidObserverException {
+		ClaimService.getIntance().addObserver(o);
+	}
+	public void addObserverToClientService(Observer o) throws InvalidObserverException {
+		ClientService.getIntance().addObserver(o);
+	}
+	public void addObserverToCompositeClaimService(Observer o) throws InvalidObserverException {
+		CompositeClaimService.getIntance().addObserver(o);
+	}
+	public void addObserverToIncompatibleZoneClaimService(Observer o) throws InvalidObserverException {
+		IncompatibleZoneClaimService.getIntance().addObserver(o);
+	}
+	public void addObserverToInvoiceService(Observer o) throws InvalidObserverException {
+		InvoiceService.getIntance().addObserver(o);
+	}
+	public void addObserverToMoreQuantityClaimService(Observer o) throws InvalidObserverException {
+		MoreQuantityClaimService.getIntance().addObserver(o);
+	}
+	public void addObserverToProductService(Observer o) throws InvalidObserverException {
+		ProductService.getIntance().addObserver(o);
+	}
+	public void addObserverToUserService(Observer o) throws InvalidObserverException {
+		UserService.getIntance().addObserver(o);
+	}
+	public void addObserverToWrongInvoicingClaimService(Observer o) throws InvalidObserverException {
+		WrongInvoicingClaimService.getIntance().addObserver(o);
+	}
+	public void addObserverToZoneService(Observer o) throws InvalidObserverException {
+		ZoneService.getIntance().addObserver(o);
+	}
 	
+	//--------------------------REMOVE OBSERVERS-----------------------------------
+	
+	public void removeObserverToClaimService(Observer o) throws InvalidObserverException {
+		ClaimService.getIntance().removeObserver(o);
+	}
+	public void removeObserverToClientService(Observer o) throws InvalidObserverException {
+		ClientService.getIntance().removeObserver(o);
+	}
+	public void removeObserverToCompositeClaimService(Observer o) throws InvalidObserverException {
+		CompositeClaimService.getIntance().removeObserver(o);
+	}
+	public void removeObserverToIncompatibleZoneClaimService(Observer o) throws InvalidObserverException {
+		IncompatibleZoneClaimService.getIntance().removeObserver(o);
+	}
+	public void removeObserverToInvoiceService(Observer o) throws InvalidObserverException {
+		InvoiceService.getIntance().removeObserver(o);
+	}
+	public void removeObserverToMoreQuantityClaimService(Observer o) throws InvalidObserverException {
+		MoreQuantityClaimService.getIntance().removeObserver(o);
+	}
+	public void removeObserverToProductService(Observer o) throws InvalidObserverException {
+		ProductService.getIntance().removeObserver(o);
+	}
+	public void removeObserverToUserService(Observer o) throws InvalidObserverException {
+		UserService.getIntance().removeObserver(o);
+	}
+	public void removeObserverToWrongInvoicingClaimService(Observer o) throws InvalidObserverException {
+		WrongInvoicingClaimService.getIntance().removeObserver(o);
+	}
+	public void removeObserverToZoneService(Observer o) throws InvalidObserverException {
+		ZoneService.getIntance().removeObserver(o);
+	}
 	
 }

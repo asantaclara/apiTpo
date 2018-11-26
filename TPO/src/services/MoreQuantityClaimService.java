@@ -64,14 +64,8 @@ public class MoreQuantityClaimService extends Observable{
 		}
 		
 		newClaim.save();
-		updateObservers(newClaim);
+		updateObservers();
 		return newClaim.getClaimId();
-	}
-	
-	private void updateObservers(MoreQuantityClaim claim) {
-		List<MoreQuantityClaimDTO> claimToSend = new LinkedList<>();
-		claimToSend.add(claim.toDTO());
-		updateObservers(claimToSend);
 	}
 
 	public List<MoreQuantityClaimDTO> getAllMoreQuantityClaimsDTO() throws ConnectionException, InvalidClaimException, InvalidInvoiceException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidProductItemException {

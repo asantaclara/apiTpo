@@ -64,15 +64,10 @@ public class WrongInvoicingClaimService extends Observable{
 			}
 		}
 		newClaim.save();
-		updateObservers(newClaim);
+		updateObservers();
 		return newClaim.getClaimId();
 	}
 	
-	private void updateObservers(WrongInvoicingClaim claim) {
-		List<WrongInvoicingClaimDTO> claimToSend = new LinkedList<>();
-		claimToSend.add(claim.toDTO());
-		updateObservers(claimToSend);
-	}
 
 	public List<WrongInvoicingClaimDTO> getAllWrongInvoicingClaimsDTO() throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException {
 		

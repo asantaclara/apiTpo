@@ -48,21 +48,16 @@ public class ZoneService extends Observable{
 	public int addZone(String zoneName) throws ConnectionException, AccessException, InvalidZoneException {
 		Zone newZone = new Zone(zoneName);
 		newZone.save();
-		updateObservers(newZone);
+		updateObservers();
 		return newZone.getId();
 	}
-	
-	private void updateObservers(Zone z) {
-		List<ZoneDTO> zoneToSend = new LinkedList<>();
-		zoneToSend.add(z.toDTO());
-		updateObservers(zoneToSend);
-	}
+
 
 	public void modifyZone(ZoneDTO dto) throws AccessException, InvalidZoneException, ConnectionException {
 		Zone existingZone = new ZoneDAO().getZone(dto.getZoneId());
 		existingZone.setName(dto.getName());
 		existingZone.modify();
-		updateObservers(existingZone);
+		updateObservers();
 	}
 
 	

@@ -33,7 +33,7 @@ public class UserService extends Observable{
 		if(dto.getName() != null && dto.getPrincipalRole() != null && dto.getUserName() != null && dto.getPassword() != null) {			
 			User u = new User(dto.getName(),Roles.valueOf(dto.getPrincipalRole()), dto.getUserName(), dto.getPassword());
 			u.save();
-			updateObservers(u);
+			updateObservers();
 			return u.getId();
 		} else {
 			throw new InvalidUserException("Parameters missing");
@@ -46,7 +46,7 @@ public class UserService extends Observable{
 		
 		if (existingUser != null) {
 			existingUser.modify(dto.getName(), (dto.getPrincipalRole() == null) ? null : Roles.valueOf(dto.getPrincipalRole()), dto.getUserName(), dto.getPassword());
-			updateObservers(existingUser);
+			updateObservers();
 		}
 	}
 
@@ -54,7 +54,7 @@ public class UserService extends Observable{
 		User userToRemove = new UserDAO().getUser(dto.getUserId());
 		
 		userToRemove.deactivateUser(); //Aca desactivo al usuario para que no se pueda usar mas en el programa.
-		updateObservers(userToRemove);
+		updateObservers();
 	}
 
 	public boolean userExists(UserDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
@@ -100,7 +100,7 @@ public class UserService extends Observable{
 	
 			existingUser.addRole(Roles.valueOf(dto.getRole()));
 			existingUser.modify();
-			updateObservers(existingUser);
+			updateObservers();
 		}
 	}
 	
@@ -114,14 +114,8 @@ public class UserService extends Observable{
 		if(existingUser != null) {			
 			existingUser.removeRole();
 			existingUser.modify();
-			updateObservers(existingUser);
+			updateObservers();
 		}
-	}
-
-	private void updateObservers(User u) {
-		List<UserDTO> userToSend = new LinkedList<>();
-		userToSend.add(u.toDTO());
-		updateObservers(userToSend);
 	}
 
 	public User getUserById(int userId) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {

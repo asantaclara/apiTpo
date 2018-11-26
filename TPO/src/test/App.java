@@ -386,11 +386,12 @@ public class App {
 		
 // test getUserRanking
 		
-		for (UserDTO u : c.getRankingOfUsers()) {
-			System.out.println(u.getName());
-			System.out.println(u.getRanking());
-			System.out.println(u.getAvgReponseTime());
-		}
+//		for (UserDTO u : c.getRankingOfUsers()) {
+//			System.out.println(u.getName());
+//			System.out.println(u.getRanking());
+//			System.out.println(u.getAvgReponseTime());
+//		}
+		
 		System.out.println("END");
 	}
 }

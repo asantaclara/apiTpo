@@ -52,7 +52,7 @@ public class ClaimService extends Observable{
 		
 		Claim aux = getClaim(dto.getClaimId());
 		aux.treatClaim(UserService.getIntance().getUserById(dto.getResponsableId()), State.valueOf(dto.getNewState()), dto.getDescription());
-		updateObservers(aux);
+		updateObservers();
 		
 		CompositeClaimService.getIntance().updateCompositeClaims(aux.getClaimId());
 	}
@@ -65,12 +65,6 @@ public class ClaimService extends Observable{
 		}
 		
 		return claims;
-	}
-	
-	private void updateObservers(Claim claim) {
-		List<ClaimDTO> claimToSend = new LinkedList<>();
-		claimToSend.add(claim.toDTO());
-		updateObservers(claimToSend);
 	}
 	
 	public Claim getClaim(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException {

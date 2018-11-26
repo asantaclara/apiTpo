@@ -51,23 +51,20 @@ public class CompositeClaimService extends Observable{
 			}
 		}
 		claim.save();
-		updateObservers(claim);
+		updateObservers();
 		
 		return claim.getClaimId();
 	}
 	
 	public List<CompositeClaim> updateCompositeClaims(int individualClaimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException{
-		List<CompositeClaim> compositeClaims = new CompositeClaimDAO().getAllClaimsByIndividualClaim(individualClaimId);
+		List<CompositeClaim> compositeClaims = new CompositeClaimDAO().getAllClaimsByIndividualClaim(individualClaimId);		
 		for (CompositeClaim compositeClaim : compositeClaims) {
 			new ClaimDAO().updateState(compositeClaim);
+
 		}
-		updateObservers(compositeClaims);
+		updateObservers();
+		
 		return compositeClaims;
 	}
 	
-	private void updateObservers(CompositeClaim compositeClaim) {
-		List<CompositeClaimDTO> compositeClaimToSend = new LinkedList<>();
-		compositeClaimToSend.add(compositeClaim.toDTO());
-		updateObservers(compositeClaimToSend);
-	}
 }

@@ -35,7 +35,7 @@ public class ProductService extends Observable{
 	public int addProduct(ProductDTO dto) throws ConnectionException, AccessException, InvalidProductException {
 		Product p = new Product(dto.getTitle(), dto.getDescription(), dto.getPrice());
 		p.save();
-		updateObservers(p);
+		updateObservers();
 		return p.getProductId();
 	}
 	public void modifyProduct(ProductDTO dto) throws ConnectionException, AccessException, InvalidProductException {
@@ -47,14 +47,14 @@ public class ProductService extends Observable{
 		
 		if(existingProduct != null) {
 			existingProduct.modify(dto.getTitle(), dto.getDescription(), dto.getPrice());
-			updateObservers(existingProduct);
+			updateObservers();
 		}
 	}
 	public void removeProduct(ProductDTO dto) throws ConnectionException, AccessException, InvalidProductException {
 		Product productToRemove = new ProductDAO().getProduct(dto.getProductId());
 		
 		productToRemove.deactivateProduct();
-		updateObservers(productToRemove);
+		updateObservers();
 	}
 
 	public List<ProductDTO> getInvoiceProducts(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException {
@@ -85,12 +85,6 @@ public class ProductService extends Observable{
 	
 	public Product getProductById(int productId) throws ConnectionException, AccessException, InvalidProductException {
 		return new ProductDAO().getProduct(productId);
-	}
-	
-	private void updateObservers(Product p) {
-		List<ProductDTO> productToSend = new LinkedList<>();
-		productToSend.add(p.toDTO());
-		updateObservers(productToSend);
 	}
 	
 }
