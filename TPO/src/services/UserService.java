@@ -121,4 +121,13 @@ public class UserService extends Observable{
 	public User getUserById(int userId) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
 		return new UserDAO().getUser(userId);
 	}
+
+	public List<UserDTO> getAllUsers() throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException {
+		List<UserDTO> returnList = new LinkedList<>();
+		
+		for (User u : new UserDAO().getAllUsers()) {
+			returnList.add(u.toDTO());
+		}
+		return returnList;
+	}
 }

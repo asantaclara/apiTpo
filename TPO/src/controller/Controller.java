@@ -230,7 +230,9 @@ public class Controller {
 	public List<MoreQuantityClaimDTO> getAllOpenMoreQuantityClaimsByClient(int clientId) throws ConnectionException, InvalidClaimException, InvalidInvoiceException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidProductItemException{
 		return MoreQuantityClaimService.getIntance().getAllOpenMoreQuantityClaimsByClient(clientId);
 	}
-	
+	public List<UserDTO> getAllUsers() throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException{
+		return UserService.getIntance().getAllUsers();
+	}
 	
 	
 	
