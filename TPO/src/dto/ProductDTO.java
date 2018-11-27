@@ -41,6 +41,9 @@ public class ProductDTO {
 	public float getPrice() {
 		return price;
 	}
-	
+	@Override
+	public String toString() {
+		return title + " " + productId;
+	}
 	
 }
