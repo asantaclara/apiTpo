@@ -82,5 +82,9 @@ public class UserDTO {
 		return secondaryRole;
 	}
 	
+	@Override
+	public String toString() {
+		return userName;
+	}
 	
 }

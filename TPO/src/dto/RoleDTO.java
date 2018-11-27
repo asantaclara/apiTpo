@@ -37,4 +37,8 @@ public class RoleDTO {
 		return role;
 	}
 
+	@Override
+	public String toString() {
+		return role;
+	}
 }

@@ -102,5 +102,10 @@ public class ClientDTO {
 		this.ranking = ranking;
 	}
 	
+	@Override
+	public String toString() {
+		return id + " " + name;
+	}
+	
 	
 }

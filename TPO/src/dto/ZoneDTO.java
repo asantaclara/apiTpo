@@ -17,6 +17,10 @@ public class ZoneDTO {
 	public void setZoneId(int zoneId) {
 		this.zoneId = zoneId;
 	}
+	@Override
+	public String toString() {
+		return name;
+	}
 	
 	
 }
