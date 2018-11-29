@@ -120,5 +120,17 @@ public class ClientDTO {
 	    return result;
 	}
 	
+	public String[] toDataRow() {
+		String[] aux = new String[6];
+		
+		aux[0] = String.valueOf(ranking);
+		aux[1] = String.valueOf(claimsCount);
+		aux[2] = String.valueOf(id);
+		aux[3] = name;
+		aux[4] = cuit;
+		aux[5] = zone;
+		
+		return aux;
+	}
 	
 }
