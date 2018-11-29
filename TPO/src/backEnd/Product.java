@@ -15,7 +15,7 @@ public class Product {
 	private boolean activeProduct;
 	
 	public Product(String title, String description, float price) throws InvalidProductException {
-		if(title == null || description == null || price <= 0) {
+		if(title == null || description == null || price <= 0 || title.length() == 0 || description.length() == 0) {
 			throw new InvalidProductException("Missing parameters");
 		} else {			
 			this.title = title;
@@ -31,10 +31,10 @@ public class Product {
 	
 	public void modify(String title, String description, float price) throws ConnectionException, AccessException, InvalidProductException {
 		
-		if(title != null) {			
+		if(title != null && title.length() == 0) {			
 			this.title = title;
 		}
-		if (description != null) {			
+		if (description != null && description.length() == 0) {			
 			this.description = description;
 		}
 		if (price > 0) {			
