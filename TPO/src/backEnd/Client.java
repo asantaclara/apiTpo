@@ -131,12 +131,7 @@ public class Client {
 		public int getId() {
 			return id;
 		}
-		
-		@Override
-		public String toString() {
-			return id + " " + name;
-		
-		}
+
 		
 	//--------------------------------------------------------------------GETERS END-------------------------------------------------------------------------------------
 
