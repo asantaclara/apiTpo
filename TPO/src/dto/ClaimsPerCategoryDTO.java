@@ -40,6 +40,16 @@ public class ClaimsPerCategoryDTO {
 		this.incompatibleZoneClaims = incompatibleZoneClaims;
 	}
 	
-	
+	public String[] toDataRow() {
+		String[] aux = new String[4];
+		
+		aux[0] = String.valueOf(moreQuantityClaims);
+		aux[1] = String.valueOf(wrongInvoicingClaims);
+		aux[2] = String.valueOf(compositeClaims);
+		aux[3] = String.valueOf(incompatibleZoneClaims);
+
+		
+		return aux;
+	}
 	
 }
