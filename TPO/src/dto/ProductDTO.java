@@ -43,7 +43,7 @@ public class ProductDTO {
 	}
 	@Override
 	public String toString() {
-		return title;
+		return productId + "-" + title;
 	}
 	
 }
