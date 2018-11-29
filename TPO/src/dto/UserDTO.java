@@ -87,4 +87,18 @@ public class UserDTO {
 		return userId + "-" + userName;
 	}
 	
+	public String[] toDataRow() {
+		String[] aux = new String[6];
+		
+		aux[0] = String.valueOf(ranking);
+		aux[1] = String.valueOf(avgReponseTime);
+		aux[2] = String.valueOf(userId);
+		aux[3] = name;
+		aux[4] = userName;
+		aux[5] = principalRole;
+		aux[6] = secondaryRole;
+		
+		return aux;
+	}
+	
 }
