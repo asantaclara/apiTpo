@@ -70,5 +70,10 @@ public abstract class ClaimDTO {
 		return state;
 	}
 	
+	@Override
+	public String toString() {
+		return String.valueOf(claimId); 
+	}
+	
 	
 }
