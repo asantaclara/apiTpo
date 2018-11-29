@@ -101,4 +101,16 @@ public class UserDTO {
 		return aux;
 	}
 	
+	public boolean equals(Object other){
+	    boolean result;
+	    
+	    if((other == null) || (getClass() != other.getClass())){
+	        result = false;
+	    } else {
+	        UserDTO otherUserDTO = (UserDTO)other;
+	        result = userId == otherUserDTO.getUserId();
+	    }
+	    
+	    return result;
+	}
 }
