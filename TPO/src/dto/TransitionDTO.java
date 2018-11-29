@@ -58,4 +58,17 @@ public class TransitionDTO {
 		return description;
 	}
 	
+	public String[] toDataRow() {
+		String[] aux = new String[6];
+		
+		aux[0] = String.valueOf(claimId);
+		aux[1] = String.valueOf(date);
+		aux[2] = String.valueOf(userId);
+		aux[3] = previousState;
+		aux[4] = newState;
+		aux[5] = description;
+		
+		return aux;
+	}
+	
 }

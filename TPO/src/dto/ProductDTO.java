@@ -55,6 +55,8 @@ public class ProductDTO {
 		aux[3] = String.valueOf(price);
 		
 		return aux;
+		
 	}
+	
 	
 }
