@@ -46,4 +46,15 @@ public class ProductDTO {
 		return productId + "-" + title;
 	}
 	
+	public String[] toDataRow() {
+		String[] aux = new String[4];
+		
+		aux[0] = String.valueOf(productId);
+		aux[1] = title;
+		aux[2] = description;
+		aux[3] = String.valueOf(price);
+		
+		return aux;
+	}
+	
 }
