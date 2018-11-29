@@ -47,6 +47,19 @@ public class MoreQuantityClaimDTO extends ClaimDTO {
 	public void addTransition(TransitionDTO dto) {
 		transitions.add(dto);
 	}
+
+	public String[] toDataRow() {
+		String[] aux = new String[6];
+		
+		aux[0] = String.valueOf(claimId);
+		aux[1] = String.valueOf(clientId);
+		aux[2] = date.toString();
+		aux[3] = description;
+		aux[4] = state;
+		aux[5] = claimType;
+		
+		return aux;
+	}
 	
 	
 }

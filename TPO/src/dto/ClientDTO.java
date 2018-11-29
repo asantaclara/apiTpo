@@ -109,16 +109,16 @@ public class ClientDTO {
 	
 	public boolean equals(Object other){
 	    boolean result;
+	    
 	    if((other == null) || (getClass() != other.getClass())){
 	        result = false;
-	    } // end if
-	    else{
+	    } else {
 	        ClientDTO otherClientDTO = (ClientDTO)other;
 	        result = id == otherClientDTO.getId();
-	    } // end else
-
+	    }
+	    
 	    return result;
-	} // end equals
+	}
 	
 	
 }
