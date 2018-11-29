@@ -47,8 +47,7 @@ public class ClaimsPerCategoryDTO {
 		aux[1] = String.valueOf(wrongInvoicingClaims);
 		aux[2] = String.valueOf(compositeClaims);
 		aux[3] = String.valueOf(incompatibleZoneClaims);
-
-		
+	
 		return aux;
 	}
 	

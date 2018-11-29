@@ -88,7 +88,7 @@ public class UserDTO {
 	}
 	
 	public String[] toDataRow() {
-		String[] aux = new String[6];
+		String[] aux = new String[7];
 		
 		aux[0] = String.valueOf(ranking);
 		aux[1] = String.valueOf(avgReponseTime);
