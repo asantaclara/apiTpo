@@ -75,6 +75,9 @@ public class MoreQuantityClaim extends IndividualClaim {
 	
 	@Override
 	public void save() throws ConnectionException, AccessException, InvalidClaimException, InvalidProductException {
+		if(products.isEmpty()) {
+			throw new InvalidClaimException("The product list is empty");
+		}
 		new MoreQuantityClaimDAO().save(this);
 	}
 
