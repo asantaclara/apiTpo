@@ -107,5 +107,18 @@ public class ClientDTO {
 		return id + "-" + name;
 	}
 	
+	public boolean equals(Object other){
+	    boolean result;
+	    if((other == null) || (getClass() != other.getClass())){
+	        result = false;
+	    } // end if
+	    else{
+	        ClientDTO otherClientDTO = (ClientDTO)other;
+	        result = id == otherClientDTO.getId();
+	    } // end else
+
+	    return result;
+	} // end equals
+	
 	
 }
