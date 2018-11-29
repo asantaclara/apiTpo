@@ -84,7 +84,7 @@ public class UserDTO {
 	
 	@Override
 	public String toString() {
-		return userName;
+		return userId + " " + userName;
 	}
 	
 }
