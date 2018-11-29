@@ -11,6 +11,7 @@ import java.util.List;
 
 import backEnd.State;
 import backEnd.Transition;
+import dto.TransitionDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
@@ -124,4 +125,36 @@ public class TransitionDAO {
 			SqlUtils.closeConnection(con);
 		}
 	}
+
+	public List<Transition> getAllTransitions() throws ConnectionException, AccessException, InvalidTransitionException, InvalidUserException, InvalidRoleException {
+		Connection con = SqlUtils.getConnection();  
+		try {
+			Statement stmt = SqlUtils.createStatement(con);  
+			ResultSet rs = null;
+			
+			String sql = "SELECT * FROM Transitions"; 
+			
+			rs = SqlUtils.executeQuery(stmt, con, sql);
+			
+			try {
+				List<Transition> returnList = new LinkedList<>();
+				Transition newTransition = null;
+				
+				while(rs.next()){					
+					newTransition = new Transition(rs.getInt(2), State.valueOf(rs.getString(3)), State.valueOf(rs.getString(4)), 
+							new Date(rs.getDate(5).getTime()), rs.getString(6), new UserDAO().getUser(rs.getInt(7)));	
+					newTransition.setId(rs.getInt(1));
+					returnList.add(newTransition);
+				}
+				return returnList;
+				
+			} catch (SQLException e) {
+				throw new ConnectionException("Data not reachable");
+			}
+			
+		} finally {
+			SqlUtils.closeConnection(con);
+		}
+	}
+
 }

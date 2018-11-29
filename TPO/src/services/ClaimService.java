@@ -6,8 +6,9 @@ import java.util.List;
 
 import backEnd.Claim;
 import backEnd.State;
+import backEnd.Transition;
 import dao.ClaimDAO;
-import dao.UserDAO;
+import dao.TransitionDAO;
 import dto.ClaimDTO;
 import dto.TransitionDTO;
 import exceptions.AccessException;
@@ -74,4 +75,14 @@ public class ClaimService extends Observable{
 	public ClaimDTO getClaimDTO(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException {
 		return getClaim(claimId).toDTO();
 	}
+
+	public List<TransitionDTO> getAllTransitionsOfClaim(int claimId) throws ConnectionException, AccessException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
+		List<TransitionDTO> auxList = new LinkedList<>();
+		
+		for (Transition t : new TransitionDAO().getAllTransitionOfClaim(claimId)) {
+			auxList.add(t.toDTO());
+		}
+		return auxList;
+	}
+
 }

@@ -233,10 +233,14 @@ public class Controller {
 	public List<UserDTO> getAllUsers() throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException{
 		return UserService.getIntance().getAllUsers();
 	}
+	public List<TransitionDTO> getAllTransitionsOfClaim(int claimId) throws ConnectionException, AccessException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
+		return ClaimService.getIntance().getAllTransitionsOfClaim(claimId);
+	}
+
 	
 	
 	
-	
+	//------------------------------STATISTICS---------------------------------
 	
 	public List<ClientDTO> getRankingClientsOfClaims() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException{
 		return StatisticsService.getIntance().getRankingClientsOfClaims();

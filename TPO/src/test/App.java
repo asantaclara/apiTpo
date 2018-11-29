@@ -1,16 +1,10 @@
 package test;
 
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 
 import controller.Controller;
-import dto.InvoiceDTO;
-import dto.ProductDTO;
-import dto.UserDTO;
-import dto.ZoneDTO;
+import dto.ClientDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
@@ -79,6 +73,15 @@ public class App {
 //			c.addClient(dtoAddClient);
 //			
 //		}
+		ClientDTO dtoAddClient = new ClientDTO();
+		dtoAddClient.setCuit("10-98765452-2");
+		dtoAddClient.setName("Juan");
+		dtoAddClient.setAddress("Washington 2540");
+		dtoAddClient.setPhoneNumber((new Random().nextInt(8999) + 1000) + "-" + (new Random().nextInt(8999) + 1000));
+		dtoAddClient.setEmail("hola@hola.com");
+		dtoAddClient.setZone("Puerto Madero");
+		c.addClient(dtoAddClient);
+		
 //		
 // test modifyClient
 //		ClientDTO dtoModifyClient = new ClientDTO();
