@@ -84,7 +84,7 @@ public class Client {
 	}
 	
 	private void parameterChecker(String cuit, String name, String address, String phoneNumber, String email, Zone zone) throws InvalidClientException {
-		if(name == null || name.length() < 1) {
+		if(name.chars().allMatch(Character::isLetter) || name.length() < 1) {
 			throw new InvalidClientException("Invalid name");
 		} else if(address == null || address.length() < 1) {
 			throw new InvalidClientException("Invalid address");
