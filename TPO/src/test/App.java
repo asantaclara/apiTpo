@@ -2,7 +2,9 @@ package test;
 
 import java.sql.SQLException;
 
+import backEnd.Roles;
 import controller.Controller;
+import dto.UserDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
@@ -403,7 +405,6 @@ public class App {
 //			System.out.println(u.getAvgReponseTime());
 //		}
 		
-		c.getAllClients();
 		System.out.println("END");
 	}
 }
