@@ -7,6 +7,7 @@ import dto.ClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
+import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceItemException;
 import exceptions.InvalidProductException;
 import exceptions.InvalidTransitionException;
@@ -39,7 +40,10 @@ public abstract class Claim {
 	public abstract ClaimDTO toDTO();
 	public abstract void save() throws ConnectionException, AccessException, InvalidClaimException, InvalidProductException, InvalidInvoiceItemException, SQLException;
 	
-	public boolean validateClient(Client client) {
+	public boolean validateClient(Client client) throws InvalidClientException {
+		if(client == null) {
+			throw new InvalidClientException("Invalid client");
+		}
 		return (client.equals(this.client));
 	}
 	
@@ -60,6 +64,8 @@ public abstract class Claim {
 	}
 	
 	public void setClaimId(int claimId) {
-		this.claimId = claimId;
+		if(claimId > 0) {			
+			this.claimId = claimId;
+		}
 	}	
 }
