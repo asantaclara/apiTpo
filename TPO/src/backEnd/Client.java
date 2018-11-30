@@ -88,13 +88,13 @@ public class Client {
 			throw new InvalidClientException("Invalid name");
 		} else if(address == null || address.length() < 1) {
 			throw new InvalidClientException("Invalid address");
-		} else if(phoneNumber == null) { // || !phoneNumber.matches("\\d{4}-\\d{4}")
+		} else if(phoneNumber == null || !phoneNumber.matches("\\d{4}-\\d{4}")) {
 			throw new InvalidClientException("Invalid phone number");
 		} else if(email == null || email.length() < 1) {
 			throw new InvalidClientException("Invalid email");
 		} else if(zone == null) {
 			throw new InvalidClientException("Invalid zone");
-		} else if(cuit == null) { //|| !cuit.matches("\\d{2}-\\d{8}-\\d{1}")
+		} else if(cuit == null || !cuit.matches("\\d{2}-\\d{8}-\\d{1}")) {
 			throw new InvalidClientException("Invalid cuit");
 		}
 	}

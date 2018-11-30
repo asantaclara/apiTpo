@@ -1,10 +1,10 @@
 package test;
 
 import java.sql.SQLException;
-import java.util.Random;
 
+import backEnd.Roles;
 import controller.Controller;
-import dto.ClientDTO;
+import dto.UserDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
@@ -73,14 +73,16 @@ public class App {
 //			c.addClient(dtoAddClient);
 //			
 //		}
-		ClientDTO dtoAddClient = new ClientDTO();
-		dtoAddClient.setCuit("10-98765452-2");
-		dtoAddClient.setName("Juan");
-		dtoAddClient.setAddress("Washington 2540");
-		dtoAddClient.setPhoneNumber((new Random().nextInt(8999) + 1000) + "-" + (new Random().nextInt(8999) + 1000));
-		dtoAddClient.setEmail("hola@hola.com");
-		dtoAddClient.setZone("Puerto Madero");
-		c.addClient(dtoAddClient);
+
+// test addClient (only One)
+//		ClientDTO dtoAddClient = new ClientDTO();
+//		dtoAddClient.setCuit("10-98765452-2");
+//		dtoAddClient.setName("Juan");
+//		dtoAddClient.setAddress("Washington 2540");
+//		dtoAddClient.setPhoneNumber((new Random().nextInt(8999) + 1000) + "-" + (new Random().nextInt(8999) + 1000));
+//		dtoAddClient.setEmail("hola@hola.com");
+//		dtoAddClient.setZone("Puerto Madero");
+//		c.addClient(dtoAddClient);
 		
 //		
 // test modifyClient
@@ -132,6 +134,14 @@ public class App {
 //			c.addUser(dtoAddUser);
 //			
 //		}
+
+// testAddUser (only one)
+		UserDTO dtoAddUser = new UserDTO();
+		dtoAddUser.setName("Pedro");
+		dtoAddUser.setPrincipalRole(Roles.ZONE_RESPONSABLE.toString());
+		dtoAddUser.setUserName("z");
+		dtoAddUser.setPassword("z");
+		c.addUser(dtoAddUser);
 		
 
 // test modifyUser
