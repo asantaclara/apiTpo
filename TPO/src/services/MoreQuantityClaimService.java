@@ -6,14 +6,9 @@ import java.util.List;
 
 import backEnd.ClaimType;
 import backEnd.Client;
-import backEnd.IncompatibleZoneClaim;
 import backEnd.Invoice;
 import backEnd.MoreQuantityClaim;
-import dao.ClientDAO;
-import dao.InvoiceDAO;
 import dao.MoreQuantityClaimDAO;
-import dao.ProductDAO;
-import dto.IncompatibleZoneClaimDTO;
 import dto.MoreQuantityClaimDTO;
 import dto.ProductItemDTO;
 import exceptions.AccessException;

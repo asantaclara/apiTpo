@@ -11,8 +11,6 @@ import java.util.List;
 
 import backEnd.Client;
 import backEnd.IncompatibleZoneClaim;
-import backEnd.Invoice;
-import backEnd.ProductItem;
 import backEnd.State;
 import backEnd.Transition;
 import exceptions.AccessException;

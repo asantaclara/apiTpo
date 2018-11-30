@@ -1,13 +1,11 @@
 package services;
 
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 import backEnd.Claim;
 import backEnd.CompositeClaim;
 import dao.ClaimDAO;
-import dao.ClientDAO;
 import dao.CompositeClaimDAO;
 import dto.CompositeClaimDTO;
 import exceptions.AccessException;

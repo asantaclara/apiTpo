@@ -237,9 +237,6 @@ public class Controller {
 		return ClaimService.getIntance().getAllTransitionsOfClaim(claimId);
 	}
 
-	
-	
-	
 	//------------------------------STATISTICS---------------------------------
 	
 	public List<ClientDTO> getRankingClientsOfClaims() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException{

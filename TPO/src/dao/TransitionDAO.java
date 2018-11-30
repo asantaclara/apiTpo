@@ -11,7 +11,6 @@ import java.util.List;
 
 import backEnd.State;
 import backEnd.Transition;
-import dto.TransitionDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;

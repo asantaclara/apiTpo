@@ -2,9 +2,7 @@ package test;
 
 import java.sql.SQLException;
 
-import backEnd.Roles;
 import controller.Controller;
-import dto.UserDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;

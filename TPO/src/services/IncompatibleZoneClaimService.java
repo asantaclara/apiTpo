@@ -7,7 +7,6 @@ import java.util.List;
 
 import backEnd.Client;
 import backEnd.IncompatibleZoneClaim;
-import dao.ClientDAO;
 import dao.IncompatibleZoneClaimDAO;
 import dto.IncompatibleZoneClaimDTO;
 import exceptions.AccessException;

@@ -6,13 +6,9 @@ import java.util.List;
 
 import backEnd.Client;
 import backEnd.Invoice;
-import backEnd.MoreQuantityClaim;
 import backEnd.WrongInvoicingClaim;
-import dao.ClientDAO;
-import dao.InvoiceDAO;
 import dao.WrongInvoicingClaimDAO;
 import dto.InvoiceItemDTO;
-import dto.MoreQuantityClaimDTO;
 import dto.WrongInvoicingClaimDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;

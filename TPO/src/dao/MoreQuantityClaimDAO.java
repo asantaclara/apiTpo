@@ -11,7 +11,6 @@ import java.util.List;
 
 import backEnd.ClaimType;
 import backEnd.Client;
-import backEnd.IncompatibleZoneClaim;
 import backEnd.MoreQuantityClaim;
 import backEnd.ProductItem;
 import backEnd.State;
@@ -28,7 +27,6 @@ import exceptions.InvalidTransitionException;
 import exceptions.InvalidUserException;
 import exceptions.InvalidZoneException;
 import services.ClientService;
-import services.ZoneService;
 
 public class MoreQuantityClaimDAO {
 

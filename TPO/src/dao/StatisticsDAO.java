@@ -8,7 +8,6 @@ import java.time.Month;
 import java.util.LinkedList;
 import java.util.List;
 
-import backEnd.User;
 import dto.ClaimQuantityPerMonthDTO;
 import dto.ClaimsPerCategoryDTO;
 import dto.ClientDTO;
