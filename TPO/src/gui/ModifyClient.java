@@ -212,9 +212,27 @@ public class ModifyClient extends JFrame implements Observer{
 						client.setZone(((ZoneDTO)boxZonas.getSelectedItem()).getName());
 						try {
 							Controller.getInstance().modifyClient(client);
+							JOptionPane.showMessageDialog(thisWindow, "CLIENTE MODIFICADO EXITOSAMENTE", "GG", 1);
 						} catch (InvalidClientException  | InvalidZoneException e1) {
-							JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-							e1.printStackTrace();
+							switch (e1.getMessage()) {
+							case "Invalid phone number":
+								JOptionPane.showMessageDialog(thisWindow, "Numero de telefono invalido, por favor cargue XXXX-XXXX", "ERROR", 1);
+								break;
+							case "Invalid email":
+								JOptionPane.showMessageDialog(thisWindow, "La direccion de email es invalida", "ERROR", 1);
+								break;
+							case "Invalid cuit":
+								JOptionPane.showMessageDialog(thisWindow, "El cuit es invalido, por favor cargue XX-XXXXXXXX-X", "ERROR", 1);
+								break;
+							case "Existing cuit":
+								JOptionPane.showMessageDialog(thisWindow, "El cuit ya esta asociado a otro cliente", "ERROR", 1);
+								break;
+								
+							default:
+								e1.printStackTrace();
+								JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
+								break;
+							}
 						}catch (ConnectionException e1) {
 							JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
 							e1.printStackTrace();
@@ -222,8 +240,6 @@ public class ModifyClient extends JFrame implements Observer{
 							JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
 							e1.printStackTrace();
 						}
-						JOptionPane.showMessageDialog(thisWindow, "CLIENTE MODIFICADO EXITOSAMENTE", "GG", 1);
-						ModifyClient.this.dispose();
 					}
 					else
 						JOptionPane.showMessageDialog(thisWindow, "Complete todos los campos antes de continuar", "GG", 1);
@@ -240,6 +256,8 @@ public class ModifyClient extends JFrame implements Observer{
 					removeObservers();
 					thisWindow.dispose();
 				} catch (InvalidObserverException e1) {
+					JOptionPane.showMessageDialog(thisWindow, "Error de Observer", "ERROR", 1);
+
 					e1.printStackTrace();
 				}
 			}
@@ -264,14 +282,13 @@ public class ModifyClient extends JFrame implements Observer{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(boxClientes.getSelectedIndex() != -1) {
-					ClientDTO client = new ClientDTO();
-					client.setId((Integer)boxClientes.getSelectedItem());
+					ClientDTO client = (ClientDTO) boxClientes.getSelectedItem();
+					
 				    int reply = JOptionPane.showConfirmDialog(null, "Estas seguro que deseas eliminar el cliente?", "Confirmacion", JOptionPane.YES_NO_OPTION);
 			        if (reply == JOptionPane.YES_OPTION) {
 			          try {
 						Controller.getInstance().removeClient(client);
 						JOptionPane.showMessageDialog(null, "CLIENTE ELIMINADO CON EXITO");
-						ModifyClient.this.dispose();
 					} catch (InvalidClientException | InvalidZoneException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
 						e1.printStackTrace();
@@ -287,56 +304,56 @@ public class ModifyClient extends JFrame implements Observer{
 			}
 		});
 		
-		txtCuit.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				char vChar = arg0.getKeyChar();
-				if (!(Character.isDigit(vChar)
-                        || (vChar == KeyEvent.VK_BACK_SPACE)
-                        || (vChar == KeyEvent.VK_DELETE))) {
-                    arg0.consume();
-                }		
-			}
-		});
-		
-		txtNombre.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				char vChar = arg0.getKeyChar();
-				if (!(Character.isAlphabetic(vChar)
-                        || (vChar == KeyEvent.VK_BACK_SPACE)
-                        || (vChar == KeyEvent.VK_DELETE))) {
-                    arg0.consume();
-                }
-						
-			}
-		});
-		
-		txtNombre.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				char vChar = arg0.getKeyChar();
-				if (!(Character.isAlphabetic(vChar)
-                        || (vChar == KeyEvent.VK_BACK_SPACE)
-                        || (vChar == KeyEvent.VK_DELETE))) {
-                    arg0.consume();
-                }
-						
-			}
-		});
-		
-		txtTelefono.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				char vChar = arg0.getKeyChar();
-				if (!(Character.isDigit(vChar)
-                        || (vChar == KeyEvent.VK_BACK_SPACE)
-                        || (vChar == KeyEvent.VK_DELETE))) {
-                    arg0.consume();
-                }
-						
-			}
-		});
+//		txtCuit.addKeyListener(new KeyAdapter() {
+//			@Override
+//			public void keyTyped(KeyEvent arg0) {
+//				char vChar = arg0.getKeyChar();
+//				if (!(Character.isDigit(vChar)
+//                        || (vChar == KeyEvent.VK_BACK_SPACE)
+//                        || (vChar == KeyEvent.VK_DELETE))) {
+//                    arg0.consume();
+//                }		
+//			}
+//		});
+//		
+//		txtNombre.addKeyListener(new KeyAdapter() {
+//			@Override
+//			public void keyTyped(KeyEvent arg0) {
+//				char vChar = arg0.getKeyChar();
+//				if (!(Character.isAlphabetic(vChar)
+//                        || (vChar == KeyEvent.VK_BACK_SPACE)
+//                        || (vChar == KeyEvent.VK_DELETE))) {
+//                    arg0.consume();
+//                }
+//						
+//			}
+//		});
+//		
+//		txtNombre.addKeyListener(new KeyAdapter() {
+//			@Override
+//			public void keyTyped(KeyEvent arg0) {
+//				char vChar = arg0.getKeyChar();
+//				if (!(Character.isAlphabetic(vChar)
+//                        || (vChar == KeyEvent.VK_BACK_SPACE)
+//                        || (vChar == KeyEvent.VK_DELETE))) {
+//                    arg0.consume();
+//                }
+//						
+//			}
+//		});
+//		
+//		txtTelefono.addKeyListener(new KeyAdapter() {
+//			@Override
+//			public void keyTyped(KeyEvent arg0) {
+//				char vChar = arg0.getKeyChar();
+//				if (!(Character.isDigit(vChar)
+//                        || (vChar == KeyEvent.VK_BACK_SPACE)
+//                        || (vChar == KeyEvent.VK_DELETE))) {
+//                    arg0.consume();
+//                }
+//						
+//			}
+//		});
 
 		boxClientes.addItemListener(new ItemListener() {
 			
@@ -349,7 +366,9 @@ public class ModifyClient extends JFrame implements Observer{
 					txtEmail.setText(client.getEmail());
 					txtNombre.setText(client.getName());
 					txtTelefono.setText(client.getPhoneNumber());
-					boxZonas.setSelectedItem(client.getZone());  //COMO SETEO ACA EL COMBOBOX DE ZONA CORRESPONDIENTE SI YO EN EL CLIENTE TENGO SOLO EL STRING?
+					ZoneDTO zoneAux = new ZoneDTO();
+					zoneAux.setName(client.getZone());
+					boxZonas.setSelectedItem(zoneAux);
 				}
 			}
 		});
@@ -378,8 +397,12 @@ public class ModifyClient extends JFrame implements Observer{
 		try {
 			boxClientes.removeAllItems();
 			List<ClientDTO> clientes =Controller.getInstance().getAllClients();
+			
 			for(ClientDTO cli : clientes) {
 				boxClientes.addItem(cli);
+			}
+			if(!clientes.contains(client)) {
+				client = (ClientDTO) boxClientes.getItemAt(0);
 			}
 			
 			txtCuit.setText(client.getCuit());

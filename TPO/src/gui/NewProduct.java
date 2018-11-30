@@ -118,7 +118,6 @@ public class NewProduct extends JFrame {
 						try {
 							Controller.getInstance().addProduct(prod);
 							JOptionPane.showMessageDialog(NewProduct.this, "EL PRODUCTO FUE AGREGADO CON EXITO", "GG", 1);
-							NewProduct.this.dispose();
 						} catch ( InvalidProductException e1) {
 							JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
 							e1.printStackTrace();

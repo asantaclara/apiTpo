@@ -75,7 +75,7 @@ public class UserRoleAdministrator extends JFrame implements Observer{
 		
 		
 		JLabel lblUsrSeleccionado = new JLabel("USUARIO A MODIFICAR\r\n");
-		lblUsrSeleccionado.setBounds(43, 58, 129, 14);
+		lblUsrSeleccionado.setBounds(20, 58, 175, 14);
 		contentPane.add(lblUsrSeleccionado);
 		
 		btnSalir = new JButton("SALIR");
@@ -91,7 +91,7 @@ public class UserRoleAdministrator extends JFrame implements Observer{
 		contentPane.add(lblRolPrincipalFijo);
 		
 		JLabel lblRolSecundarioFijo = new JLabel("ROL SECUNDARIO");
-		lblRolSecundarioFijo.setBounds(20, 172, 105, 14);
+		lblRolSecundarioFijo.setBounds(20, 172, 137, 14);
 		contentPane.add(lblRolSecundarioFijo);
 		
 		JLabel lblNuevoRol = new JLabel("NUEVO ROL");
@@ -133,11 +133,11 @@ public class UserRoleAdministrator extends JFrame implements Observer{
 		
 		btnEliminarRolSecundario = new JButton("ELIMINAR\r\n");
 		btnEliminarRolSecundario.setToolTipText("");
-		btnEliminarRolSecundario.setBounds(140, 284, 89, 23);
+		btnEliminarRolSecundario.setBounds(124, 284, 105, 23);
 		contentPane.add(btnEliminarRolSecundario);
 		
 		btnAgregarRolSecundario = new JButton("AGREGAR");
-		btnAgregarRolSecundario.setBounds(260, 287, 89, 23);
+		btnAgregarRolSecundario.setBounds(260, 284, 89, 23);
 		contentPane.add(btnAgregarRolSecundario);
 		
 		lblRolPrincipal = new JLabel("");

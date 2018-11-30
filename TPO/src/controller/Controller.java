@@ -176,7 +176,7 @@ public class Controller {
 	public UserDTO getUserById(int userId) throws AccessException, InvalidRoleException, ConnectionException {
 		return UserService.getIntance().getUserDTOById(userId);
 	}
-	public UserDTO getUserByUsernameAndPassword(UserDTO dto) throws AccessException, ConnectionException, InvalidRoleException {
+	public UserDTO getUserByUsernameAndPassword(UserDTO dto) throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException {
 		return UserService.getIntance().getUserByUsernameAndPassword(dto);
 	}
 	public List<ClientDTO> getAllClients() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException{

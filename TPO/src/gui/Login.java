@@ -27,6 +27,7 @@ import dto.UserDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidRoleException;
+import exceptions.InvalidUserException;
 
 public class Login extends JFrame {
 
@@ -106,12 +107,12 @@ public class Login extends JFrame {
 		lblUsername.setBounds(395, 42, 114, 14);
 		contentPane.add(lblUsername);
 		
-		JLabel lblPassword = new JLabel("CONTRASE�A");
+		JLabel lblPassword = new JLabel("CONTRASENA");
 		lblPassword.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblPassword.setBounds(395, 127, 96, 14);
 		contentPane.add(lblPassword);
 		
-		JLabel lblRepeatPassword = new JLabel("REPITA CONTRASE�A");
+		JLabel lblRepeatPassword = new JLabel("REPITA CONTRASENA");
 		lblRepeatPassword.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblRepeatPassword.setBounds(395, 212, 133, 14);
 		contentPane.add(lblRepeatPassword);
@@ -154,27 +155,19 @@ public class Login extends JFrame {
 					actualUsr.setPassword(String.valueOf(password1.getPassword()));
 					
 					try {
-						actualUsr = Controller.getInstance().getUserByUsernameAndPassword(actualUsr);
-						if(actualUsr != null){
-							interfaceRedirectByRol( actualUsr);
-							//JOptionPane.showMessageDialog(Login.this,actualUsr.getPrincipalRole());
-							//CallCenterMenu menu = new CallCenterMenu();
-							//menu.setVisible(true);
-						}
-						else {
-							JOptionPane.showMessageDialog(Login.this,"El nombre ingresado es incorrecto, intente nuevemente");
-							
-							txtUserName.setText("");
-							password1.setText("");
-							password2.setText("");
-						}
+						interfaceRedirectByRol( Controller.getInstance().getUserByUsernameAndPassword(actualUsr));	
 					} catch ( ConnectionException | AccessException | InvalidRoleException e) {
 						e.printStackTrace();
+					} catch (InvalidUserException e) {
+						JOptionPane.showMessageDialog(Login.this,"La combinacion de usuario y contrasena es incorrecta, por favor reintente");
+						txtUserName.setText("");
+						password1.setText("");
+						password2.setText("");
 					}
 					
 				}
 				else {
-					JOptionPane.showMessageDialog(Login.this,"Las contrase�as no coinciden, intente nuevamente");
+					JOptionPane.showMessageDialog(Login.this,"Las contrasenas no coinciden, intente nuevamente");
 					password1.setText("");
 					password2.setText("");
 				}

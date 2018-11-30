@@ -172,18 +172,32 @@ public class NewClient extends JFrame {
 					client.setZone(String.valueOf(boxZonas.getSelectedItem()));
 					try {
 						Controller.getInstance().addClient(client);
+						JOptionPane.showMessageDialog(thisWindow, "CLIENTE INGRESADO EXITOSAMENTE", "GG", 1);
 					} catch (InvalidClientException | InvalidZoneException e1) {
-						JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-						e1.printStackTrace();
+						switch (e1.getMessage()) {
+						case "Invalid phone number":
+							JOptionPane.showMessageDialog(thisWindow, "Numero de telefono invalido, por favor cargue XXXX-XXXX", "ERROR", 1);
+							break;
+						case "Invalid email":
+							JOptionPane.showMessageDialog(thisWindow, "La direccion de email es invalida", "ERROR", 1);
+							break;
+						case "Invalid cuit":
+							JOptionPane.showMessageDialog(thisWindow, "El cuit es invalido, por favor cargue XX-XXXXXXXX-X", "ERROR", 1);
+							break;
+						case "Existing CUIT":
+							JOptionPane.showMessageDialog(thisWindow, "El cuit ya esta asociado a otro cliente", "ERROR", 1);
+							break;
+							
+						default:
+							e1.printStackTrace();
+							JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
+							break;
+						}
 					} catch (ConnectionException  e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-						e1.printStackTrace();
 					} catch (AccessException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-						e1.printStackTrace();
 					}
-					JOptionPane.showMessageDialog(thisWindow, "CLIENTE INGRESADO EXITOSAMENTE", "GG", 1);
-					thisWindow.dispose();
 				}
 				else
 					JOptionPane.showMessageDialog(thisWindow, "Complete todos los campos antes de finalizar", "GG", 1);
@@ -200,45 +214,45 @@ public class NewClient extends JFrame {
 			}
 		});
 		
-		txtCuit.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				char vChar = arg0.getKeyChar();
-				if (!(Character.isDigit(vChar)
-                        || (vChar == KeyEvent.VK_BACK_SPACE)
-                        || (vChar == KeyEvent.VK_DELETE))) {
-                    arg0.consume();
-                }
-						
-			}
-		});
-		
-		txtNombre.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				char vChar = arg0.getKeyChar();
-				if (!(Character.isAlphabetic(vChar)
-                        || (vChar == KeyEvent.VK_BACK_SPACE)
-                        || (vChar == KeyEvent.VK_DELETE))) {
-                    arg0.consume();
-                }
-						
-			}
-		});
-		
-		
-		txtTelefono.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				char vChar = arg0.getKeyChar();
-				if (!(Character.isDigit(vChar)
-                        || (vChar == KeyEvent.VK_BACK_SPACE)
-                        || (vChar == KeyEvent.VK_DELETE))) {
-                    arg0.consume();
-                }
-						
-			}
-		});
+//		txtCuit.addKeyListener(new KeyAdapter() {
+//			@Override
+//			public void keyTyped(KeyEvent arg0) {
+//				char vChar = arg0.getKeyChar();
+//				if (!(Character.isDigit(vChar)
+//                        || (vChar == KeyEvent.VK_BACK_SPACE)
+//                        || (vChar == KeyEvent.VK_DELETE))) {
+//                    arg0.consume();
+//                }
+//						
+//			}
+//		});
+//		
+//		txtNombre.addKeyListener(new KeyAdapter() {
+//			@Override
+//			public void keyTyped(KeyEvent arg0) {
+//				char vChar = arg0.getKeyChar();
+//				if (!(Character.isAlphabetic(vChar)
+//                        || (vChar == KeyEvent.VK_BACK_SPACE)
+//                        || (vChar == KeyEvent.VK_DELETE))) {
+//                    arg0.consume();
+//                }
+//						
+//			}
+//		});
+//		
+//		
+//		txtTelefono.addKeyListener(new KeyAdapter() {
+//			@Override
+//			public void keyTyped(KeyEvent arg0) {
+//				char vChar = arg0.getKeyChar();
+//				if (!(Character.isDigit(vChar)
+//                        || (vChar == KeyEvent.VK_BACK_SPACE)
+//                        || (vChar == KeyEvent.VK_DELETE))) {
+//                    arg0.consume();
+//                }
+//						
+//			}
+//		});
 
 	}
 	

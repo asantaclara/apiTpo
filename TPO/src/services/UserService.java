@@ -75,19 +75,15 @@ public class UserService extends Observable{
 		}
 	}
 
-	public UserDTO getUserByUsernameAndPassword(UserDTO dto) throws AccessException, ConnectionException, InvalidRoleException {
-		try {
+	public UserDTO getUserByUsernameAndPassword(UserDTO dto) throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException {
 			User aux = new UserDAO().getUserByUsername(dto.getUserName());
 			
 			if(aux.getPassword().equals(dto.getPassword())) {
 				return aux.toDTO();
 			} else {
-				return null;
+				throw new InvalidUserException("Password doesn't match");
 			}
-		} catch (InvalidUserException e) {
-			System.out.println("User not found");
-			return null;
-		}
+		
 	}
 	
 	public void addRoleToUser(RoleDTO dto) throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException {

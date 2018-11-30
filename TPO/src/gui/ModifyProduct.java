@@ -27,6 +27,7 @@ import javax.swing.border.EmptyBorder;
 
 import controller.Controller;
 import dto.ProductDTO;
+import dto.UserDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidObserverException;
@@ -195,7 +196,6 @@ public class ModifyProduct extends JFrame implements Observer {
 			          try {
 						Controller.getInstance().removeProduct((ProductDTO)cbProducts.getSelectedItem());
 						JOptionPane.showMessageDialog(null, "PRODUCTO ELIMINADO CON EXITO");
-						ModifyProduct.this.dispose();
 					} catch (  InvalidProductException  e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
 						e1.printStackTrace();
@@ -211,18 +211,18 @@ public class ModifyProduct extends JFrame implements Observer {
 			}
 		});
 		
-		txtNombre.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				char vChar = arg0.getKeyChar();
-				if (!(Character.isAlphabetic(vChar)
-                        || (vChar == KeyEvent.VK_BACK_SPACE)
-                        || (vChar == KeyEvent.VK_DELETE))) {
-                    arg0.consume();
-                }
-						
-			}
-		});
+//		txtNombre.addKeyListener(new KeyAdapter() {
+//			@Override
+//			public void keyTyped(KeyEvent arg0) {
+//				char vChar = arg0.getKeyChar();
+//				if (!(Character.isAlphabetic(vChar)
+//                        || (vChar == KeyEvent.VK_BACK_SPACE)
+//                        || (vChar == KeyEvent.VK_DELETE))) {
+//                    arg0.consume();
+//                }
+//						
+//			}
+//		});
 		
 		
 		cbProducts.addItemListener(new ItemListener() {
@@ -248,6 +248,7 @@ public class ModifyProduct extends JFrame implements Observer {
 					prod.setTitle(txtNombre.getText());
 					try {
 						Controller.getInstance().modifyProduct(prod);
+						JOptionPane.showMessageDialog(ModifyProduct.this, "PRODUCTO MODIFICADO EXITOSAMENTE", "GG", 1);
 					} catch ( InvalidProductException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
 						e1.printStackTrace();
@@ -258,8 +259,6 @@ public class ModifyProduct extends JFrame implements Observer {
 						JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
 						e1.printStackTrace();
 					}
-					JOptionPane.showMessageDialog(ModifyProduct.this, "PRODUCTO MODIFICADO EXITOSAMENTE", "GG", 1);
-					ModifyProduct.this.dispose();
 				}
 				else {
 					JOptionPane.showMessageDialog(ModifyProduct.this, "Complete todos los campos antes de continuar", "GG", 1);
@@ -277,18 +276,21 @@ public class ModifyProduct extends JFrame implements Observer {
 	
 	@Override
 	public void update() {
-		ProductDTO prod = (ProductDTO) cbProducts.getSelectedItem();
+		ProductDTO actualProd = (ProductDTO) cbProducts.getSelectedItem();
 		try {
 			cbProducts.removeAllItems();
 			List<ProductDTO> clientes =Controller.getInstance().getAllProducts();
 			for(ProductDTO c : clientes) {
 				cbProducts.addItem(c);
 			}
+			if(!clientes.contains(actualProd)) {
+				actualProd = (ProductDTO) cbProducts.getItemAt(0);
+			}
+			txtNombre.setText(actualProd.getTitle());
+			txtPrecio.setText(String.valueOf(actualProd.getPrice()));
+			editorPane.setText(actualProd.getDescription());
+			cbProducts.setSelectedItem(actualProd);
 			
-			txtNombre.setText(prod.getTitle());
-			txtPrecio.setText(String.valueOf(prod.getPrice()));
-			editorPane.setText(prod.getDescription());
-			cbProducts.setSelectedItem(prod);
 		} catch ( InvalidProductException  e) {
 			JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
 			e.printStackTrace();

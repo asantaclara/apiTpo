@@ -6,10 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -40,7 +39,7 @@ public class ModifyUser extends JFrame implements Observer{
 	private JPanel contentPane;
 	private JButton btnSalir,btnAceptar,btnEliminar;
 	private JTextField txtNombre,txtNombreUsuario,txtPassword;
-	private JComboBox<Roles> boxRolSecundario,boxRolPrincipal;
+	private JComboBox<Roles> boxRolPrincipal;
 	private JComboBox<UserDTO> boxUsers;
 	private ModifyUser thisWindow = this;
 
@@ -74,7 +73,7 @@ public class ModifyUser extends JFrame implements Observer{
 		
 		
 		JLabel lblUsrSeleccionado = new JLabel("USUARIO A MODIFICAR\r\n");
-		lblUsrSeleccionado.setBounds(43, 58, 129, 14);
+		lblUsrSeleccionado.setBounds(43, 58, 164, 14);
 		contentPane.add(lblUsrSeleccionado);
 		
 		btnAceptar = new JButton("ACEPTAR");
@@ -97,16 +96,14 @@ public class ModifyUser extends JFrame implements Observer{
 		lblRolPrincipal.setBounds(20, 137, 105, 14);
 		contentPane.add(lblRolPrincipal);
 		
-		JLabel lblRolSecundario = new JLabel("ROL SECUNDARIO");
-		lblRolSecundario.setBounds(20, 172, 105, 14);
-		contentPane.add(lblRolSecundario);
+
 		
 		JLabel lblNombreDeUsuario = new JLabel("NOMBRE DE USUARIO");
-		lblNombreDeUsuario.setBounds(20, 208, 132, 14);
+		lblNombreDeUsuario.setBounds(20, 208, 172, 14);
 		contentPane.add(lblNombreDeUsuario);
 		
 		JLabel lblContrasea = new JLabel("CONTRASE\u00D1A");
-		lblContrasea.setBounds(20, 242, 83, 14);
+		lblContrasea.setBounds(20, 242, 132, 14);
 		contentPane.add(lblContrasea);
 		
 		txtNombre = new JTextField();
@@ -115,7 +112,7 @@ public class ModifyUser extends JFrame implements Observer{
 		txtNombre.setColumns(10);
 		
 		txtNombreUsuario = new JTextField();
-		txtNombreUsuario.setBounds(147, 202, 202, 20);
+		txtNombreUsuario.setBounds(171, 202, 178, 20);
 		contentPane.add(txtNombreUsuario);
 		txtNombreUsuario.setColumns(10);
 		
@@ -129,16 +126,11 @@ public class ModifyUser extends JFrame implements Observer{
 		boxRolPrincipal.setBounds(147, 131, 202, 20);
 		contentPane.add(boxRolPrincipal);
 		
-		boxRolSecundario = new JComboBox<Roles>();
-		boxRolSecundario.setBounds(147, 166, 202, 20);
-		contentPane.add(boxRolSecundario);
 		
 		for(Roles  rol: Roles.values()) {
 			boxRolPrincipal.addItem(rol);
-			boxRolSecundario.addItem(rol);
 		}
 		boxRolPrincipal.setSelectedIndex(-1);
-		boxRolSecundario.setSelectedIndex(-1);
 		
 		boxUsers = new JComboBox<UserDTO>();
 		boxUsers.setBounds(207, 55, 105, 20);
@@ -166,7 +158,7 @@ public class ModifyUser extends JFrame implements Observer{
 		
 		btnEliminar = new JButton("ELIMINAR\r\n");
 		btnEliminar.setToolTipText("Una vez eliminado el usuario, este no podra restablecerse.");
-		btnEliminar.setBounds(135, 284, 89, 23);
+		btnEliminar.setBounds(119, 284, 129, 23);
 		contentPane.add(btnEliminar);
 	}
 	
@@ -182,13 +174,21 @@ public class ModifyUser extends JFrame implements Observer{
 						if(!txtPassword.getText().isEmpty())
 							usr.setPassword(txtPassword.getText());
 							usr.setPrincipalRole(boxRolPrincipal.getSelectedItem().toString());
-							usr.setSecondaryRole(boxRolSecundario.getSelectedItem().toString());
 							usr.setUserName(txtNombreUsuario.getText());
 						try {
 							Controller.getInstance().modifyUser(usr);
+													JOptionPane.showMessageDialog(thisWindow, "USUARIO MODIFICADO EXITOSAMENTE", "GG", 1);
 						} catch ( InvalidUserException | InvalidRoleException   e1) {
-							JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-							e1.printStackTrace();
+							switch (e1.getMessage()) {
+							case "Duplicate userName":
+								JOptionPane.showMessageDialog(thisWindow, "Nombre de usuario duplicado, por favor ingrese otro", "ERROR", 1);
+								break;
+
+							default:
+								JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
+								e1.printStackTrace();
+								break;
+							}
 						}catch (ConnectionException e1) {
 							JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
 							e1.printStackTrace();
@@ -196,8 +196,6 @@ public class ModifyUser extends JFrame implements Observer{
 							JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
 							e1.printStackTrace();
 						}
-						JOptionPane.showMessageDialog(thisWindow, "USUARIO MODIFICADO EXITOSAMENTE", "GG", 1);
-						ModifyUser.this.dispose();
 					}
 					else
 						JOptionPane.showMessageDialog(thisWindow, "Complete todos los campos antes de continuar", "GG", 1);
@@ -261,31 +259,31 @@ public class ModifyUser extends JFrame implements Observer{
 		});
 		
 		
-		txtNombre.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				char vChar = arg0.getKeyChar();
-				if (!(Character.isAlphabetic(vChar)
-                        || (vChar == KeyEvent.VK_BACK_SPACE)
-                        || (vChar == KeyEvent.VK_DELETE))) {
-                    arg0.consume();
-                }
-						
-			}
-		});
-		
-		txtNombre.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				char vChar = arg0.getKeyChar();
-				if (!(Character.isAlphabetic(vChar)
-                        || (vChar == KeyEvent.VK_BACK_SPACE)
-                        || (vChar == KeyEvent.VK_DELETE))) {
-                    arg0.consume();
-                }
-						
-			}
-		});
+//		txtNombre.addKeyListener(new KeyAdapter() {
+//			@Override
+//			public void keyTyped(KeyEvent arg0) {
+//				char vChar = arg0.getKeyChar();
+//				if (!(Character.isAlphabetic(vChar)
+//                        || (vChar == KeyEvent.VK_BACK_SPACE)
+//                        || (vChar == KeyEvent.VK_DELETE))) {
+//                    arg0.consume();
+//                }
+//						
+//			}
+//		});
+//		
+//		txtNombre.addKeyListener(new KeyAdapter() {
+//			@Override
+//			public void keyTyped(KeyEvent arg0) {
+//				char vChar = arg0.getKeyChar();
+//				if (!(Character.isAlphabetic(vChar)
+//                        || (vChar == KeyEvent.VK_BACK_SPACE)
+//                        || (vChar == KeyEvent.VK_DELETE))) {
+//                    arg0.consume();
+//                }
+//						
+//			}
+//		});
 		
 		boxUsers.addItemListener(new ItemListener() {
 			
@@ -296,8 +294,6 @@ public class ModifyUser extends JFrame implements Observer{
 					txtNombre.setText(usr.getName());
 					txtNombreUsuario.setText(usr.getUserName());
 					boxRolPrincipal.setSelectedItem(Roles.valueOf( usr.getPrincipalRole()));
-					boxRolSecundario.setSelectedItem(usr.getSecondaryRole());
-					boxRolSecundario.setSelectedItem(Roles.valueOf(usr.getSecondaryRole()));
 				}
 			}
 		});
@@ -314,7 +310,7 @@ public class ModifyUser extends JFrame implements Observer{
 	 */
 	private boolean areFieldsEmpty() {
 		if(txtNombreUsuario.getText().isEmpty() || txtNombre.getText().isEmpty() 
-			|| boxRolPrincipal.getSelectedIndex()== -1 || boxRolSecundario.getSelectedIndex() == -1) {
+			|| boxRolPrincipal.getSelectedIndex()== -1 ) {
 			return true;
 		}else
 			return false;
@@ -324,10 +320,20 @@ public class ModifyUser extends JFrame implements Observer{
 	public void update() {
 		UserDTO actualUser = (UserDTO)boxUsers.getSelectedItem();
 		try {
-			for(UserDTO usr :Controller.getInstance().getAllUsers()) {
+			boxUsers.removeAllItems();
+			List<UserDTO> list = Controller.getInstance().getAllUsers(); 
+			
+			for(UserDTO usr : list ) {
 				boxUsers.addItem(usr);
 			}
+			if(!list.contains(actualUser)) {
+				actualUser = (UserDTO) boxUsers.getItemAt(0);
+			}
+			txtNombre.setText(actualUser.getName());
+			txtNombreUsuario.setText(actualUser.getUserName());
+			boxRolPrincipal.setSelectedItem(actualUser.getPrincipalRole());
 			boxUsers.setSelectedItem(actualUser);
+			
 		} catch (InvalidRoleException | InvalidUserException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
 			e.printStackTrace();

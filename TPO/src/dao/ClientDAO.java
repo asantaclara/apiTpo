@@ -150,7 +150,11 @@ public class ClientDAO {
 			try {
 				prepStm.execute();
 			} catch (SQLException e) {
-				throw new AccessException("Save error");
+				if(e.getErrorCode() == 2627) {
+					throw new InvalidClientException("Existing cuit");
+				}else {					
+					throw new AccessException("Save error");
+				}
 			}
 			
 		} finally {

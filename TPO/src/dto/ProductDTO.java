@@ -57,6 +57,18 @@ public class ProductDTO {
 		return aux;
 		
 	}
+	public boolean equals(Object other){
+	    boolean result;
+	    
+	    if((other == null) || (getClass() != other.getClass())){
+	        result = false;
+	    } else {
+	        ProductDTO otherProductDTO = (ProductDTO)other;
+	        result = productId == otherProductDTO.getProductId();
+	    }
+	    
+	    return result;
+	}
 	
 	
 }

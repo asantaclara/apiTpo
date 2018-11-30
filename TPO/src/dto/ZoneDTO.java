@@ -22,5 +22,18 @@ public class ZoneDTO {
 		return name;
 	}
 	
+	public boolean equals(Object other){
+	    boolean result;
+	    
+	    if((other == null) || (getClass() != other.getClass())){
+	        result = false;
+	    } else {
+	        ZoneDTO otherZoneDTO = (ZoneDTO)other;
+	        result = (name.equals(otherZoneDTO.getName()));
+	    }
+	    
+	    return result;
+	}
+	
 	
 }

@@ -31,20 +31,40 @@ public class Client {
 	
 	public void modify(String cuit, String name, String address, String phoneNumber, String email, Zone zone) throws InvalidClientException, ConnectionException, AccessException {
 		
-		if(cuit != null) {			
-			this.cuit = cuit;
+		if(cuit != null) {
+			if(!(!cuit.matches("\\d{2}-\\d{8}-\\d{1}"))) {
+				this.cuit = cuit;				
+			} else {
+				throw new InvalidClientException("Invalid cuit");
+			}
 		}
-		if(name != null) {			
-			this.name = name;
+		if(name != null) {	
+			if (!(name.length() < 1 || !name.matches("[a-zA-Zñ ]+$"))) {
+				this.name = name;
+			} else {
+				throw new InvalidClientException("Invalid name");
+			}
 		}
-		if(address != null) {			
-			this.address = address;
+		if(address != null) {	
+			if(!(address.length() < 1 || !address.matches("[a-zA-Z0-9ñ ]+$"))) {				
+				this.address = address;
+			} else {
+				throw new InvalidClientException("Invalid address");
+			}
 		}
-		if(phoneNumber != null && phoneNumber.length() > 0) {			
-			this.phoneNumber = phoneNumber;
+		if(phoneNumber != null && phoneNumber.length() > 0) {	
+			if(!(phoneNumber.length() < 1 || !phoneNumber.matches("\\d{4}-\\d{4}"))) {				
+				this.phoneNumber = phoneNumber;
+			} else {
+				throw new InvalidClientException("Invalid phone number");
+			}
 		}
-		if(email != null) {			
-			this.email = email;
+		if(email != null) {	
+			if(!(email.length() < 1 || !email.matches("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"))) {				
+				this.email = email;
+			} else {
+				throw new InvalidClientException("Invalid email");	
+			}
 		}
 		if(zone != null) {			
 			this.zone = zone;	

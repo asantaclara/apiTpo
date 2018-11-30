@@ -34,7 +34,7 @@ public class NewUser extends JFrame{
 	private JPanel contentPane;
 	private JButton btnSalir,btnAceptar;
 	private JTextField txtNombre,txtNombreUsuario,txtPassword;
-	private JComboBox<Roles> boxRolSecundario,boxRolPrincipal;
+	private JComboBox<Roles> boxRolPrincipal;
 	private NewUser thisWindow = this;
 
 	public NewUser(){
@@ -80,9 +80,6 @@ public class NewUser extends JFrame{
 		lblRolPrincipal.setBounds(21, 108, 105, 14);
 		contentPane.add(lblRolPrincipal);
 		
-		JLabel lblRolSecundario = new JLabel("ROL SECUNDARIO");
-		lblRolSecundario.setBounds(21, 143, 105, 14);
-		contentPane.add(lblRolSecundario);
 		
 		JLabel lblNombreDeUsuario = new JLabel("NOMBRE DE USUARIO");
 		lblNombreDeUsuario.setBounds(21, 179, 132, 14);
@@ -111,16 +108,10 @@ public class NewUser extends JFrame{
 		boxRolPrincipal.setBounds(148, 102, 201, 20);
 		contentPane.add(boxRolPrincipal);
 		
-		boxRolSecundario = new JComboBox<Roles>();
-		boxRolSecundario.setBounds(148, 137, 201, 20);
-		contentPane.add(boxRolSecundario);
-		
 		for(Roles  rol: Roles.values()) {
 			boxRolPrincipal.addItem(rol);
-			boxRolSecundario.addItem(rol);
 		}
 		boxRolPrincipal.setSelectedIndex(-1);
-		boxRolSecundario.setSelectedIndex(-1);
 		
 
 		
@@ -137,14 +128,20 @@ public class NewUser extends JFrame{
 						usr.setName(txtNombre.getText());
 						usr.setPassword(txtPassword.getText());
 						usr.setPrincipalRole(boxRolPrincipal.getSelectedItem().toString());
-						usr.setSecondaryRole(boxRolSecundario.getSelectedItem().toString());
 						usr.setUserName(txtNombreUsuario.getText());
 						Controller.getInstance().addUser(usr);
 						JOptionPane.showMessageDialog(null, "USUARIO AGREGADO CON EXITO");
-						NewUser.this.dispose();
 					} catch ( InvalidRoleException | InvalidUserException e1) {
-						JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-						e1.printStackTrace();
+						switch (e1.getMessage()) {
+						case "Duplicate userName":
+							JOptionPane.showMessageDialog(thisWindow, "Nombre de usuario duplicado, por favor ingrese otro", "ERROR", 1);
+							break;
+
+						default:
+							JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
+							e1.printStackTrace();
+							break;
+						}
 					}catch (ConnectionException  e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
 						e1.printStackTrace();
@@ -167,36 +164,36 @@ public class NewUser extends JFrame{
 			}
 		});
 		
-		txtNombre.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				char vChar = arg0.getKeyChar();
-				if (!(Character.isAlphabetic(vChar)
-                        || (vChar == KeyEvent.VK_BACK_SPACE)
-                        || (vChar == KeyEvent.VK_DELETE))) {
-                    arg0.consume();
-                }
-						
-			}
-		});
-		
-		txtNombreUsuario.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				char vChar = arg0.getKeyChar();
-				if (!(Character.isAlphabetic(vChar)
-                        || (vChar == KeyEvent.VK_BACK_SPACE)
-                        || (vChar == KeyEvent.VK_DELETE))) {
-                    arg0.consume();
-                }
-						
-			}
-		});
+//		txtNombre.addKeyListener(new KeyAdapter() {
+//			@Override
+//			public void keyTyped(KeyEvent arg0) {
+//				char vChar = arg0.getKeyChar();
+//				if (!(Character.isAlphabetic(vChar)
+//                        || (vChar == KeyEvent.VK_BACK_SPACE)
+//                        || (vChar == KeyEvent.VK_DELETE))) {
+//                    arg0.consume();
+//                }
+//						
+//			}
+//		});
+//		
+//		txtNombreUsuario.addKeyListener(new KeyAdapter() {
+//			@Override
+//			public void keyTyped(KeyEvent arg0) {
+//				char vChar = arg0.getKeyChar();
+//				if (!(Character.isAlphabetic(vChar)
+//                        || (vChar == KeyEvent.VK_BACK_SPACE)
+//                        || (vChar == KeyEvent.VK_DELETE))) {
+//                    arg0.consume();
+//                }
+//						
+//			}
+//		});
 
 	}
 	
 	private boolean areFieldsEmpty() {
-		if(txtNombre.getText().isEmpty() || txtPassword.getText().isEmpty() || txtNombreUsuario.getText().isEmpty() || boxRolPrincipal.getSelectedIndex()== -1 || boxRolSecundario.getSelectedIndex() == -1) 
+		if(txtNombre.getText().isEmpty() || txtPassword.getText().isEmpty() || txtNombreUsuario.getText().isEmpty() || boxRolPrincipal.getSelectedIndex()== -1 ) 
 			return true;
 		else
 			return false;
