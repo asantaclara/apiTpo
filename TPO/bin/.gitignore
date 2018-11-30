@@ -1,9 +1,5 @@
-/dto/
-/exceptions/
+/gui/
+/images/
 /observer/
 /services/
 /test/
-/controller/
-/dao/
-/backEnd/
-/umlDiagrams/
