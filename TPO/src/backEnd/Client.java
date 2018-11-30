@@ -84,13 +84,13 @@ public class Client {
 	}
 	
 	private void parameterChecker(String cuit, String name, String address, String phoneNumber, String email, Zone zone) throws InvalidClientException {
-		if(name == null || name.length() < 1) {
+		if(name == null || name.length() < 1 || !name.matches("[a-zA-Zñ ]+$")) {
 			throw new InvalidClientException("Invalid name");
-		} else if(address == null || address.length() < 1) {
+		} else if(address == null || address.length() < 1 || !address.matches("[a-zA-Z0-9ñ ]+$")) {
 			throw new InvalidClientException("Invalid address");
-		} else if(phoneNumber == null || !phoneNumber.matches("\\d{4}-\\d{4}")) {
+		} else if(phoneNumber == null || phoneNumber.length() < 1 || !phoneNumber.matches("\\d{4}-\\d{4}")) {
 			throw new InvalidClientException("Invalid phone number");
-		} else if(email == null || email.length() < 1) {
+		} else if(email == null || email.length() < 1 || !email.matches("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")) {
 			throw new InvalidClientException("Invalid email");
 		} else if(zone == null) {
 			throw new InvalidClientException("Invalid zone");

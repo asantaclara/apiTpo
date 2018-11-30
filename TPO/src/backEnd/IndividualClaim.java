@@ -35,8 +35,12 @@ public abstract class IndividualClaim extends Claim {
 		this.actualState = actualState;
 	}
 	
-	public void addTransition(Transition t) {
-		transitions.add(t);
+	public void addTransition(Transition t) throws InvalidTransitionException {
+		if(t != null) {			
+			transitions.add(t);
+		} else {
+			throw new InvalidTransitionException("Invalid transition");
+		}
 	}
 	
 	public List<Transition> getTransitions() {

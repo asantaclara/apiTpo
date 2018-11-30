@@ -19,6 +19,11 @@ public class CompositeClaim extends Claim{
 	}
 	
 	public void addClaim(Claim claim) throws InvalidClaimException {
+		
+		if(claim == null) {
+			throw new InvalidClaimException("Claim doesn't exist");
+		}
+		
 		if(claim.getClient().getId() ==  client.getId()) {			
 			claims.add(claim);
 		} else {
@@ -61,8 +66,8 @@ public class CompositeClaim extends Claim{
 	}
 
 	@Override
-	public void treatClaim(User responsable, State newState, String description) {
-		System.out.println("Can't treat composite claim");
+	public void treatClaim(User responsable, State newState, String description) throws InvalidClaimException {
+		throw new InvalidClaimException("Can't treat compositeClaim");
 	}
 
 	@Override

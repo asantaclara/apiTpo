@@ -10,6 +10,7 @@ import dto.ProductItemDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
+import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidProductException;
 import exceptions.InvalidProductItemException;
@@ -20,7 +21,7 @@ public class MoreQuantityClaim extends IndividualClaim {
 	private ClaimType claimType;
 	private Invoice invoice;
 	
-	public MoreQuantityClaim(Client client, Date date, String description, ClaimType claimType, Invoice invoice) throws InvalidClaimException, InvalidInvoiceException {
+	public MoreQuantityClaim(Client client, Date date, String description, ClaimType claimType, Invoice invoice) throws InvalidClaimException, InvalidInvoiceException, InvalidClientException {
 		super(client, date, description);		
 		this.claimType = claimType;
 		

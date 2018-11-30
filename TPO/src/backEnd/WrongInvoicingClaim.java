@@ -21,7 +21,7 @@ public class WrongInvoicingClaim extends IndividualClaim {
 		invoices = new LinkedList<>();
 	}
 
-	public void addInovice(Invoice invoice, String inconsistency) {
+	public void addInovice(Invoice invoice, String inconsistency) throws InvalidInvoiceItemException {
 		invoices.add(new InvoiceItem(invoice, inconsistency));
 	}
 	

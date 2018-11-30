@@ -17,6 +17,7 @@ import exceptions.ConnectionException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidProductException;
+import exceptions.InvalidProductItemException;
 import exceptions.InvalidZoneException;
 import observer.Observable;
 
@@ -34,7 +35,7 @@ public class InvoiceService extends Observable{
 		
 	}
 	
-	public int addInvoice(InvoiceDTO dto) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidProductException, InvalidClientException, InvalidZoneException {
+	public int addInvoice(InvoiceDTO dto) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidProductException, InvalidClientException, InvalidZoneException, InvalidProductItemException {
 		List<ProductItemDTO> itemsDTO = dto.getProductItems(); //Esta lista de ProductItemDTO la tengo para despues traerme los product de la BD.
 		int clientId = dto.getClientId(); //Este es el id que uso para traerme al cliente de la BD.
 		Client existingClient =  ClientService.getIntance().getClientById(clientId);
@@ -54,13 +55,13 @@ public class InvoiceService extends Observable{
 		updateObservers();
 		return newInvoice.getId();
 	}
-	public void removeInvoice(InvoiceDTO dto) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException {
+	public void removeInvoice(InvoiceDTO dto) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
 		Invoice existingInvoice = new InvoiceDAO().getInvoice(dto.getInvoiceId());
 		existingInvoice.deactivateInvoice();
 		updateObservers();
 	}
 
-	public List<InvoiceDTO> getInvoicesByClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException {
+	public List<InvoiceDTO> getInvoicesByClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidInvoiceException, InvalidProductItemException {
 		List<Invoice> invoices = new InvoiceDAO().getAllInvoicesFromClient(clientId);
 		List<InvoiceDTO> aux = new LinkedList<>();
 		
@@ -70,7 +71,7 @@ public class InvoiceService extends Observable{
 		return aux;
 		
 	}
-	public Invoice getInvoiceById(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException {
+	public Invoice getInvoiceById(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
 		return new InvoiceDAO().getInvoice(invoiceId);
 	}
 }

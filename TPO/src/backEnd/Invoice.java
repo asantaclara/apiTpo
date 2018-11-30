@@ -8,8 +8,10 @@ import dao.InvoiceDAO;
 import dto.InvoiceDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
+import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidProductException;
+import exceptions.InvalidProductItemException;
 
 public class Invoice {
 	
@@ -19,13 +21,22 @@ public class Invoice {
 	private Date date;
 	private boolean activeInvoice;
 	
-	public Invoice(Client client, Date date) {
+	public Invoice(Client client, Date date) throws InvalidInvoiceException {
+		if(client == null || date == null) {
+			throw new InvalidInvoiceException("Invalid parameters");
+		}
+		
 		this.client = client;
 		this.date = date;
 		activeInvoice = true;
 	}
 	
-	public void addProductItem(Product product, int quantity) {
+	public void addProductItem(Product product, int quantity) throws InvalidProductItemException {
+		
+		if(product == null || product.getProductId() == 0 || quantity <= 0) {
+			throw new InvalidProductItemException("Invalid productItem");
+		}
+		
 		items.add(new ProductItem(product, quantity));
 	}
 	
@@ -49,7 +60,10 @@ public class Invoice {
 		return invoiceId;
 	}
 	
-	public void setId(int invoiceId) {
+	public void setId(int invoiceId) throws InvalidInvoiceException {
+		if(invoiceId == 0) {
+			throw new InvalidInvoiceException("Invalid invoiceId");
+		}
 		this.invoiceId = invoiceId;
 	}
 	
@@ -62,11 +76,17 @@ public class Invoice {
 		new InvoiceDAO().modify(this);
 	}
 	
-	public boolean validateClient(Client client) { //Si la factura es del cliente que me mandan devuelvo true
+	public boolean validateClient(Client client) throws InvalidClientException { //Si la factura es del cliente que me mandan devuelvo true
+		if(client == null) {
+			throw new InvalidClientException("Invalid client");
+		}
 		return (this.client.getId() == client.getId()); 
 	}
 	
-	public boolean validateProductItem(Product product, int quantity) {
+	public boolean validateProductItem(Product product, int quantity) throws InvalidProductItemException {
+		if(product == null | product.getProductId() == 0) {
+			throw new InvalidProductItemException("Invalid productItem");
+		}
 		for (ProductItem p : items) {
 			if (p.getProduct().getProductId() == product.getProductId()) {
 				return true;

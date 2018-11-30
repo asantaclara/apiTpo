@@ -17,22 +17,23 @@ import exceptions.ConnectionException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidProductException;
+import exceptions.InvalidProductItemException;
 import exceptions.InvalidZoneException;
 import services.ClientService;
 
 public class InvoiceDAO {
 
-	public List<Invoice> getAllInvoices() throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException{
+	public List<Invoice> getAllInvoices() throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidInvoiceException, InvalidProductItemException{
 		String sql = "SELECT * FROM Invoices WHERE Active = 1"; 
 		return getAllInvoicesPrivate(sql);
 	}
 	
-	public List<Invoice> getAllInvoicesFromClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException{
+	public List<Invoice> getAllInvoicesFromClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidInvoiceException, InvalidProductItemException{
 		String sql = "SELECT * FROM Invoices WHERE clientId = " + clientId + " AND Active = 1" ; 
 		return getAllInvoicesPrivate(sql);
 	}
 	
-	private static List<Invoice> getAllInvoicesPrivate(String sql) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException {
+	private static List<Invoice> getAllInvoicesPrivate(String sql) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidInvoiceException, InvalidProductItemException {
 		Connection con = SqlUtils.getConnection();  
 		try {
 			Statement stmt = SqlUtils.createStatement(con);  
@@ -61,7 +62,7 @@ public class InvoiceDAO {
 		}
 	}
 
-	public Invoice getInvoice(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException {
+	public Invoice getInvoice(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
 		Connection con = SqlUtils.getConnection();  
 		try {
 			Statement stmt = SqlUtils.createStatement(con);  

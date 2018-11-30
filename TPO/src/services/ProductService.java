@@ -14,6 +14,7 @@ import exceptions.ConnectionException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidProductException;
+import exceptions.InvalidProductItemException;
 import exceptions.InvalidZoneException;
 import observer.Observable;
 
@@ -57,7 +58,7 @@ public class ProductService extends Observable{
 		updateObservers();
 	}
 
-	public List<ProductDTO> getInvoiceProducts(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException {
+	public List<ProductDTO> getInvoiceProducts(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
 		Invoice invoice = new InvoiceDAO().getInvoice(invoiceId);
 		List<ProductDTO> returnList = new LinkedList<>();
 		

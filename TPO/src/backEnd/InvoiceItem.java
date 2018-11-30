@@ -13,7 +13,10 @@ public class InvoiceItem {
 	private String inconsistency;
 	private int id = 0;
 	
-	public InvoiceItem(Invoice invoice, String inconsistency) {
+	public InvoiceItem(Invoice invoice, String inconsistency) throws InvalidInvoiceItemException {
+		if(invoice == null || inconsistency.length() == 0) {
+			throw new InvalidInvoiceItemException("Invalid invoiceItem");
+		}
 		this.inconsistency = inconsistency;
 		this.invoice = invoice;
 	}
@@ -26,7 +29,10 @@ public class InvoiceItem {
 		return id;
 	}
 	
-	public void setId(int id) {
+	public void setId(int id) throws InvalidInvoiceItemException {
+		if(id == 0) {
+			throw new InvalidInvoiceItemException("The id is invalid");
+		}
 		this.id = id;
 	}
 	

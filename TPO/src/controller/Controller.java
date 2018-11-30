@@ -115,25 +115,25 @@ public class Controller {
 	//------------------------------------------------------------ END ROLE ------------------------------------------------------------
 	
 	//------------------------------------------------------------ START INVOICE ------------------------------------------------------------
-	public int addInvoice(InvoiceDTO dto) throws InvalidClientException, ConnectionException, AccessException, InvalidInvoiceException, InvalidProductException, InvalidZoneException {
+	public int addInvoice(InvoiceDTO dto) throws InvalidClientException, ConnectionException, AccessException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
 	// addProductItem(productId, quantity) / client / date
 		return InvoiceService.getIntance().addInvoice(dto);
 	}
-	public void removeInvoice(InvoiceDTO dto) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException {
+	public void removeInvoice(InvoiceDTO dto) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
 	// invoiceId
 		InvoiceService.getIntance().removeInvoice(dto);
 	}
 	//------------------------------------------------------------ END INVOICE ------------------------------------------------------------
 	
-	public String getClaimState(int claimNumber) throws InvalidClaimException, ConnectionException, AccessException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException {
+	public String getClaimState(int claimNumber) throws InvalidClaimException, ConnectionException, AccessException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidInvoiceItemException {
 		// claimId
 		return ClaimService.getIntance().getClaimState(claimNumber);
 	}
-	public void treatClaim(TransitionDTO dto) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidTransitionException, InvalidUserException, InvalidRoleException, SQLException {
+	public void treatClaim(TransitionDTO dto) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidTransitionException, InvalidUserException, InvalidRoleException, SQLException, InvalidInvoiceItemException {
 	// responsable / newState / description / claimId
 		ClaimService.getIntance().treatClaim(dto);	//Este metodo me esta devolviendo una List<ClaimDTO> con todas las claims que se vieron modificadas en el proceso.
 	}
-	public int addWrongInvoicingClaim(WrongInvoicingClaimDTO dto) throws InvalidClaimException, InvalidClientException, ConnectionException, AccessException, InvalidZoneException, InvalidInvoiceException, InvalidProductException, InvalidInvoiceItemException {
+	public int addWrongInvoicingClaim(WrongInvoicingClaimDTO dto) throws InvalidClaimException, InvalidClientException, ConnectionException, AccessException, InvalidZoneException, InvalidInvoiceException, InvalidProductException, InvalidInvoiceItemException, InvalidProductItemException {
 	// client / description / list de invoiceitemDTO	
 		return WrongInvoicingClaimService.getIntance().addWrongInvoicingClaim(dto);
 	}
@@ -143,7 +143,7 @@ public class Controller {
 	public int addIncompatibleZoneClaim(IncompatibleZoneClaimDTO dto) throws InvalidClientException, InvalidClaimException, ConnectionException, AccessException, InvalidZoneException, SQLException {
 		return IncompatibleZoneClaimService.getIntance().addIncompatibleZoneClaim(dto);
 	}
-	public int addCompositeClaim(CompositeClaimDTO dto) throws InvalidClaimException, ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException {
+	public int addCompositeClaim(CompositeClaimDTO dto) throws InvalidClaimException, ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidInvoiceItemException {
 		return CompositeClaimService.getIntance().addCompositeClaim(dto);	
 	}
 	public int addZone(String zoneName) throws ConnectionException, AccessException, InvalidZoneException {
@@ -155,13 +155,13 @@ public class Controller {
 	
 	//------------------------------------------------------------ START GUI ------------------------------------------------------------
 	
-	public List<InvoiceDTO> getInvoicesByClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException {
+	public List<InvoiceDTO> getInvoicesByClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidInvoiceException, InvalidProductItemException {
 		return InvoiceService.getIntance().getInvoicesByClient(clientId);
 	}
 	public boolean userExists(UserDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
 		return UserService.getIntance().userExists(dto);
 	}
-	public List<ProductDTO> getInvoiceProducts(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException{
+	public List<ProductDTO> getInvoiceProducts(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidProductItemException{
 		return ProductService.getIntance().getInvoiceProducts(invoiceId);
 	}
 	public ClientDTO getClientById(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
@@ -170,7 +170,7 @@ public class Controller {
 	public boolean clientExists(int clientId) throws ConnectionException, AccessException, InvalidZoneException {
 		return ClientService.getIntance().clientExists(clientId);
 	}
-	public List<ClaimDTO> getClaimsFromClient(int clientId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException{
+	public List<ClaimDTO> getClaimsFromClient(int clientId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidInvoiceItemException{
 		return ClaimService.getIntance().getClaimsFromClient(clientId);
 	}
 	public UserDTO getUserById(int userId) throws AccessException, InvalidRoleException, ConnectionException {
@@ -203,13 +203,13 @@ public class Controller {
 	public List<MoreQuantityClaimDTO> getAllMoreQuantityClaimsDTOFromClient(int clientId) throws ConnectionException, InvalidClaimException, InvalidInvoiceException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidProductItemException{
 		return MoreQuantityClaimService.getIntance().getAllMoreQuantityClaimsDTOFromClient(clientId);
 	}
-	public List<WrongInvoicingClaimDTO> getAllWrongInvoicingClaimsDTO() throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException{
+	public List<WrongInvoicingClaimDTO> getAllWrongInvoicingClaimsDTO() throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException, InvalidInvoiceItemException{
 		return WrongInvoicingClaimService.getIntance().getAllWrongInvoicingClaimsDTO();
 	}
-	public List<WrongInvoicingClaimDTO> getAllWrongInvoicingClaimsDTOFromClient(int clientId) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException{
+	public List<WrongInvoicingClaimDTO> getAllWrongInvoicingClaimsDTOFromClient(int clientId) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException, InvalidInvoiceItemException{
 		return WrongInvoicingClaimService.getIntance().getAllWrongInvoicingClaimsDTOFromClient(clientId);
 	}
-	public List<WrongInvoicingClaimDTO> getAllClaimsForInvoiceResponsable() throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException{
+	public List<WrongInvoicingClaimDTO> getAllClaimsForInvoiceResponsable() throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException, InvalidInvoiceItemException{
 		return WrongInvoicingClaimService.getIntance().getAllClaimsForInvoiceResponsable();
 	}
 	public List<IncompatibleZoneClaimDTO> getAllClaimsForZoneResponsable() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidClaimException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException{
@@ -218,10 +218,10 @@ public class Controller {
 	public List<MoreQuantityClaimDTO> getAllClaimsForDistributionResponsable() throws ConnectionException, InvalidClaimException, InvalidInvoiceException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidProductItemException{
 		return MoreQuantityClaimService.getIntance().getAllClaimsForDistributionResponsable();
 	}
-	public ClaimDTO getClaimById(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException {
+	public ClaimDTO getClaimById(int claimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidInvoiceItemException {
 		return ClaimService.getIntance().getClaimDTO(claimId);
 	}
-	public List<WrongInvoicingClaimDTO> getAllOpenWrongInvoicingClaimsByClient(int clientId) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException{
+	public List<WrongInvoicingClaimDTO> getAllOpenWrongInvoicingClaimsByClient(int clientId) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException, InvalidInvoiceItemException{
 		return WrongInvoicingClaimService.getIntance().getAllOpenWrongInvoicingClaimsByClient(clientId);
 	}
 	public List<IncompatibleZoneClaimDTO> getAllOpenIncompatibleZoneClaimsByClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidClaimException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException{

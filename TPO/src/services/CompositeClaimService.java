@@ -15,6 +15,7 @@ import exceptions.ConnectionException;
 import exceptions.InvalidClaimException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
+import exceptions.InvalidInvoiceItemException;
 import exceptions.InvalidProductException;
 import exceptions.InvalidProductItemException;
 import exceptions.InvalidRoleException;
@@ -37,7 +38,7 @@ public class CompositeClaimService extends Observable{
 		
 	}
 	
-	public int addCompositeClaim(CompositeClaimDTO dto) throws InvalidClaimException, ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException {
+	public int addCompositeClaim(CompositeClaimDTO dto) throws InvalidClaimException, ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidInvoiceItemException {
 		if(dto.getClientId() == 0 || dto.getDescription() == null) {
 			throw new InvalidClaimException("Missing parameters");
 		}
@@ -56,7 +57,7 @@ public class CompositeClaimService extends Observable{
 		return claim.getClaimId();
 	}
 	
-	public List<CompositeClaim> updateCompositeClaims(int individualClaimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException{
+	public List<CompositeClaim> updateCompositeClaims(int individualClaimId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidInvoiceItemException{
 		List<CompositeClaim> compositeClaims = new CompositeClaimDAO().getAllClaimsByIndividualClaim(individualClaimId);		
 		for (CompositeClaim compositeClaim : compositeClaims) {
 			new ClaimDAO().updateState(compositeClaim);

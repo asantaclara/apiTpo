@@ -136,12 +136,12 @@ public class App {
 //		}
 
 // testAddUser (only one)
-		UserDTO dtoAddUser = new UserDTO();
-		dtoAddUser.setName("Pedro");
-		dtoAddUser.setPrincipalRole(Roles.ZONE_RESPONSABLE.toString());
-		dtoAddUser.setUserName("z");
-		dtoAddUser.setPassword("z");
-		c.addUser(dtoAddUser);
+//		UserDTO dtoAddUser = new UserDTO();
+//		dtoAddUser.setName("Pedro");
+//		dtoAddUser.setPrincipalRole(Roles.ZONE_RESPONSABLE.toString());
+//		dtoAddUser.setUserName("z");
+//		dtoAddUser.setPassword("z");
+//		c.addUser(dtoAddUser);
 		
 
 // test modifyUser
@@ -405,6 +405,7 @@ public class App {
 //			System.out.println(u.getAvgReponseTime());
 //		}
 		
+		c.getAllClients();
 		System.out.println("END");
 	}
 }

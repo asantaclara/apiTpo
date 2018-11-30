@@ -43,7 +43,7 @@ public class WrongInvoicingClaimService extends Observable{
 		
 	}
 	
-	public int addWrongInvoicingClaim(WrongInvoicingClaimDTO dto) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidClaimException, InvalidInvoiceException, InvalidProductException, InvalidInvoiceItemException {
+	public int addWrongInvoicingClaim(WrongInvoicingClaimDTO dto) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidClaimException, InvalidInvoiceException, InvalidProductException, InvalidInvoiceItemException, InvalidProductItemException {
 		
 		int clientId = dto.getClientId(); //Con este clientId tengo que traer al client desde la BD y lo llamo existingClient.
 		Client existingClient =  ClientService.getIntance().getClientById(clientId);
@@ -69,16 +69,16 @@ public class WrongInvoicingClaimService extends Observable{
 	}
 	
 
-	public List<WrongInvoicingClaimDTO> getAllWrongInvoicingClaimsDTO() throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException {
+	public List<WrongInvoicingClaimDTO> getAllWrongInvoicingClaimsDTO() throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException, InvalidInvoiceItemException {
 		
 		return listOfClaimsTODTO(new WrongInvoicingClaimDAO().getAllWrongInvoicingClaims());
 	}
 
-	public List<WrongInvoicingClaimDTO> getAllWrongInvoicingClaimsDTOFromClient(int clientId) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException {
+	public List<WrongInvoicingClaimDTO> getAllWrongInvoicingClaimsDTOFromClient(int clientId) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException, InvalidInvoiceItemException {
 		return listOfClaimsTODTO(new WrongInvoicingClaimDAO().getAllWrongInvoicingClaimsFromClient(clientId));
 	}
 
-	public List<WrongInvoicingClaimDTO> getAllClaimsForInvoiceResponsable() throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException {
+	public List<WrongInvoicingClaimDTO> getAllClaimsForInvoiceResponsable() throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException, InvalidInvoiceItemException {
 		return listOfClaimsTODTO(new WrongInvoicingClaimDAO().getAllClaimsForInvoiceResponsable());
 	}
 	private List<WrongInvoicingClaimDTO> listOfClaimsTODTO(List<WrongInvoicingClaim> claims){
@@ -90,7 +90,7 @@ public class WrongInvoicingClaimService extends Observable{
 		return claimsDTO;
 	}
 
-	public List<WrongInvoicingClaimDTO> getAllOpenWrongInvoicingClaimsByClient(int clientId) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException {
+	public List<WrongInvoicingClaimDTO> getAllOpenWrongInvoicingClaimsByClient(int clientId) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidClaimException, InvalidProductItemException, InvalidInvoiceItemException {
 		return listOfClaimsTODTO(new WrongInvoicingClaimDAO().getAllOpenWrongInvoicingClaimsByClient(clientId));
 	}
 }

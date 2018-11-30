@@ -16,6 +16,7 @@ import exceptions.InvalidClientException;
 import exceptions.InvalidInvoiceException;
 import exceptions.InvalidInvoiceItemException;
 import exceptions.InvalidProductException;
+import exceptions.InvalidProductItemException;
 import exceptions.InvalidZoneException;
 
 public class InvoiceItemDAO {
@@ -53,7 +54,7 @@ public class InvoiceItemDAO {
 		}
 	}
 	
-	public InvoiceItem getInvoiceItem(int invoiceItemId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidInvoiceItemException, InvalidZoneException {
+	public InvoiceItem getInvoiceItem(int invoiceItemId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidInvoiceItemException, InvalidZoneException, InvalidProductItemException {
 		Connection con = SqlUtils.getConnection();  
 		try {
 			Statement stmt = SqlUtils.createStatement(con);  
@@ -81,7 +82,7 @@ public class InvoiceItemDAO {
 		}
 	}
 
-	public List<InvoiceItem> getAllInvoiceItemsOfClaim(WrongInvoicingClaim claim) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException{
+	public List<InvoiceItem> getAllInvoiceItemsOfClaim(WrongInvoicingClaim claim) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidInvoiceItemException, InvalidProductItemException{
 		Connection con = SqlUtils.getConnection();  
 		try {
 			Statement stmt = SqlUtils.createStatement(con);  
