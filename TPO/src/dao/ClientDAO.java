@@ -19,7 +19,7 @@ import exceptions.InvalidZoneException;
 public class ClientDAO {
 
 	
-	public List<Client> getAllClients() throws ConnectionException, AccessException, InvalidClientException{
+	public List<Client> getAllClients() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException{
 		Connection con = SqlUtils.getConnection();  
 		try {
 			Statement stmt = SqlUtils.createStatement(con);  

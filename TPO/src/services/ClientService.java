@@ -69,7 +69,7 @@ public class ClientService extends Observable{
 		}
 	}
 
-	public List<ClientDTO> getAllClients() throws ConnectionException, AccessException, InvalidClientException {
+	public List<ClientDTO> getAllClients() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
 		List<Client> clients =  new ClientDAO().getAllClients();
 		List<ClientDTO> aux = new LinkedList<>();
 		for (Client client : clients) {

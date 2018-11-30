@@ -11,7 +11,10 @@ public class Zone {
 	private String name;
 	private int id = 0;
 	
-	public Zone(String name) {
+	public Zone(String name) throws InvalidZoneException {
+		if(name == null || name.length() == 0) {
+			throw new InvalidZoneException("Invalid name");
+		}
 		this.name = name;
 	}
 	
@@ -23,7 +26,10 @@ public class Zone {
 		return id;
 	}
 	
-	public void setId(int zoneId) {
+	public void setId(int zoneId) throws InvalidZoneException {
+		if (zoneId == 0) {
+			throw new InvalidZoneException("Invalid zoneId");
+		}
 		this.id = zoneId;
 	}
 	
@@ -36,7 +42,10 @@ public class Zone {
 		new ZoneDAO().modify(this);
 	}
 	
-	public void setName(String name) {
+	public void setName(String name) throws InvalidZoneException {
+		if (name == null || name.length() == 0) {
+			throw new InvalidZoneException("Invalid name");
+		}
 		this.name = name;
 	}
 	

@@ -19,22 +19,40 @@ public class Transition {
 	private User responsable;
 	private int id = 0;
 	
-	public Transition(int claimId, State previousState, State newState, Date date, String description,
-			User responsable) throws InvalidTransitionException {
-		super();
+	public Transition(int claimId, State previousState, State newState, Date date, String description, User responsable) throws InvalidTransitionException {
+		if(claimId < 1) {
+			throw new InvalidTransitionException("Invalid Id");
+		}
 		this.claimId = claimId;
-		this.previousState = previousState;
-		this.newState = newState;
-		this.date = date;
-		this.description = description;
-		this.responsable = responsable;
 		
-		if(newState.getValue() <= previousState.getValue()) {
+		if(previousState == null || newState == null ||newState.getValue() <= previousState.getValue()) {
 			throw new InvalidTransitionException("Invalid transition from " + previousState.name() + " to " + newState.name());
 		}
+		this.previousState = previousState;
+		this.newState = newState;
+		
+		if(date == null) {
+			throw new InvalidTransitionException("Invalid date");
+		}
+		this.date = date;
+		
+		if(description == null || description.length() == 0) {
+			throw new InvalidTransitionException("Invalid description");
+		}
+		this.description = description;
+		
+		if (responsable == null) {
+			throw new InvalidTransitionException("Invalid responsable");
+		}
+		this.responsable = responsable;
+		
+		
 	}
 	
-	public void setId(int id) {
+	public void setId(int id) throws InvalidTransitionException {
+		if(id < 1) {
+			throw new InvalidTransitionException("Invalid id");
+		}
 		this.id = id;
 	}
 	

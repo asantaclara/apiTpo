@@ -179,13 +179,13 @@ public class Controller {
 	public UserDTO getUserByUsernameAndPassword(UserDTO dto) throws AccessException, ConnectionException, InvalidRoleException {
 		return UserService.getIntance().getUserByUsernameAndPassword(dto);
 	}
-	public List<ClientDTO> getAllClients() throws ConnectionException, AccessException, InvalidClientException{
+	public List<ClientDTO> getAllClients() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException{
 		return ClientService.getIntance().getAllClients();
 	}
 	public List<ProductDTO> getAllProducts() throws ConnectionException, AccessException, InvalidProductException{
 		return ProductService.getIntance().getAllProducts();
 	}
-	public List<ZoneDTO> getAllZones() throws ConnectionException, AccessException{
+	public List<ZoneDTO> getAllZones() throws ConnectionException, AccessException, InvalidZoneException{
 		return ZoneService.getIntance().getAllZones();
 	}
 	public ProductDTO getProductById(int productId) throws ConnectionException, AccessException, InvalidProductException{

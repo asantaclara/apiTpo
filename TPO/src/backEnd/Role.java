@@ -6,6 +6,7 @@ import java.util.List;
 import dto.RoleDTO;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
+import exceptions.InvalidRoleException;
 
 public class Role {
 
@@ -17,11 +18,17 @@ public class Role {
 		this.description = description;
 	}
 	
-	public void addUser(User user) {
+	public void addUser(User user) throws InvalidRoleException {
+		if(user == null) {
+			throw new InvalidRoleException("Invalid user");
+		}
 		users.add(user);
 	}
 	
-	public void removeUser(User user) {
+	public void removeUser(User user) throws InvalidRoleException {
+		if(user == null) {
+			throw new InvalidRoleException("Invalid user");
+		}
 		users.remove(user);
 	}
 	
@@ -42,7 +49,10 @@ public class Role {
 		
 	}
 	
-	public void setRoleId(int roleId) {
+	public void setRoleId(int roleId) throws InvalidRoleException {
+		if(roleId < 1) {
+			throw new InvalidRoleException("Invalid id");
+		}
 		this.roleId = roleId;
 	}
 	

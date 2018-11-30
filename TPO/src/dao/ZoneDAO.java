@@ -15,7 +15,7 @@ import exceptions.InvalidZoneException;
 
 public class ZoneDAO {
 	
-	public List<Zone> getAllZones() throws ConnectionException, AccessException {
+	public List<Zone> getAllZones() throws ConnectionException, AccessException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();  
 		try {
 			Statement stmt = SqlUtils.createStatement(con);  

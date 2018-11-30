@@ -31,10 +31,10 @@ public class Product {
 	
 	public void modify(String title, String description, float price) throws ConnectionException, AccessException, InvalidProductException {
 		
-		if(title != null && title.length() == 0) {			
+		if(title != null && title.length() != 0) {			
 			this.title = title;
 		}
-		if (description != null && description.length() == 0) {			
+		if (description != null && description.length() != 0) {			
 			this.description = description;
 		}
 		if (price > 0) {			
@@ -85,7 +85,10 @@ public class Product {
 		return price;
 	}
 
-	public void setProductId(int productId) {
+	public void setProductId(int productId) throws InvalidProductException {
+		if(productId < 1) {
+			throw new InvalidProductException("Invalid id");
+		}
 		this.productId = productId;
 	}
 	

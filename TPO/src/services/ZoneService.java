@@ -34,7 +34,7 @@ public class ZoneService extends Observable{
 		return new ZoneDAO().getZone(zoneName);
 	}
 
-	public List<ZoneDTO> getAllZones() throws ConnectionException, AccessException {
+	public List<ZoneDTO> getAllZones() throws ConnectionException, AccessException, InvalidZoneException {
 		List<Zone> aux =  new ZoneDAO().getAllZones();
 		List<ZoneDTO> zonesDTOList = new LinkedList<>();
 		
