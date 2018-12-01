@@ -65,12 +65,17 @@ public class LogsForQueryUser extends JFrame implements Observer{
 		try {
 			Controller.getInstance().addObserverToClaimService(thisWindow);
 			Controller.getInstance().addObserverToClientService(thisWindow);
+			Controller.getInstance().addObserverToCompositeClaimService(thisWindow);
+			Controller.getInstance().addObserverToIncompatibleZoneClaimService(thisWindow);
+			Controller.getInstance().addObserverToMoreQuantityClaimService(thisWindow);
+			Controller.getInstance().addObserverToWrongInvoicingClaimService(thisWindow);
+			Controller.getInstance().addObserverToZoneService(thisWindow);
 		} catch (InvalidObserverException e1) {
 			e1.printStackTrace();
 		}
 		
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 800, 365);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -138,6 +143,14 @@ public class LogsForQueryUser extends JFrame implements Observer{
 			lblConsultaDeTratamientos.setFont(new Font("Tahoma", Font.PLAIN, 18));
 			lblConsultaDeTratamientos.setBounds(10, 26, 255, 33);
 			contentPane.add(lblConsultaDeTratamientos);
+			
+			JLabel lblClientes = new JLabel("CLIENTES");
+			lblClientes.setBounds(335, 7, 61, 16);
+			contentPane.add(lblClientes);
+			
+			JLabel lblIdReclamos = new JLabel("ID RECLAMOS");
+			lblIdReclamos.setBounds(589, 7, 91, 16);
+			contentPane.add(lblIdReclamos);
 				
 	}
 	
@@ -209,7 +222,11 @@ public class LogsForQueryUser extends JFrame implements Observer{
 					try {
 						Controller.getInstance().removeObserverToClaimService(thisWindow);
 						Controller.getInstance().removeObserverToClientService(thisWindow);
-						super.windowClosed(e);
+						Controller.getInstance().removeObserverToCompositeClaimService(thisWindow);
+						Controller.getInstance().removeObserverToIncompatibleZoneClaimService(thisWindow);
+						Controller.getInstance().removeObserverToMoreQuantityClaimService(thisWindow);
+						Controller.getInstance().removeObserverToWrongInvoicingClaimService(thisWindow);
+						Controller.getInstance().removeObserverToZoneService(thisWindow);
 					} catch (InvalidObserverException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Error de Observer", "ERROR", 1);
 						e1.printStackTrace();
@@ -223,10 +240,27 @@ public class LogsForQueryUser extends JFrame implements Observer{
 	public void update() {
 		ClientDTO actualClient = (ClientDTO) comboBoxClientes.getSelectedItem();
 		ClaimDTO actualClaim = (ClaimDTO) comboBoxReclamos.getSelectedItem();
+		comboBoxClientes.removeAllItems();
+		comboBoxReclamos.removeAllItems();
 		try {
-			for(ClientDTO c : Controller.getInstance().getAllClients()) {
+			List<ClientDTO> clients = Controller.getInstance().getAllClients(); 
+			for(ClientDTO c : clients) {
 				comboBoxClientes.addItem(c);
 			}
+			if(!clients.contains(actualClient)) {
+				actualClient = comboBoxClientes.getItemAt(0);
+			}
+			comboBoxClientes.setSelectedItem(actualClient);
+			
+			List<ClaimDTO> claims = Controller.getInstance().getClaimsFromClient(actualClient.getId());
+			
+			for (ClaimDTO claimDTO : claims) {
+				comboBoxReclamos.addItem(claimDTO);
+			}
+			if(!claims.contains(actualClaim)) {
+				actualClaim = comboBoxReclamos.getItemAt(0);
+			}
+			comboBoxReclamos.setSelectedItem(actualClaim);
 		} catch ( InvalidClientException | InvalidZoneException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
 			e.printStackTrace();
@@ -236,6 +270,30 @@ public class LogsForQueryUser extends JFrame implements Observer{
 		} catch (AccessException e1) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
 			e1.printStackTrace();
+		} catch (InvalidClaimException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidInvoiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidProductException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidProductItemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidUserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidRoleException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidTransitionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidInvoiceItemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		comboBoxClientes.setSelectedItem(actualClient);
 		if(actualClaim != null) {

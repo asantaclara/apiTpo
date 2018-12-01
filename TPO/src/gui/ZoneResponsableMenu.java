@@ -89,7 +89,7 @@ public class ZoneResponsableMenu extends JFrame implements Observer {
 			e1.printStackTrace();
 		}
 		//
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1001, 572);
 		contentPane = new JPanel();
 		contentPane.setForeground(Color.WHITE);
@@ -177,7 +177,7 @@ public class ZoneResponsableMenu extends JFrame implements Observer {
 		scrollPaneClaim.setViewportView(claimTable);
 
 		// Carga por primera vez todos los reclamos a la tabla
-		setClaimsToModel();
+		//setClaimsToModel();
 
 		// --------------------------------------FIN TABLA
 		// RECLAMOS-----------------------------------------------------------------
@@ -195,7 +195,7 @@ public class ZoneResponsableMenu extends JFrame implements Observer {
 		contentPane.add(btnAllClaims);
 
 		stateComboBox = new JComboBox<State>(State.values());
-		// stateComboBox = new JComboBox<State>();
+		 //stateComboBox = new JComboBox<State>();
 		stateComboBox.setBounds(128, 265, 141, 20);
 		contentPane.add(stateComboBox);
 		stateComboBox.setSelectedIndex(-1);
@@ -253,7 +253,7 @@ public class ZoneResponsableMenu extends JFrame implements Observer {
 						List<IncompatibleZoneClaimDTO> claimsByClient;
 						ClientDTO actualClient = (ClientDTO) clientesComboBox.getSelectedItem();
 						claimsByClient = Controller.getInstance()
-								.getAllIncompatibleZonClaimsDTOFromClient(actualClient.getId());
+								.getAllOpenIncompatibleZoneClaimsByClient(actualClient.getId());
 						for (ClaimDTO cl : claimsByClient) {
 							dtmClaim.addRow(cl.toDataRow());
 						}
@@ -303,9 +303,9 @@ public class ZoneResponsableMenu extends JFrame implements Observer {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				TransitionDTO transition = new TransitionDTO();
-				transition.setClaimId(Integer.parseInt(lblReclamoID.getText()));
+				transition.setClaimId(Integer.parseInt((lblReclamoID.getText() == "") ? "0" : lblReclamoID.getText()));
 				transition.setDescription(txtDescripcion.getText());
-				transition.setNewState(stateComboBox.getSelectedItem().toString());
+				transition.setNewState((stateComboBox.getSelectedItem() != null) ? stateComboBox.getSelectedItem().toString() : null);
 				transition.setResponsableId(userId);
 				try {
 					Controller.getInstance().treatClaim(transition);
@@ -319,8 +319,15 @@ public class ZoneResponsableMenu extends JFrame implements Observer {
 						| InvalidInvoiceException | InvalidProductException | InvalidZoneException
 						| InvalidProductItemException | InvalidTransitionException | InvalidUserException
 						| InvalidRoleException | SQLException | InvalidInvoiceItemException e1) {
-					JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-					e1.printStackTrace();
+					if(e1.getMessage() == "Missing parameters") {
+						JOptionPane.showMessageDialog(thisWindow, "Parametros cargados incorrectamente", "ERROR", 1);
+					} else if (e1.getMessage().contains("Invalid transition from")){ 
+						JOptionPane.showMessageDialog(thisWindow, "No se puede seleccionar un estado igual o previo al actual", "ERROR", 1);
+					} else if(e1.getMessage().contains("Invalid description")){
+						JOptionPane.showMessageDialog(thisWindow, "Debe cargar la descripcion", "ERROR", 1);
+					} else {
+						e1.printStackTrace();
+					}
 				}catch (ConnectionException  e1) {
 					JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
 					e1.printStackTrace();
@@ -354,7 +361,7 @@ public class ZoneResponsableMenu extends JFrame implements Observer {
 	private void setClaimsToModel() {
 		try {
 			dtmClaim.setRowCount(0);
-			List<IncompatibleZoneClaimDTO> claims = Controller.getInstance().getAllIncompatibleZoneClaimsDTO();
+			List<IncompatibleZoneClaimDTO> claims = Controller.getInstance().getAllClaimsForZoneResponsable();
 			for (IncompatibleZoneClaimDTO c : claims) {
 				dtmClaim.addRow(c.toDataRow());
 			}
@@ -378,15 +385,16 @@ public class ZoneResponsableMenu extends JFrame implements Observer {
 	public void update() {
 		// guardo el cliente que tengo seleccionado
 		ClientDTO client = (ClientDTO) clientesComboBox.getSelectedItem();
+		clientesComboBox.removeAllItems();
 		try {
-			clientesComboBox.removeAllItems();
 			List<ClientDTO> clientes = Controller.getInstance().getAllClients();
 			for (ClientDTO c : clientes) {
 				clientesComboBox.addItem(c);
 			}
-			// seteo el cliente que estaba seleccionado nuevamente
-
 			setClaimsToModel();
+			if(!clientes.contains(client)) {
+				client = clientesComboBox.getItemAt(0);
+			}
 			clientesComboBox.setSelectedItem(client);
 		} catch ( InvalidClientException | InvalidZoneException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);

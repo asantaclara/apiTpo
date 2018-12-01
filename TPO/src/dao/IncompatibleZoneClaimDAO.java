@@ -149,7 +149,7 @@ public class IncompatibleZoneClaimDAO {
 	}
 
 	public List<IncompatibleZoneClaim> getAllClaimsForZoneResponsable() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidClaimException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException {
-		String sql = "SELECT * FROM IncompatibleZoneClaims JOIN Claims ON Claims.ClaimId = IncompatibleZoneClaims.IncompatibleZoneId where claims.state IN ('ENTERED','IN_TREATMENT')";
+		String sql = "SELECT * FROM IncompatibleZoneClaims JOIN Claims ON Claims.ClaimId = IncompatibleZoneClaims.IncompatibleZoneId where claims.state IN ('ENTERED','IN_TREATMENT') and ClientId in (select clientId from Clients where active = 1)";
 		return getAllIncompatibleZoneClaims(sql);
 	}
 

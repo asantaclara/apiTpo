@@ -104,7 +104,7 @@ public class CallCenterMenu extends JFrame implements Observer{
 	}
 	
 	private void configuration() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1100, 572);
 		contentPane = new JPanel();
 		contentPane.setForeground(Color.WHITE);
@@ -533,8 +533,9 @@ public class CallCenterMenu extends JFrame implements Observer{
 						int selectedCount = ((rdbtnZonaIncompatible.isSelected() ? 1 : 0) + (rdbtnFacturacionIncorrecta.isSelected() ? 1 : 0) 
 								+ (rdbtnCantidadIncorrecta.isSelected() ? 1 : 0) + (rdbtnProductosFaltantes.isSelected() ? 1 : 0) 
 								+ (rdbtnMayorCantidad.isSelected() ? 1 : 0));
-						
-						if(lblInvoiceID.getText().isEmpty() && (rdbtnCantidadIncorrecta.isSelected() || rdbtnMayorCantidad.isSelected() || rdbtnProductosFaltantes.isSelected())) {
+						if(selectedCount != 0 && actualClient == null) {
+							JOptionPane.showMessageDialog(thisWindow, "No se selecciono cliente", "GG", 1);
+						} else if(lblInvoiceID.getText().isEmpty() && (rdbtnCantidadIncorrecta.isSelected() || rdbtnMayorCantidad.isSelected() || rdbtnProductosFaltantes.isSelected())) {
 							JOptionPane.showMessageDialog(thisWindow, "NO SE SELECCIONO UNA FACTURA", "GG", 1);
 						} else {
 							// --------------------------------- incompatible zone ------------------------------------------
@@ -593,7 +594,7 @@ public class CallCenterMenu extends JFrame implements Observer{
 							JOptionPane.showMessageDialog(thisWindow, "RECLAMO COMPUESTO CARGADO EXITOSAMENTE", "GG", 1);
 						} else if(claims.size() == 1 && selectedCount == 1 ) {
 								JOptionPane.showMessageDialog(thisWindow, "RECLAMO CARGADO EXITOSAMENTE", "GG", 1);
-						} else {
+						} else if (claims.size() != 0){
 							String enteredClaims = "";
 							
 							for (Integer integer : claims) {
@@ -601,6 +602,8 @@ public class CallCenterMenu extends JFrame implements Observer{
 							}
 							JOptionPane.showMessageDialog(thisWindow, "Problema en la carga de reclamos, los reclamos cargados correctamente son los" + enteredClaims, "ERROR", 1);
 							
+						} else if (selectedCount == 0){
+							JOptionPane.showMessageDialog(thisWindow, "No se selecciono ninguna opcion", "ERROR", 1);
 						}
 						editorPane.setText("");
 			} catch ( InvalidClientException | InvalidZoneException | InvalidClaimException | InvalidInvoiceException 

@@ -133,6 +133,7 @@ public class ClaimsPerCategory extends JFrame implements Observer{
 	@Override
 	public void update() {
 		try {
+			dtm.setRowCount(0);
 			loadTable();
 		} catch (AccessException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);

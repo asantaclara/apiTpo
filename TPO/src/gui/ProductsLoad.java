@@ -43,7 +43,7 @@ public class ProductsLoad extends JDialog {
 	private JTable table;
 	private DefaultTableModel dtm;
 	private JButton btnAceptar,btnCancelar,btnAgregar,btnQuitar;
-	private JComboBox<String> productsName;
+	private JComboBox<ProductDTO> productsName;
 	private JSpinner spinner;
 	private JLabel lblTitulo;
 	private int invoiceId;
@@ -96,14 +96,14 @@ public class ProductsLoad extends JDialog {
 		lblTitulo.setBounds(161, 11, 249, 26);
 		contentPane.add(lblTitulo);
 		
-		productsName = new JComboBox<String>();
+		productsName = new JComboBox<ProductDTO>();
 		productsName.setToolTipText("Unicamente apareceran los productos de la factura");
 		productsName.setBounds(38, 59, 173, 24);
 		
 		try {
 			products = Controller.getInstance().getInvoiceProducts(invoiceId);
 			for(ProductDTO p : products) {
-				productsName.addItem(p.getTitle());
+				productsName.addItem(p);
 			}
 		} catch (InvalidProductException | InvalidInvoiceException | InvalidClientException | InvalidZoneException | InvalidProductItemException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
@@ -173,7 +173,7 @@ public class ProductsLoad extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				spinner.getValue().toString();
 				for(ProductDTO prod : products) {
-					if(prod.getTitle().equals(productsName.getSelectedItem())) {
+					if(prod.equals(productsName.getSelectedItem())) {
 						int quantity = (int) spinner.getValue();
 						String[] aux = new String[6];
 						for (int i = 0; i < prod.toDataRow().length; i++) {
@@ -195,7 +195,7 @@ public class ProductsLoad extends JDialog {
 					dtm.removeRow(table.getSelectedRow());
 				}
 				else
-					JOptionPane.showMessageDialog(ProductsLoad.this,"No se ha seleccionado ningun producto");
+					JOptionPane.showMessageDialog(thisWindow,"No se ha seleccionado ningun producto");
 			}
 		});
 

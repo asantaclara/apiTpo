@@ -108,7 +108,7 @@ public class DistributionResponsableMenu extends JFrame implements Observer {
 		}
 
 		//
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1001, 572);
 		contentPane = new JPanel();
 		contentPane.setForeground(Color.WHITE);
@@ -392,14 +392,14 @@ public class DistributionResponsableMenu extends JFrame implements Observer {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				TransitionDTO transition = new TransitionDTO();
-				transition.setClaimId(Integer.parseInt(lblReclamoID.getText()));
+				transition.setClaimId(Integer.parseInt((lblReclamoID.getText() == "") ? "0" : lblReclamoID.getText()));
 				transition.setDescription(txtDescripcion.getText());
 				transition.setNewState(stateComboBox.getSelectedItem().toString());
 				transition.setResponsableId(userId);
 				
 			try {
 				Controller.getInstance().treatClaim(transition);
-				JOptionPane.showMessageDialog(DistributionResponsableMenu.this, "RECLAMO DE FACTURACION INCORRECTA TRATADO CON EXISTO", "TRATAMIENTO EXITOSO", 1);
+				JOptionPane.showMessageDialog(DistributionResponsableMenu.this, "RECLAMO DE FACTURACION INCORRECTA TRATADO CON EXITO", "TRATAMIENTO EXITOSO", 1);
 				txtDescripcion.setText("");
 				stateComboBox.setSelectedIndex(-1);
 				
@@ -407,8 +407,15 @@ public class DistributionResponsableMenu extends JFrame implements Observer {
 					| InvalidInvoiceException | InvalidProductException | InvalidZoneException
 					| InvalidProductItemException | InvalidTransitionException | InvalidUserException
 					| InvalidRoleException | SQLException | InvalidInvoiceItemException e1) {
-				JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-				e1.printStackTrace();
+				if(e1.getMessage() == "Missing parameters") {
+					JOptionPane.showMessageDialog(thisWindow, "Parametros cargados incorrectamente", "ERROR", 1);
+				} else if (e1.getMessage().contains("Invalid transition from")){ 
+					JOptionPane.showMessageDialog(thisWindow, "No se puede seleccionar un estado igual o previo al actual", "ERROR", 1);
+				} else if(e1.getMessage().contains("Invalid description")){
+					JOptionPane.showMessageDialog(thisWindow, "Debe cargar la descripcion", "ERROR", 1);
+				} else {
+					e1.printStackTrace();
+				}
 			} catch (ConnectionException e1) {
 				JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
 				e1.printStackTrace();
@@ -497,7 +504,9 @@ public class DistributionResponsableMenu extends JFrame implements Observer {
 					clientesComboBox.addItem(c);
 				}
 				setClaimsToModel();
-				
+				if(!clientes.contains(client)) {
+					client = clientesComboBox.getItemAt(0);
+				}
 				clientesComboBox.setSelectedItem(client);
 			} catch (InvalidZoneException | InvalidClientException e) {
 				e.printStackTrace();

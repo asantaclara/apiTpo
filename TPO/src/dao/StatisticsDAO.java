@@ -27,7 +27,8 @@ public class StatisticsDAO {
 		Connection con = SqlUtils.getConnection();  
 		try {
 			Statement stmt = SqlUtils.createStatement(con); 
-			String sql = "select Claims.ClientId as Cliente, count(claims.clientId) as Cantidad from Claims group by Claims.ClientId ORDER BY Cantidad DESC";
+			String sql = "select Claims.ClientId as Cliente, count(claims.clientId) as Cantidad from Claims join Clients on Clients.ClientId = Claims.ClientId " + 
+					"where Clients.Active = 1 group by Claims.ClientId ORDER BY Cantidad DESC";
 			ResultSet rs = SqlUtils.executeQuery(stmt, con, sql);
 			
 			try {

@@ -62,6 +62,7 @@ public class RankingPerUser extends JFrame implements Observer {
 		//Observer
 		try {
 			Controller.getInstance().addObserverToUserService(thisWindow);
+			Controller.getInstance().addObserverToClaimService(thisWindow);
 		} catch (InvalidObserverException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Error de Observer", "ERROR", 1);
 			e.printStackTrace();
@@ -115,7 +116,8 @@ public class RankingPerUser extends JFrame implements Observer {
 			public void windowClosing(WindowEvent e) {
 					//Observer
 					try {
-						Controller.getInstance().removeObserverToUserService(thisWindow);super.windowClosed(e);
+						Controller.getInstance().removeObserverToUserService(thisWindow);
+						Controller.getInstance().removeObserverToClaimService(thisWindow);
 					} catch (InvalidObserverException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Error de Observer", "ERROR", 1);
 						e1.printStackTrace();
@@ -135,6 +137,7 @@ public class RankingPerUser extends JFrame implements Observer {
 	@Override
 	public void update() {
 		try {
+			dtm.setRowCount(0);
 			loadTable();
 		} catch (InvalidUserException | InvalidRoleException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);

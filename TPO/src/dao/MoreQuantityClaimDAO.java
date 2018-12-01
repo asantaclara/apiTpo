@@ -168,7 +168,7 @@ public class MoreQuantityClaimDAO {
 	}
 
 	public List<MoreQuantityClaim> getAllClaimsForDistributionResponsable() throws ConnectionException, InvalidClaimException, InvalidInvoiceException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidProductItemException {
-		String sql = "SELECT * FROM MoreQuantityClaims JOIN Claims ON Claims.ClaimId = MoreQuantityClaims.MoreQuantityId where claims.state IN ('ENTERED','IN_TREATMENT')";
+		String sql = "SELECT * FROM MoreQuantityClaims JOIN Claims ON Claims.ClaimId = MoreQuantityClaims.MoreQuantityId where claims.state IN ('ENTERED','IN_TREATMENT') and ClientId in (select clientId from Clients where active = 1)";
 		return getAllMoreQuantityClaims(sql);
 	}
 

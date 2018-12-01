@@ -66,6 +66,7 @@ public class RankingPerClient extends JFrame implements Observer {
 			Controller.getInstance().addObserverToIncompatibleZoneClaimService(thisWindow);
 			Controller.getInstance().addObserverToMoreQuantityClaimService(thisWindow);
 			Controller.getInstance().addObserverToWrongInvoicingClaimService(thisWindow);
+			Controller.getInstance().addObserverToZoneService(thisWindow);
 		} catch (InvalidObserverException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Error de Observer", "ERROR", 1);
 			e.printStackTrace();
@@ -124,6 +125,7 @@ public class RankingPerClient extends JFrame implements Observer {
 						Controller.getInstance().removeObserverToIncompatibleZoneClaimService(thisWindow);
 						Controller.getInstance().removeObserverToMoreQuantityClaimService(thisWindow);
 						Controller.getInstance().removeObserverToWrongInvoicingClaimService(thisWindow);
+						Controller.getInstance().removeObserverToZoneService(thisWindow);
 						super.windowClosed(e);
 					} catch (InvalidObserverException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Error de Observer", "ERROR", 1);
@@ -143,6 +145,7 @@ public class RankingPerClient extends JFrame implements Observer {
 	@Override
 	public void update() {
 		try {
+			dtm.setRowCount(0);
 			loadTable();
 		} catch (InvalidClientException | InvalidZoneException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
