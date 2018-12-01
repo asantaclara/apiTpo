@@ -217,7 +217,7 @@ public class ProductsLoad extends JDialog {
 				for(ProductDTO prod : products) {	
 					for(int y = 0;y < table.getRowCount();y++) {
 						if(prod.getProductId() == Integer.parseInt(table.getValueAt(y, 0).toString())) {
-							int quantity = (int) table.getValueAt(y,4);
+							int quantity = Integer.parseInt(table.getValueAt(y,4).toString());
 							finalProducts.add(new ProductItemDTO(prod,quantity));
 						}
 					}

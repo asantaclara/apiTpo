@@ -14,10 +14,11 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-
+import java.util.Map.Entry;import javax.naming.InitialContext;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -36,6 +37,8 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+
+import org.omg.Messaging.SyncScopeHelper;
 
 import backEnd.ClaimType;
 import controller.Controller;
@@ -89,6 +92,7 @@ public class CallCenterMenu extends JFrame implements Observer{
 	private List<ProductItemDTO> finalProducts;
 
 	private JButton btnSalir;
+	private JButton btnReclamoCompuesto;
 
 	/**
 	 * Create the frame.
@@ -308,8 +312,12 @@ public class CallCenterMenu extends JFrame implements Observer{
 		btnSalir = new JButton("");
 
 		btnSalir.setIcon(new ImageIcon(CallCenterMenu.class.getResource("/images/btnNaranjaSalir.jpg")));
-		btnSalir.setBounds(428, 491, 174, 45);
+		btnSalir.setBounds(517, 491, 174, 45);
 		contentPane.add(btnSalir);
+		
+		btnReclamoCompuesto = new JButton("Reclamo Compuesto");
+		btnReclamoCompuesto.setBounds(308, 491, 157, 29);
+		contentPane.add(btnReclamoCompuesto);
 		
 		//Observer
 		try {
@@ -353,6 +361,55 @@ public class CallCenterMenu extends JFrame implements Observer{
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange() == ItemEvent.SELECTED){
 					updateClientComboBox();
+				}
+			}
+		});
+		
+		btnReclamoCompuesto.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String individualClaims = JOptionPane.showInputDialog(thisWindow, "Ingrese separado por espacios los ID de los reclamos simples para formar el compuesto", "Ingresar reclamo compuesto manualmente",1);
+				String[] splitted = individualClaims.split(" ");
+				CompositeClaimDTO dto = new CompositeClaimDTO();
+				dto.setDescription(editorPane.getText());
+				dto.setDate(new Date());
+				
+				try {
+					for (int i = 0; i < splitted.length; i++) {
+						System.out.println(splitted[i]);
+						ClaimDTO claim = Controller.getInstance().getClaimById(Integer.parseInt(splitted[i]));
+						if(dto.getClientId() == 0) {
+							dto.setClientId(claim.getClientId());
+						}
+						if(claim.getClass() == dto.getClass()) {
+							throw new InvalidClaimException("Claim is composite");
+						}
+						
+						dto.addIndividualClaimId(Integer.valueOf(splitted[i]));
+					}
+						
+						Controller.getInstance().addCompositeClaim(dto);
+						
+				} catch (InvalidClaimException e2) {
+					if(e2.getMessage() == "Claim not found") {
+						JOptionPane.showMessageDialog(thisWindow, "Los ID ingresados son incorrectos", "ERROR", 1);
+					}else if(e2.getMessage() == "Claim is composite") {
+						JOptionPane.showMessageDialog(thisWindow, "Uno de los reclamos es compuesto", "ERROR", 1);
+					} else if(e2.getMessage() == "The claim doesn't belong to the client"){
+						JOptionPane.showMessageDialog(thisWindow, "Los reclamos no pertenecen al mismo cliente", "ERROR", 1);
+					} else if(e2.getMessage() == "Description not found") {
+						JOptionPane.showMessageDialog(thisWindow, "No se cargo la descripcion", "ERROR", 1);
+					} else {
+						e2.printStackTrace();
+					}
+				} catch(NumberFormatException e3) {
+					JOptionPane.showMessageDialog(thisWindow, "Los ID ingresados son incorrectos", "ERROR", 1);
+				} catch (ConnectionException | AccessException | InvalidClientException | InvalidZoneException
+						| InvalidInvoiceException | InvalidProductException | InvalidProductItemException
+						| InvalidUserException | InvalidRoleException | InvalidTransitionException
+						| InvalidInvoiceItemException e1) {
+					e1.printStackTrace();
 				}
 			}
 		});
@@ -427,6 +484,7 @@ public class CallCenterMenu extends JFrame implements Observer{
 			      int row = target.getSelectedRow();
 					if(!modelClaim.isSelectionEmpty() && ((String)dtmClaim.getValueAt(row, 5)).compareTo("CompositeClaim") == 0) {
 						try {
+							lblReclamosDeCompuestos.setText("");
 							CompositeClaimDTO claim = (CompositeClaimDTO)Controller.getInstance().getClaimById(Integer.valueOf((String)dtmClaim.getValueAt(row, 0)));
 							for (Integer c : claim.getInidividualClaimsId()) {
 								lblReclamosDeCompuestos.setText(lblReclamosDeCompuestos.getText() +c.toString()+ "-");
@@ -468,167 +526,106 @@ public class CallCenterMenu extends JFrame implements Observer{
 		
 		btnEnviarReclamo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+
 				List<Integer> claims = new ArrayList<>();
-				boolean optionSelected = false;
 				try {
-					if(!editorPane.getText().isEmpty()) {
-			
 						ClientDTO actualClient = (ClientDTO) clientesComboBox.getSelectedItem();
-						//ZONE INCOMPATIBLE
-						if(rdbtnZonaIncompatible.isSelected()) {
-							optionSelected = true;
-							IncompatibleZoneClaimDTO incompatibleZoneClaim = new IncompatibleZoneClaimDTO();
-							incompatibleZoneClaim.setDescription(editorPane.getText());
-							incompatibleZoneClaim.setClientId(actualClient.getId());
-					
-							claims.add(Controller.getInstance().addIncompatibleZoneClaim(incompatibleZoneClaim));
-							//JOptionPane.showMessageDialog(CallCenterMenu.this, "RECLAMO DE ZONA REGISTRADO CON EXITO", "GG", 1);
-							
-						}						
-						boolean invoiceSelected = !lblInvoiceID.getText().isEmpty();
-						boolean showMissingInvoiceMessage = false; 
-						//MISSING QUANTITY
-						if(rdbtnCantidadIncorrecta.isSelected()) {
-							
-							if(invoiceSelected == true) {	
-								optionSelected = true;
-								//JOptionPane.showMessageDialog(CallCenterMenu.this, "CantidadIncorrecta", "GG", 1);
-								MoreQuantityClaimDTO MqcMissingQuantity = new MoreQuantityClaimDTO();
-								MqcMissingQuantity.setClaimType(ClaimType.MISSING_QUANTITY.toString());
-								MqcMissingQuantity.setClientId(actualClient.getId());
-								MqcMissingQuantity.setDescription(editorPane.getText());
-								MqcMissingQuantity.setInvoiceId(Integer.parseInt(lblInvoiceID.getText()));
-															
-								ProductsLoad p = new ProductsLoad("CANTIDAD INCORRECTA",Integer.parseInt(lblInvoiceID.getText()));
-								p.setModal(true);
-								p.setVisible(true);
-								finalProducts=p.getProductsLoaded();
-								//NO CONTINUA HASTA QUE NO FINALIZA LA VENTANA PRODUCTSLOAD
-								for(ProductItemDTO c :finalProducts) {
-									MqcMissingQuantity.addProductItemDTO(c);
-								}
-								try{
-									int id = Controller.getInstance().addMoreQuantityClaim(MqcMissingQuantity);
-									claims.add(id);
-								}
-								catch(InvalidProductItemException e){
-									JOptionPane.showMessageDialog(thisWindow, "Se detectaron productos que no perteneces a la factura", "GG", 1);
-								}
-							} else {
-								showMissingInvoiceMessage = true;
-							}
-						}
-						//MISSING PRODUCTS
-						if(rdbtnProductosFaltantes.isSelected()) {
-							//JOptionPane.showMessageDialog(CallCenterMenu.this, "ProductosFaltantes", "GG", 1);
-							if(invoiceSelected == true) {
-								optionSelected = true;
-								MoreQuantityClaimDTO MqcMissingProducts = new MoreQuantityClaimDTO();
-								MqcMissingProducts.setClaimType(ClaimType.MISSING_PRODUCT.toString());
-								MqcMissingProducts.setClientId(actualClient.getId());
-								MqcMissingProducts.setDescription(editorPane.getText());
-								MqcMissingProducts.setInvoiceId(Integer.parseInt(lblInvoiceID.getText()));
+						int selectedCount = ((rdbtnZonaIncompatible.isSelected() ? 1 : 0) + (rdbtnFacturacionIncorrecta.isSelected() ? 1 : 0) 
+								+ (rdbtnCantidadIncorrecta.isSelected() ? 1 : 0) + (rdbtnProductosFaltantes.isSelected() ? 1 : 0) 
+								+ (rdbtnMayorCantidad.isSelected() ? 1 : 0));
+						
+						if(lblInvoiceID.getText().isEmpty() && (rdbtnCantidadIncorrecta.isSelected() || rdbtnMayorCantidad.isSelected() || rdbtnProductosFaltantes.isSelected())) {
+							JOptionPane.showMessageDialog(thisWindow, "NO SE SELECCIONO UNA FACTURA", "GG", 1);
+						} else {
+							// --------------------------------- incompatible zone ------------------------------------------
+							if(rdbtnZonaIncompatible.isSelected()) {
+								int i =addIncompatibleZoneClaim(actualClient);
 								
-								ProductsLoad p = new ProductsLoad("PRODUCTOS FALTANTES",Integer.parseInt(lblInvoiceID.getText()));
-								p.setModal(true);
-								p.setVisible(true);
-								finalProducts=p.getProductsLoaded();
-								
-								for(ProductItemDTO c :finalProducts) {
-									MqcMissingProducts.addProductItemDTO(c);
+								if (i != 0) {
+									claims.add(i);
 								}
-								claims.add(Controller.getInstance().addMoreQuantityClaim(MqcMissingProducts));
-							}
-							else
-								showMissingInvoiceMessage = true;
-						}
-						//MORE QUANTITY
-						if(rdbtnMayorCantidad.isSelected()) {
-							//JOptionPane.showMessageDialog(CallCenterMenu.this, "MayorCantidad", "GG", 1);
-							if(invoiceSelected == true) {
-								optionSelected = true;
-								MoreQuantityClaimDTO MqcMoreQuantity = new MoreQuantityClaimDTO();
-								MqcMoreQuantity.setClaimType(ClaimType.MORE_QUANTITY.toString());
-								MqcMoreQuantity.setClientId(actualClient.getId());
-								MqcMoreQuantity.setDescription(editorPane.getText());
-								MqcMoreQuantity.setInvoiceId(Integer.parseInt(lblInvoiceID.getText()));
+								
+								rdbtnZonaIncompatible.setSelected(false);
+							}						
 							
-								ProductsLoad p = new ProductsLoad("MAYOR CANTIDADES",Integer.parseInt(lblInvoiceID.getText()));
-								p.setModal(true);
-								p.setVisible(true);
-								finalProducts=p.getProductsLoaded();
-								for(ProductItemDTO c :finalProducts) {
-									MqcMoreQuantity.addProductItemDTO(c);
-								}
-								claims.add(Controller.getInstance().addMoreQuantityClaim(MqcMoreQuantity));
-							}
-							else
-								showMissingInvoiceMessage = true;
-						}
-						//WRONG INVOICE
-						if(rdbtnFacturacionIncorrecta.isSelected()) {
-							//JOptionPane.showMessageDialog(CallCenterMenu.this, "FacturacionIncorrecta", "GG", 1);
-							if(invoiceSelected == true) {
-								optionSelected = true;
-								WrongInvoicingClaimDTO WrongInvoicingClaim = new WrongInvoicingClaimDTO();
-								WrongInvoicingClaim.setClientId(actualClient.getId());
-								WrongInvoicingClaim.setDescription(editorPane.getText());
-								WrongInvoiceLoad w = new WrongInvoiceLoad(actualClient.getId());
-								w.setModal(true);
-								w.setVisible(true);
-								Map<Integer,InvoiceItemDTO>Inconsistencias = w.getProductsLoaded();
+							//--------------------------------- WRONG INVOICE--------------------------------- 
+							if(rdbtnFacturacionIncorrecta.isSelected()) {
+								int i =addWrongInvoicingClaim(actualClient);
 								
-								for(Entry<Integer, InvoiceItemDTO> i: Inconsistencias.entrySet()) {
-									InvoiceItemDTO invItem = i.getValue();
-									WrongInvoicingClaim.addInvoiceItemDTO(invItem.getInvoiceId(), invItem.getInconsistency());
-									System.out.println(invItem.getInvoiceId()+"  ----  "+ invItem.getInconsistency());
+								if (i != 0) {
+									claims.add(i);
 								}
-								claims.add(Controller.getInstance().addWrongInvoicingClaim(WrongInvoicingClaim));
+								rdbtnFacturacionIncorrecta.setSelected(false);
 							}
-							else
-								showMissingInvoiceMessage = true;
+							//--------------------------------- MISSING QUANTITY---------------------------------
+							if(rdbtnCantidadIncorrecta.isSelected()) {
+								int i = addMissingQuantityClaim(actualClient);
+								
+								if (i != 0) {
+									claims.add(i);
+								}
+								rdbtnCantidadIncorrecta.setSelected(false);
+							}
+							//--------------------------------- MISSING PRODUCTS--------------------------------- 
+							if(rdbtnProductosFaltantes.isSelected()) {
+								int i = addMissingProductsClaim(actualClient);
+								
+								if (i != 0) {
+									claims.add(i);
+								}
+								rdbtnProductosFaltantes.setSelected(false);
+							}
+							//--------------------------------- MORE QUANTITY--------------------------------- 
+							if(rdbtnMayorCantidad.isSelected()) {
+								int i = addMoreQuantityClaim(actualClient);
+								
+								if (i != 0) {
+									claims.add(i);
+								}
+								rdbtnMayorCantidad.setSelected(false);
+							}
+							
 						}
 						
-						if(showMissingInvoiceMessage == true) {
-							JOptionPane.showMessageDialog(thisWindow, "NO SE SELECCIONO UNA FACTURA", "GG", 1);
-						}
-						else {
-							if(claims.size() > 1 ) {
-								CompositeClaimDTO compClaim = new CompositeClaimDTO();
-								for(Integer claimId : claims) {
-									compClaim.addIndividualClaimId(claimId);
-								}
-								compClaim.setDescription(editorPane.getText());
-								compClaim.setClientId(actualClient.getId());
-								Controller.getInstance().addCompositeClaim(compClaim);
-								JOptionPane.showMessageDialog(thisWindow, "RECLAMO COMPUESTO CARGADO EXITOSAMENTE", "GG", 1);
+						
+						if(claims.size() > 1 && (selectedCount == claims.size())) {
+							addCompositeClaim(claims, actualClient);
+							JOptionPane.showMessageDialog(thisWindow, "RECLAMO COMPUESTO CARGADO EXITOSAMENTE", "GG", 1);
+						} else if(claims.size() == 1 && selectedCount == 1 ) {
+								JOptionPane.showMessageDialog(thisWindow, "RECLAMO CARGADO EXITOSAMENTE", "GG", 1);
+						} else {
+							String enteredClaims = "";
+							
+							for (Integer integer : claims) {
+								enteredClaims =  enteredClaims + " " + integer;
 							}
-							else {
-								if(optionSelected == true) {
-									JOptionPane.showMessageDialog(thisWindow, "RECLAMO CARGADO EXITOSAMENTE", "GG", 1);									
-								}
-								else {
-									JOptionPane.showMessageDialog(thisWindow, "SELECCIONE UN TIPO DE RECLAMO", "GG", 1);									
-
-								}
-							}
+							JOptionPane.showMessageDialog(thisWindow, "Problema en la carga de reclamos, los reclamos cargados correctamente son los" + enteredClaims, "ERROR", 1);
+							
 						}
-					}
-					else {
-						JOptionPane.showMessageDialog(thisWindow, "INGRESE UNA DESCRIPCION", "GG", 1);
-					}
-				} catch ( InvalidClientException | InvalidZoneException | InvalidClaimException | InvalidInvoiceException 
-						| InvalidProductException | InvalidProductItemException | InvalidUserException | InvalidRoleException | InvalidTransitionException | SQLException | InvalidInvoiceItemException e) {
-					JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
+						editorPane.setText("");
+			} catch ( InvalidClientException | InvalidZoneException | InvalidClaimException | InvalidInvoiceException 
+						| InvalidProductException | InvalidProductItemException | SQLException | InvalidInvoiceItemException e) {
+			
+				if(e.getMessage() == "Description not found") {
 					e.printStackTrace();
-					//CATCH DEL LLAMADO AddCompositeClaim
-			} catch (ConnectionException e) {
-					JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-					e.printStackTrace();
-				} catch (AccessException e) {
-					JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
+					JOptionPane.showMessageDialog(thisWindow, "Descripcion no ingresada", "ERROR", 1);
+				} else {					
+//					JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
 					e.printStackTrace();
 				}
+			} catch (ConnectionException e) {
+				JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
+				e.printStackTrace();
+			} catch (AccessException e) {
+				JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
+				e.printStackTrace();
+			} catch (InvalidUserException e) {
+				e.printStackTrace();
+			} catch (InvalidRoleException e) {
+				e.printStackTrace();
+			} catch (InvalidTransitionException e) {
+				e.printStackTrace();
+			}
 		}
 		});
 		
@@ -648,6 +645,117 @@ public class CallCenterMenu extends JFrame implements Observer{
 		
 	}
 
+	
+	private int addIncompatibleZoneClaim(ClientDTO actualClient) throws InvalidClientException, InvalidClaimException, ConnectionException, AccessException, InvalidZoneException, SQLException {
+		IncompatibleZoneClaimDTO incompatibleZoneClaim = new IncompatibleZoneClaimDTO();
+		incompatibleZoneClaim.setDescription(editorPane.getText());
+		incompatibleZoneClaim.setClientId(actualClient.getId());
+
+		return Controller.getInstance().addIncompatibleZoneClaim(incompatibleZoneClaim);
+	}
+	
+	private int addWrongInvoicingClaim(ClientDTO actualClient) throws InvalidClaimException, InvalidClientException, ConnectionException, AccessException, InvalidZoneException, InvalidInvoiceException, InvalidProductException, InvalidInvoiceItemException, InvalidProductItemException {
+		WrongInvoicingClaimDTO WrongInvoicingClaim = new WrongInvoicingClaimDTO();
+		WrongInvoicingClaim.setClientId(actualClient.getId());
+		WrongInvoicingClaim.setDescription(editorPane.getText());
+		WrongInvoiceLoad w = new WrongInvoiceLoad(actualClient.getId());
+		w.setModal(true);
+		w.setVisible(true);
+		
+		Map<Integer,InvoiceItemDTO> inconsistencias = w.getProductsLoaded();
+		
+		if(!inconsistencias.isEmpty()) {
+			for(Integer i: inconsistencias.keySet()) {
+				WrongInvoicingClaim.addInvoiceItemDTO(inconsistencias.get(i).getInvoiceId(), inconsistencias.get(i).getInconsistency());	
+			}
+			return Controller.getInstance().addWrongInvoicingClaim(WrongInvoicingClaim);
+		}
+		return 0;
+		
+	}
+	
+	private int addMissingQuantityClaim(ClientDTO actualClient) throws InvalidClaimException, InvalidClientException, ConnectionException, AccessException, InvalidZoneException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException {
+		if(!lblInvoiceID.getText().isEmpty()) {	
+			
+			MoreQuantityClaimDTO MqcMissingQuantity = new MoreQuantityClaimDTO();
+			MqcMissingQuantity.setClaimType(ClaimType.MISSING_QUANTITY.toString());
+			MqcMissingQuantity.setClientId(actualClient.getId());
+			MqcMissingQuantity.setDescription(editorPane.getText());
+			MqcMissingQuantity.setInvoiceId(Integer.parseInt(lblInvoiceID.getText()));
+										
+			ProductsLoad p = new ProductsLoad("CANTIDAD INCORRECTA",Integer.parseInt(lblInvoiceID.getText()));
+			p.setModal(true);
+			p.setVisible(true);
+			finalProducts=p.getProductsLoaded();
+			//NO CONTINUA HASTA QUE NO FINALIZA LA VENTANA PRODUCTSLOAD
+			if(!finalProducts.isEmpty()) {
+				for(ProductItemDTO c :finalProducts) {
+					MqcMissingQuantity.addProductItemDTO(c);
+				}
+				return Controller.getInstance().addMoreQuantityClaim(MqcMissingQuantity);
+			}	
+
+		}
+		return 0;
+
+	}
+	
+	private int addMissingProductsClaim(ClientDTO actualClient) throws InvalidClaimException, InvalidClientException, ConnectionException, AccessException, InvalidZoneException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException {
+		if(!lblInvoiceID.getText().isEmpty()) {	
+			MoreQuantityClaimDTO MqcMissingProducts = new MoreQuantityClaimDTO();
+			MqcMissingProducts.setClaimType(ClaimType.MISSING_PRODUCT.toString());
+			MqcMissingProducts.setClientId(actualClient.getId());
+			MqcMissingProducts.setDescription(editorPane.getText());
+			MqcMissingProducts.setInvoiceId(Integer.parseInt(lblInvoiceID.getText()));
+			
+			
+			ProductsLoad p = new ProductsLoad("PRODUCTOS FALTANTES",Integer.parseInt(lblInvoiceID.getText()));
+			p.setModal(true);
+			p.setVisible(true);
+			finalProducts = p.getProductsLoaded();
+			
+			if (!finalProducts.isEmpty()) {
+				for(ProductItemDTO c :finalProducts) {
+					MqcMissingProducts.addProductItemDTO(c);
+				}
+				
+				return Controller.getInstance().addMoreQuantityClaim(MqcMissingProducts);									
+			}
+		}
+		return 0;
+	}
+	
+	private int addMoreQuantityClaim(ClientDTO actualClient) throws InvalidClaimException, InvalidClientException, ConnectionException, AccessException, InvalidZoneException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException {
+		if(!lblInvoiceID.getText().isEmpty()) {	
+			MoreQuantityClaimDTO MqcMoreQuantity = new MoreQuantityClaimDTO();
+			MqcMoreQuantity.setClaimType(ClaimType.MORE_QUANTITY.toString());
+			MqcMoreQuantity.setClientId(actualClient.getId());
+			MqcMoreQuantity.setDescription(editorPane.getText());
+			MqcMoreQuantity.setInvoiceId(Integer.parseInt(lblInvoiceID.getText()));
+		
+			ProductsLoad p = new ProductsLoad("MAYOR CANTIDADES",Integer.parseInt(lblInvoiceID.getText()));
+			p.setModal(true);
+			p.setVisible(true);
+			finalProducts=p.getProductsLoaded();
+			if(!finalProducts.isEmpty()) {
+				for(ProductItemDTO c :finalProducts) {
+					MqcMoreQuantity.addProductItemDTO(c);
+				}
+				return Controller.getInstance().addMoreQuantityClaim(MqcMoreQuantity);
+			}
+		}
+		return 0;
+	}
+	
+	private void addCompositeClaim(List<Integer> claims, ClientDTO actualClient) throws InvalidClaimException, ConnectionException, AccessException, InvalidClientException, InvalidZoneException, InvalidInvoiceException, InvalidProductException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidInvoiceItemException {
+		CompositeClaimDTO compClaim = new CompositeClaimDTO();
+		for(Integer claimId : claims) {
+			compClaim.addIndividualClaimId(claimId);
+		}
+		compClaim.setDescription(editorPane.getText());
+		compClaim.setClientId(actualClient.getId());
+		Controller.getInstance().addCompositeClaim(compClaim);			
+	}
 	
 	private void removeObservers(Observer thisWindow) throws InvalidObserverException {
 		Controller.getInstance().removeObserverToClaimService(thisWindow);
