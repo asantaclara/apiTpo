@@ -43,8 +43,13 @@ public class ProductDAO {
 			SqlUtils.closeConnection(con);
 		}
 	}
-	
+	public Product getActiveProduct(int productId) throws ConnectionException, AccessException, InvalidProductException {
+		return getProduct(productId, false);
+	}
 	public Product getProduct(int productId) throws ConnectionException, AccessException, InvalidProductException {
+		return getProduct(productId, true);
+	}
+	private Product getProduct(int productId, boolean activeFlag) throws ConnectionException, AccessException, InvalidProductException {
 		Connection con = SqlUtils.getConnection();  
 		try {
 			Statement stmt = SqlUtils.createStatement(con);  

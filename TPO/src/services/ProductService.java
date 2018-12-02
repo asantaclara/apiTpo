@@ -44,7 +44,7 @@ public class ProductService extends Observable{
 		if(dto.getProductId() == 0) {
 			throw new InvalidProductException("Id missing");
 		}
-		Product existingProduct = new ProductDAO().getProduct(dto.getProductId());
+		Product existingProduct = new ProductDAO().getActiveProduct(dto.getProductId());
 		
 		if(existingProduct != null) {
 			existingProduct.modify(dto.getTitle(), dto.getDescription(), dto.getPrice());
@@ -52,7 +52,7 @@ public class ProductService extends Observable{
 		}
 	}
 	public void removeProduct(ProductDTO dto) throws ConnectionException, AccessException, InvalidProductException {
-		Product productToRemove = new ProductDAO().getProduct(dto.getProductId());
+		Product productToRemove = new ProductDAO().getActiveProduct(dto.getProductId());
 		
 		productToRemove.deactivateProduct();
 		updateObservers();
