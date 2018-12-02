@@ -112,7 +112,7 @@ public class ZoneResponsableMenu extends JFrame implements Observer {
 		clientesComboBox.setBounds(146, 62, 83, 20);
 
 		try {
-			List<ClientDTO> clientes = Controller.getInstance().getAllClients();
+			List<ClientDTO> clientes = Controller.getInstance().getAllActiveClients();
 			for (ClientDTO c : clientes) {
 				clientesComboBox.addItem(c);
 			}
@@ -387,7 +387,7 @@ public class ZoneResponsableMenu extends JFrame implements Observer {
 		ClientDTO client = (ClientDTO) clientesComboBox.getSelectedItem();
 		clientesComboBox.removeAllItems();
 		try {
-			List<ClientDTO> clientes = Controller.getInstance().getAllClients();
+			List<ClientDTO> clientes = Controller.getInstance().getAllActiveClients();
 			for (ClientDTO c : clientes) {
 				clientesComboBox.addItem(c);
 			}

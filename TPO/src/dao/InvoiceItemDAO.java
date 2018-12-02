@@ -66,7 +66,7 @@ public class InvoiceItemDAO {
 			
 			try {
 				if(rs.next()){
-					InvoiceItem newInvoiceItem = new InvoiceItem(new InvoiceDAO().getInvoice(rs.getInt(2)), rs.getString(3));
+					InvoiceItem newInvoiceItem = new InvoiceItem(new InvoiceDAO().getActiveInvoice(rs.getInt(2)), rs.getString(3));
 					newInvoiceItem.setId(rs.getInt(1));
 					return newInvoiceItem;
 				}
@@ -98,7 +98,7 @@ public class InvoiceItemDAO {
 				InvoiceItem newInvoiceItem = null;
 				
 				while(rs.next()){
-					newInvoiceItem = new InvoiceItem(new InvoiceDAO().getInvoice(rs.getInt(2)), rs.getString(3));
+					newInvoiceItem = new InvoiceItem(new InvoiceDAO().getActiveInvoice(rs.getInt(2)), rs.getString(3));
 					newInvoiceItem.setId(rs.getInt(1));
 					returnList.add(newInvoiceItem);
 				}

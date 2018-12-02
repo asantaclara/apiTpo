@@ -24,12 +24,12 @@ import services.ClientService;
 public class InvoiceDAO {
 
 	public List<Invoice> getAllInvoices() throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidInvoiceException, InvalidProductItemException{
-		String sql = "SELECT * FROM Invoices WHERE Active = 1"; 
+		String sql = "SELECT * FROM Invoices"; 
 		return getAllInvoicesPrivate(sql);
 	}
 	
 	public List<Invoice> getAllInvoicesFromClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidInvoiceException, InvalidProductItemException{
-		String sql = "SELECT * FROM Invoices WHERE clientId = " + clientId + " AND Active = 1" ; 
+		String sql = "SELECT * FROM Invoices WHERE clientId = " + clientId; 
 		return getAllInvoicesPrivate(sql);
 	}
 	
@@ -62,7 +62,13 @@ public class InvoiceDAO {
 		}
 	}
 
+	public Invoice getActiveInvoice(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
+		return getInvoice(invoiceId,false);
+	}
 	public Invoice getInvoice(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
+		return getInvoice(invoiceId,true);
+	}
+	private Invoice getInvoice(int invoiceId, boolean activeFlag) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
 		Connection con = SqlUtils.getConnection();  
 		try {
 			Statement stmt = SqlUtils.createStatement(con);  
@@ -74,7 +80,7 @@ public class InvoiceDAO {
 			
 			try {
 				if(rs.next()){
-					if(rs.getByte(4) == 1) {	
+					if(rs.getByte(4) == 1 || activeFlag) {	// Si active flag es flase, devuelve la invoice solo si esta activa, si esta en false la devuelve en ambos casos.
 						Client client = new ClientDAO().getClient(rs.getInt(2));
 						Invoice newInvoice = new Invoice(client,new Date(rs.getDate(3).getTime()));
 						newInvoice.setId(rs.getInt(1));

@@ -59,7 +59,7 @@ public class ProductService extends Observable{
 	}
 
 	public List<ProductDTO> getInvoiceProducts(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
-		Invoice invoice = new InvoiceDAO().getInvoice(invoiceId);
+		Invoice invoice = new InvoiceDAO().getActiveInvoice(invoiceId);
 		List<ProductDTO> returnList = new LinkedList<>();
 		
 		for (ProductItem pi : invoice.getItems()) {

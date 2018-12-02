@@ -80,7 +80,7 @@ public class ModifyClient extends JFrame implements Observer{
 		contentPane.add(boxClientes);
 		
 		try {
-			List<ClientDTO> clientes =Controller.getInstance().getAllClients();
+			List<ClientDTO> clientes =Controller.getInstance().getAllActiveClients();
 			for(ClientDTO c : clientes) {
 				boxClientes.addItem(c);
 			}
@@ -396,7 +396,7 @@ public class ModifyClient extends JFrame implements Observer{
 		ClientDTO client = (ClientDTO) boxClientes.getSelectedItem();
 		try {
 			boxClientes.removeAllItems();
-			List<ClientDTO> clientes =Controller.getInstance().getAllClients();
+			List<ClientDTO> clientes =Controller.getInstance().getAllActiveClients();
 			
 			for(ClientDTO cli : clientes) {
 				boxClientes.addItem(cli);

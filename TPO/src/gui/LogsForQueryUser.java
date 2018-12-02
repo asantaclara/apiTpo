@@ -122,7 +122,7 @@ public class LogsForQueryUser extends JFrame implements Observer{
 				//--------------------------------------FIN TABLA -------------------------------------------------------------
 				
 				try {
-					for(ClientDTO c : Controller.getInstance().getAllClients()) {
+					for(ClientDTO c : Controller.getInstance().getAllActiveClients()) {
 						comboBoxClientes.addItem(c);
 					}
 				} catch (InvalidZoneException | InvalidClientException e) {
@@ -243,7 +243,7 @@ public class LogsForQueryUser extends JFrame implements Observer{
 		comboBoxClientes.removeAllItems();
 		comboBoxReclamos.removeAllItems();
 		try {
-			List<ClientDTO> clients = Controller.getInstance().getAllClients(); 
+			List<ClientDTO> clients = Controller.getInstance().getAllActiveClients(); 
 			for(ClientDTO c : clients) {
 				comboBoxClientes.addItem(c);
 			}

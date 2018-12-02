@@ -36,7 +36,7 @@ public class ClientService extends Observable{
 	
 	public void modifyClient(ClientDTO dto) throws InvalidClientException, ConnectionException, AccessException, InvalidZoneException {
 		
-		Client existingClient =  new ClientDAO().getClient(dto.getId());
+		Client existingClient =  new ClientDAO().getActiveClient(dto.getId());
 		
 		if (existingClient != null) {
 			existingClient.modify(dto.getCuit(), dto.getName(), dto.getAddress(), dto.getPhoneNumber(), dto.getEmail(), (dto.getZone() != null) ? ZoneService.getIntance().getZoneByName(dto.getZone()) : null);
@@ -46,7 +46,7 @@ public class ClientService extends Observable{
 
 	public void removeClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
 		
-		Client existingClient =  new ClientDAO().getClient(clientId);
+		Client existingClient =  new ClientDAO().getActiveClient(clientId);
 		
 		existingClient.deactivateClient();
 		updateObservers();
@@ -60,17 +60,8 @@ public class ClientService extends Observable{
 			return getClientById(clientId).toDTO();
 	}
 
-	public boolean clientExists(int clientId) throws ConnectionException, AccessException, InvalidZoneException {
-		try {
-			new ClientDAO().getClient(clientId);
-			return true;
-		} catch (InvalidClientException e) {
-			return false;
-		}
-	}
-
-	public List<ClientDTO> getAllClients() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
-		List<Client> clients =  new ClientDAO().getAllClients();
+	public List<ClientDTO> getAllActiveClients() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
+		List<Client> clients =  new ClientDAO().getAllActiveClients();
 		List<ClientDTO> aux = new LinkedList<>();
 		for (Client client : clients) {
 			aux.add(client.toDTO());

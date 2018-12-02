@@ -131,7 +131,7 @@ public class DistributionResponsableMenu extends JFrame implements Observer {
 		clientesComboBox.setBounds(146, 62, 83, 20);
 		
 		try {
-			List<ClientDTO> clientes =Controller.getInstance().getAllClients();
+			List<ClientDTO> clientes =Controller.getInstance().getAllActiveClients();
 			for(ClientDTO c : clientes) {
 				clientesComboBox.addItem(c);
 			}
@@ -499,7 +499,7 @@ public class DistributionResponsableMenu extends JFrame implements Observer {
 			clientesComboBox.removeAllItems();
 			List<ClientDTO> clientes;
 			try {
-				clientes = Controller.getInstance().getAllClients();
+				clientes = Controller.getInstance().getAllActiveClients();
 				for(ClientDTO c : clientes) {
 					clientesComboBox.addItem(c);
 				}

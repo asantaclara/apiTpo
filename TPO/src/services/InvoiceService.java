@@ -54,7 +54,7 @@ public class InvoiceService extends Observable{
 		return newInvoice.getId();
 	}
 	public void removeInvoice(InvoiceDTO dto) throws ConnectionException, AccessException, InvalidInvoiceException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
-		Invoice existingInvoice = new InvoiceDAO().getInvoice(dto.getInvoiceId());
+		Invoice existingInvoice = new InvoiceDAO().getActiveInvoice(dto.getInvoiceId());
 		existingInvoice.deactivateInvoice();
 		updateObservers();
 	}
@@ -70,6 +70,6 @@ public class InvoiceService extends Observable{
 		
 	}
 	public Invoice getInvoiceById(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
-		return new InvoiceDAO().getInvoice(invoiceId);
+		return new InvoiceDAO().getActiveInvoice(invoiceId);
 	}
 }

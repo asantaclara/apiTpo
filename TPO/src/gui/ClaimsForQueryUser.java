@@ -90,7 +90,7 @@ public class ClaimsForQueryUser extends JFrame implements Observer {
 		
 		
 		try {
-			List<ClientDTO> clientes =Controller.getInstance().getAllClients();
+			List<ClientDTO> clientes =Controller.getInstance().getAllActiveClients();
 			for(ClientDTO c : clientes) {
 				clientesComboBox.addItem(c);
 			}
@@ -215,7 +215,7 @@ public class ClaimsForQueryUser extends JFrame implements Observer {
 		ClientDTO client = (ClientDTO) clientesComboBox.getSelectedItem();
 		try {
 			clientesComboBox.removeAllItems();
-			List<ClientDTO> clientes =Controller.getInstance().getAllClients();
+			List<ClientDTO> clientes =Controller.getInstance().getAllActiveClients();
 			for(ClientDTO c : clientes) {
 				clientesComboBox.addItem(c);
 			}

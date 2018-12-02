@@ -18,14 +18,19 @@ import exceptions.InvalidZoneException;
 
 public class ClientDAO {
 
-	
+	public List<Client> getAllActiveClients() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException{
+		return getAllClients(false);
+	}
 	public List<Client> getAllClients() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException{
+		return getAllClients(true);
+	}
+	private List<Client> getAllClients(boolean activeFlag) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException{
 		Connection con = SqlUtils.getConnection();  
 		try {
 			Statement stmt = SqlUtils.createStatement(con);  
 			ResultSet rs = null;
 			
-			String sql = "SELECT * FROM Clients JOIN Zones ON Clients.ZoneId = Zones.ZoneId WHERE Active = 1"; 
+			String sql = "SELECT * FROM Clients JOIN Zones ON Clients.ZoneId = Zones.ZoneId"; 
 			
 			rs = SqlUtils.executeQuery(stmt, con, sql);
 			
@@ -34,9 +39,11 @@ public class ClientDAO {
 				Client newClient = null;
 				
 				while(rs.next()){				
-					newClient = new Client(rs.getString(3), rs.getString(2), rs.getString(4), rs.getString(5), rs.getString(6), new Zone(rs.getString(10)));
-					newClient.setId(rs.getInt(1));
-					returnList.add(newClient);
+					if(rs.getByte(8) == 1 || activeFlag) {	// Si el flag esta en true trae todos los clientes, si esta en false solo los activos.					
+						newClient = new Client(rs.getString(3), rs.getString(2), rs.getString(4), rs.getString(5), rs.getString(6), new Zone(rs.getString(10)));
+						newClient.setId(rs.getInt(1));
+						returnList.add(newClient);
+					}
 				}
 				return returnList;
 				
@@ -47,8 +54,14 @@ public class ClientDAO {
 			SqlUtils.closeConnection(con);
 		}
 	}
-	
+//------------------------------------------------------------------------------------------------------------------------------------------------------------	
+	public Client getActiveClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
+		return getClient(clientId, false);
+	}
 	public Client getClient(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
+		return getClient(clientId, true);
+	}
+	private Client getClient(int clientId, boolean activeFlag) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
 		Connection con = SqlUtils.getConnection();  
 		try {
 			Statement stmt = SqlUtils.createStatement(con);  
@@ -60,7 +73,7 @@ public class ClientDAO {
 			
 			try {
 				if(rs.next()){
-					if(rs.getByte(8) == 1) { // If client is Active				
+					if(rs.getByte(8) == 1 || activeFlag) { // Si el activeFlag es true, devuelve el cliente sin importar si esta activo, si es false solamente si esta activo.				
 						Client newClient = new Client(rs.getString(3), rs.getString(2), rs.getString(4), rs.getString(5), rs.getString(6), new ZoneDAO().getZone(rs.getString(10)));
 						//								CUIT			Name				Address			PhoneNumber		Mail									Zone
 						newClient.setId(rs.getInt(1));
@@ -81,7 +94,7 @@ public class ClientDAO {
 			SqlUtils.closeConnection(con);
 		}
 	}
-
+//------------------------------------------------------------------------------------------------------------------------------------------------------------
 	public void save(Client client) throws ConnectionException, AccessException, InvalidClientException{
 		Connection con = SqlUtils.getConnection();
 		try {
@@ -124,7 +137,6 @@ public class ClientDAO {
 			SqlUtils.closeConnection(con);
 		}
 	}
-	
 	public void modify(Client client) throws ConnectionException, AccessException, InvalidClientException {
 		Connection con = SqlUtils.getConnection();
 		try {

@@ -167,9 +167,6 @@ public class Controller {
 	public ClientDTO getClientById(int clientId) throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException {
 		return ClientService.getIntance().getClientDTOById(clientId);
 	}
-	public boolean clientExists(int clientId) throws ConnectionException, AccessException, InvalidZoneException {
-		return ClientService.getIntance().clientExists(clientId);
-	}
 	public List<ClaimDTO> getClaimsFromClient(int clientId) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidUserException, InvalidRoleException, InvalidTransitionException, InvalidInvoiceItemException{
 		return ClaimService.getIntance().getClaimsFromClient(clientId);
 	}
@@ -179,8 +176,8 @@ public class Controller {
 	public UserDTO getUserByUsernameAndPassword(UserDTO dto) throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException {
 		return UserService.getIntance().getUserByUsernameAndPassword(dto);
 	}
-	public List<ClientDTO> getAllClients() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException{
-		return ClientService.getIntance().getAllClients();
+	public List<ClientDTO> getAllActiveClients() throws ConnectionException, AccessException, InvalidClientException, InvalidZoneException{
+		return ClientService.getIntance().getAllActiveClients();
 	}
 	public List<ProductDTO> getAllProducts() throws ConnectionException, AccessException, InvalidProductException{
 		return ProductService.getIntance().getAllProducts();
