@@ -41,7 +41,7 @@ public class UserService extends Observable{
 	}
 	
 	public void modifyUser(UserDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
-		User existingUser = new UserDAO().getUser(dto.getUserId());
+		User existingUser = new UserDAO().getActiveUser(dto.getUserId());
 		
 		
 		if (existingUser != null) {
@@ -51,7 +51,7 @@ public class UserService extends Observable{
 	}
 
 	public void removeUser(UserDTO dto) throws ConnectionException, AccessException, InvalidRoleException, InvalidUserException {
-		User userToRemove = new UserDAO().getUser(dto.getUserId());
+		User userToRemove = new UserDAO().getActiveUser(dto.getUserId());
 		
 		userToRemove.deactivateUser(); //Aca desactivo al usuario para que no se pueda usar mas en el programa.
 		updateObservers();
@@ -59,7 +59,7 @@ public class UserService extends Observable{
 
 	public boolean userExists(UserDTO dto) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
 		try {
-			new UserDAO().getUser(dto.getUserId());			
+			new UserDAO().getActiveUser(dto.getUserId());			
 		} catch (InvalidUserException e) {
 			return false;
 		}
@@ -90,7 +90,7 @@ public class UserService extends Observable{
 		if(dto.getUserId() == 0 || dto.getRole() == null) {
 			throw new InvalidRoleException("Missing parameters");
 		}
-		User existingUser =  new UserDAO().getUser(dto.getUserId());
+		User existingUser =  new UserDAO().getActiveUser(dto.getUserId());
 		
 		if(existingUser != null) {
 	
@@ -105,7 +105,7 @@ public class UserService extends Observable{
 			throw new InvalidRoleException("Missing userId");
 		}
 		
-		User existingUser = new UserDAO().getUser(dto.getUserId());
+		User existingUser = new UserDAO().getActiveUser(dto.getUserId());
 		
 		if(existingUser != null) {			
 			existingUser.removeRole();

@@ -116,7 +116,14 @@ public class UserDAO {
 			SqlUtils.closeConnection(con);
 		}
 	}
+	
+	public User getActiveUser(int userId) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
+		return getUser(userId, false);
+	}
 	public User getUser(int userId) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
+		return getUser(userId, true);
+	}
+	private User getUser(int userId, boolean activeFlag) throws InvalidUserException, ConnectionException, AccessException, InvalidRoleException {
 		Connection con = SqlUtils.getConnection();  
 		try {
 			Statement stmt = SqlUtils.createStatement(con);  
@@ -131,7 +138,7 @@ public class UserDAO {
 			
 			try {
 				if(rs.next()){
-					if(rs.getByte(3) == 1) { 
+					if(rs.getByte(3) == 1 || activeFlag) { // Si activeFlag es false, solo devuelve el usuario si esta activo, si es true, lo devuelve siempre.
 						User newUser = new User(rs.getString(2), Roles.valueOf(rs.getString(4)), rs.getString(6), rs.getString(7));
 						newUser.addRole(Roles.valueOf(rs.getString(5)));
 						newUser.setId(rs.getInt(1));

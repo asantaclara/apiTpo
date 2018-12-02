@@ -51,21 +51,5 @@ public class RoleDAO {
 		
 	}
 
-	public Role getRole(Roles role) throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException {		
-		Role returnRole = new Role(role);
-		returnRole.setRoleId(idByRole(role));
-		for (User user : UserDAO.getAllUserByRole(role)) {
-			returnRole.addUser(user);
-		}
-		return returnRole;
-	}
-
-	public List<Role> getAllRoles() throws AccessException, ConnectionException, InvalidRoleException, InvalidUserException{
-		List<Role> returnRoles = new LinkedList<>();
-		for (Roles roles : Roles.values()) {
-			returnRoles.add(getRole(roles));
-		}
-		return returnRoles;
-	}
 
 }
