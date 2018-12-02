@@ -143,13 +143,13 @@ public class ModifyUser extends JFrame implements Observer{
 			boxUsers.setSelectedIndex(-1);
 		} catch ( InvalidRoleException | InvalidUserException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-			e.printStackTrace();
+			//			e.printStackTrace();
 		}catch (ConnectionException e1) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-			e1.printStackTrace();
+			//			e1.printStackTrace();
 		} catch (AccessException e1) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-			e1.printStackTrace();
+			//			e1.printStackTrace();
 		}
 		
 		JSeparator separator_1 = new JSeparator();
@@ -186,15 +186,15 @@ public class ModifyUser extends JFrame implements Observer{
 
 							default:
 								JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-								e1.printStackTrace();
+								//			e1.printStackTrace();
 								break;
 							}
 						}catch (ConnectionException e1) {
 							JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-							e1.printStackTrace();
+							//			e1.printStackTrace();
 						} catch (AccessException e1) {
 							JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-							e1.printStackTrace();
+							//			e1.printStackTrace();
 						}
 					}
 					else
@@ -213,7 +213,7 @@ public class ModifyUser extends JFrame implements Observer{
 					thisWindow.dispose();
 				} catch (InvalidObserverException e1) {
 					JOptionPane.showMessageDialog(thisWindow, "Error de Observer","ERROR",1);
-					e1.printStackTrace();
+					//			e1.printStackTrace();
 				}
 			}
 		});
@@ -227,7 +227,7 @@ public class ModifyUser extends JFrame implements Observer{
 						super.windowClosed(e);
 					} catch (InvalidObserverException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Error de Observer", "ERROR", 1);
-						e1.printStackTrace();
+						//			e1.printStackTrace();
 					}
 				}
 		});
@@ -245,13 +245,13 @@ public class ModifyUser extends JFrame implements Observer{
 							JOptionPane.showMessageDialog(null, "USUARIO ELIMINADO CON EXITO");
 						} catch ( InvalidUserException | InvalidRoleException e1) {
 							JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-							e1.printStackTrace();
+							//			e1.printStackTrace();
 						}catch (ConnectionException e1) {
 							JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-							e1.printStackTrace();
+							//			e1.printStackTrace();
 						} catch (AccessException e1) {
 							JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-							e1.printStackTrace();
+							//			e1.printStackTrace();
 						}
 			        }
 				}
@@ -336,13 +336,13 @@ public class ModifyUser extends JFrame implements Observer{
 			
 		} catch (InvalidRoleException | InvalidUserException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-			e.printStackTrace();
+			//			e.printStackTrace();
 		}catch (ConnectionException e1) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-			e1.printStackTrace();
+			//			e1.printStackTrace();
 		} catch (AccessException e1) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-			e1.printStackTrace();
+			//			e1.printStackTrace();
 		}
 		
 	}

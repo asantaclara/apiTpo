@@ -57,7 +57,7 @@ public class UserRoleAdministrator extends JFrame implements Observer{
 			Controller.getInstance().addObserverToUserService(thisWindow);
 		} catch (InvalidObserverException e1) {
 			JOptionPane.showMessageDialog(thisWindow, "Error de Observer", "ERROR", 1);
-			e1.printStackTrace();
+			//			e1.printStackTrace();
 		}
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -118,13 +118,13 @@ public class UserRoleAdministrator extends JFrame implements Observer{
 			boxUsers.setSelectedIndex(-1);
 		} catch (InvalidRoleException | InvalidUserException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-			e.printStackTrace();
+			//			e.printStackTrace();
 		} catch (ConnectionException  e) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-			e.printStackTrace();
+			//			e.printStackTrace();
 		} catch (AccessException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-			e.printStackTrace();
+			//			e.printStackTrace();
 		} 
 		
 		JSeparator separator_1 = new JSeparator();
@@ -160,7 +160,7 @@ public class UserRoleAdministrator extends JFrame implements Observer{
 					thisWindow.dispose();
 				} catch (InvalidObserverException e1) {
 					JOptionPane.showMessageDialog(thisWindow, "Error de Observer", "ERROR", 1);
-					e1.printStackTrace();
+					//			e1.printStackTrace();
 				}
 			}
 		});
@@ -173,7 +173,7 @@ public class UserRoleAdministrator extends JFrame implements Observer{
 						removeObservers();
 					} catch (InvalidObserverException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Error de Observer", "ERROR", 1);
-						e1.printStackTrace();
+						//			e1.printStackTrace();
 					}
 				}
 		});
@@ -191,13 +191,13 @@ public class UserRoleAdministrator extends JFrame implements Observer{
 
 				} catch (InvalidUserException | InvalidRoleException e1) {
 					JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-					e1.printStackTrace();
+					//			e1.printStackTrace();
 				} catch (ConnectionException  e1) {
 					JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-					e1.printStackTrace();
+					//			e1.printStackTrace();
 				} catch (AccessException e1) {
 					JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-					e1.printStackTrace();
+					//			e1.printStackTrace();
 				} 
 			}
 		});
@@ -226,13 +226,13 @@ public class UserRoleAdministrator extends JFrame implements Observer{
 					JOptionPane.showMessageDialog(thisWindow, "ROL AGREGADO CON EXITO", "GG", 1);
 				} catch (InvalidUserException | InvalidRoleException e1) {
 					JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-					e1.printStackTrace();
+					//			e1.printStackTrace();
 				} catch (ConnectionException  e1) {
 					JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-					e1.printStackTrace();
+					//			e1.printStackTrace();
 				} catch (AccessException e1) {
 					JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-					e1.printStackTrace();
+					//			e1.printStackTrace();
 				} 
 				
 			}
@@ -256,13 +256,13 @@ public class UserRoleAdministrator extends JFrame implements Observer{
 			boxUsers.setSelectedItem(user);
 		} catch ( InvalidRoleException | InvalidUserException  e) {
 			JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-			e.printStackTrace();
+			//			e.printStackTrace();
 		} catch (ConnectionException  e) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-			e.printStackTrace();
+			//			e.printStackTrace();
 		} catch (AccessException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-			e.printStackTrace();
+			//			e.printStackTrace();
 		} 
 		
 	}

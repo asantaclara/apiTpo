@@ -139,15 +139,15 @@ public class NewUser extends JFrame{
 
 						default:
 							JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-							e1.printStackTrace();
+							//			e1.printStackTrace();
 							break;
 						}
 					}catch (ConnectionException  e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-						e1.printStackTrace();
+						//			e1.printStackTrace();
 					} catch (AccessException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-						e1.printStackTrace();
+						//			e1.printStackTrace();
 					} 
 				}
 				else {

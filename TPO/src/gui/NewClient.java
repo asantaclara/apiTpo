@@ -142,13 +142,13 @@ public class NewClient extends JFrame {
 				boxZonas.addItem(z);
 		} catch (ConnectionException  e) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-			e.printStackTrace();
+			//			e.printStackTrace();
 		} catch (AccessException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-			e.printStackTrace();
+			//			e.printStackTrace();
 		} catch (InvalidZoneException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-			e.printStackTrace();
+			//			e.printStackTrace();
 		}
 		boxZonas.setSelectedIndex(-1);
 
@@ -189,7 +189,7 @@ public class NewClient extends JFrame {
 							break;
 							
 						default:
-							e1.printStackTrace();
+							//			e1.printStackTrace();
 							JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
 							break;
 						}

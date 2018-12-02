@@ -157,7 +157,7 @@ public class Login extends JFrame {
 					try {
 						interfaceRedirectByRol( Controller.getInstance().getUserByUsernameAndPassword(actualUsr));	
 					} catch ( ConnectionException | AccessException | InvalidRoleException e) {
-						e.printStackTrace();
+						//			e.printStackTrace();
 					} catch (InvalidUserException e) {
 						JOptionPane.showMessageDialog(Login.this,"La combinacion de usuario y contrasena es incorrecta, por favor reintente");
 						txtUserName.setText("");

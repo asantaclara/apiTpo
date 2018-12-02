@@ -73,7 +73,7 @@ public class ClaimsForQueryUser extends JFrame implements Observer {
 			Controller.getInstance().addObserverToWrongInvoicingClaimService(thisWindow);
 		} catch (InvalidObserverException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Error de Observer", "ERROR", 1);
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -96,13 +96,13 @@ public class ClaimsForQueryUser extends JFrame implements Observer {
 			}
 		} catch (ConnectionException  e) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-			e.printStackTrace();
+//			e.printStackTrace();
 		} catch (AccessException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-			e.printStackTrace();
+//			e.printStackTrace();
 		} catch (InvalidZoneException | InvalidClientException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 		clientesComboBox.setSelectedIndex(-1);
 		//--------------------------------------INICIO TABLA RECLAMOS-----------------------------------------------------------------
@@ -168,10 +168,10 @@ public class ClaimsForQueryUser extends JFrame implements Observer {
 
 					} catch (ConnectionException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-						e1.printStackTrace();
+//						e1.printStackTrace();
 					} catch (AccessException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-						e1.printStackTrace();
+//						e1.printStackTrace();
 					} 
 				}
 			}
@@ -191,7 +191,7 @@ public class ClaimsForQueryUser extends JFrame implements Observer {
 						super.windowClosed(e);
 					} catch (InvalidObserverException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Error de Observer", "ERROR", 1);
-						e1.printStackTrace();
+//						e1.printStackTrace();
 					}
 				}
 		});
@@ -225,13 +225,13 @@ public class ClaimsForQueryUser extends JFrame implements Observer {
 				| InvalidClaimException | InvalidInvoiceException | InvalidProductException | InvalidZoneException 
 				| InvalidProductItemException | InvalidUserException | InvalidRoleException | InvalidTransitionException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-			e.printStackTrace();
+//			e.printStackTrace();
 		} catch (ConnectionException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-			e.printStackTrace();
+//			e.printStackTrace();
 		} catch (AccessException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 	}
 	
