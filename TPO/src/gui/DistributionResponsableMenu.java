@@ -407,7 +407,9 @@ public class DistributionResponsableMenu extends JFrame implements Observer {
 					JOptionPane.showMessageDialog(thisWindow, "No se puede seleccionar un estado igual o previo al actual", "ERROR", 1);
 				} else if(e1.getMessage().contains("Invalid description")){
 					JOptionPane.showMessageDialog(thisWindow, "Debe cargar la descripcion", "ERROR", 1);
-				} else {
+				} else if(e1.getMessage().contains("Incompatible Role")){
+					JOptionPane.showMessageDialog(thisWindow, "No tiene permisos para tratar el reclamo", "ERROR", 1);
+				}else {					
 					JOptionPane.showMessageDialog(thisWindow, "Problemas con la base de datos, comuniquese con el administrador", "ERROR", 1);
 				}
 			} catch (ConnectionException e1) {

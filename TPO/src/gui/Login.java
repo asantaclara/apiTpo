@@ -168,7 +168,6 @@ public class Login extends JFrame {
 						password1.setText("");
 						password2.setText("");						
 					}
-					
 				}
 				else {
 					JOptionPane.showMessageDialog(thisWindow,"Las contrasenas no coinciden, intente nuevamente");

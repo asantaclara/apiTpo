@@ -48,6 +48,19 @@ public abstract class IndividualClaim extends Claim {
 	}
 
 	public void treatClaim(User responsable, State newState, String description) throws InvalidTransitionException, ConnectionException, AccessException {
+		if(this instanceof WrongInvoicingClaim) {
+			if(responsable.getSecondaryRole() != Roles.INVOICING_RESPONSABLE) {
+				throw new InvalidTransitionException("Incompatible Role");
+			}
+		} else if(this instanceof IncompatibleZoneClaim) {
+			if(responsable.getSecondaryRole() != Roles.ZONE_RESPONSABLE) {
+				throw new InvalidTransitionException("Incompatible Role");
+			}
+		} else if(this instanceof MoreQuantityClaim) {
+			if(responsable.getSecondaryRole() != Roles.DISTRIBUTION_RESPONSABLE) {
+				throw new InvalidTransitionException("Incompatible Role");
+			}
+		}
 		
 		Transition newTran = new Transition(claimId, actualState, newState, date, description, responsable);
 		newTran.save();

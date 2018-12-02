@@ -1,5 +1,6 @@
 package backEnd;
 
+
 public enum Roles {
 
 	DISTRIBUTION_RESPONSABLE,

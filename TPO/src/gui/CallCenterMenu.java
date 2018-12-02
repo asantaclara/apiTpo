@@ -139,6 +139,7 @@ public class CallCenterMenu extends JFrame implements Observer{
 		} catch (InvalidClientException | InvalidZoneException e1) {
 			JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
 			e1.printStackTrace();
+			System.exit(0);
 		}
 
 		

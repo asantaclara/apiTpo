@@ -8,7 +8,7 @@ import exceptions.InvalidClientException;
 
 public class Client {
 	
-	private int id=0;
+	private int id = 0;
 	private String cuit;
 	private String name;
 	private String address;
