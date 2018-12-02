@@ -1,6 +1,5 @@
 package backEnd;
 
-import java.sql.SQLException;
 import java.util.Date;
 
 import dao.TransitionDAO;
@@ -98,7 +97,7 @@ public class Transition {
 		return aux;
 	}
 	
-	public void save() throws ConnectionException, AccessException, InvalidTransitionException, SQLException {
+	public void save() throws ConnectionException, AccessException, InvalidTransitionException{
 		new TransitionDAO().save(this);
 	}
 	

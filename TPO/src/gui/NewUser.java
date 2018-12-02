@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -132,22 +130,21 @@ public class NewUser extends JFrame{
 						Controller.getInstance().addUser(usr);
 						JOptionPane.showMessageDialog(null, "USUARIO AGREGADO CON EXITO");
 					} catch ( InvalidRoleException | InvalidUserException e1) {
+						e1.printStackTrace();
 						switch (e1.getMessage()) {
-						case "Duplicate userName":
-							JOptionPane.showMessageDialog(thisWindow, "Nombre de usuario duplicado, por favor ingrese otro", "ERROR", 1);
-							break;
-
-						default:
-							JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-							//			e1.printStackTrace();
-							break;
+							case "Duplicate userName":
+								JOptionPane.showMessageDialog(thisWindow, "Nombre de usuario duplicado, por favor ingrese otro", "ERROR", 1);
+								break;
+							default:
+								JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
+								break;
 						}
 					}catch (ConnectionException  e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-						//			e1.printStackTrace();
+						e1.printStackTrace();
 					} catch (AccessException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-						//			e1.printStackTrace();
+						e1.printStackTrace();
 					} 
 				}
 				else {
@@ -163,33 +160,6 @@ public class NewUser extends JFrame{
 				thisWindow.dispose();
 			}
 		});
-		
-//		txtNombre.addKeyListener(new KeyAdapter() {
-//			@Override
-//			public void keyTyped(KeyEvent arg0) {
-//				char vChar = arg0.getKeyChar();
-//				if (!(Character.isAlphabetic(vChar)
-//                        || (vChar == KeyEvent.VK_BACK_SPACE)
-//                        || (vChar == KeyEvent.VK_DELETE))) {
-//                    arg0.consume();
-//                }
-//						
-//			}
-//		});
-//		
-//		txtNombreUsuario.addKeyListener(new KeyAdapter() {
-//			@Override
-//			public void keyTyped(KeyEvent arg0) {
-//				char vChar = arg0.getKeyChar();
-//				if (!(Character.isAlphabetic(vChar)
-//                        || (vChar == KeyEvent.VK_BACK_SPACE)
-//                        || (vChar == KeyEvent.VK_DELETE))) {
-//                    arg0.consume();
-//                }
-//						
-//			}
-//		});
-
 	}
 	
 	private boolean areFieldsEmpty() {

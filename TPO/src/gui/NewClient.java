@@ -2,8 +2,19 @@ package gui;
 
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import controller.Controller;
@@ -13,21 +24,6 @@ import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidClientException;
 import exceptions.InvalidZoneException;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
-
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import javax.swing.JButton;
-import javax.swing.JSeparator;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 
 
@@ -142,13 +138,13 @@ public class NewClient extends JFrame {
 				boxZonas.addItem(z);
 		} catch (ConnectionException  e) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-			//			e.printStackTrace();
+			e.printStackTrace();
 		} catch (AccessException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-			//			e.printStackTrace();
+			e.printStackTrace();
 		} catch (InvalidZoneException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-			//			e.printStackTrace();
+			e.printStackTrace();
 		}
 		boxZonas.setSelectedIndex(-1);
 
@@ -162,7 +158,7 @@ public class NewClient extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(!txtCuit.getText().isEmpty() && !txtDireccion.getText().isEmpty() && !txtEmail.getText().isEmpty() 
-					&& !txtNombre.getText().isEmpty() && !txtTelefono.getText().isEmpty() &&  boxZonas.getSelectedIndex() != -1){
+						&& !txtNombre.getText().isEmpty() && !txtTelefono.getText().isEmpty() &&  boxZonas.getSelectedIndex() != -1){
 					ClientDTO client = new ClientDTO();
 					client.setCuit(txtCuit.getText());
 					client.setAddress(txtDireccion.getText());
@@ -174,33 +170,34 @@ public class NewClient extends JFrame {
 						Controller.getInstance().addClient(client);
 						JOptionPane.showMessageDialog(thisWindow, "CLIENTE INGRESADO EXITOSAMENTE", "GG", 1);
 					} catch (InvalidClientException | InvalidZoneException e1) {
+						e1.printStackTrace();
 						switch (e1.getMessage()) {
-						case "Invalid phone number":
-							JOptionPane.showMessageDialog(thisWindow, "Numero de telefono invalido, por favor cargue XXXX-XXXX", "ERROR", 1);
-							break;
-						case "Invalid email":
-							JOptionPane.showMessageDialog(thisWindow, "La direccion de email es invalida", "ERROR", 1);
-							break;
-						case "Invalid cuit":
-							JOptionPane.showMessageDialog(thisWindow, "El cuit es invalido, por favor cargue XX-XXXXXXXX-X", "ERROR", 1);
-							break;
-						case "Existing CUIT":
-							JOptionPane.showMessageDialog(thisWindow, "El cuit ya esta asociado a otro cliente", "ERROR", 1);
-							break;
-							
-						default:
-							//			e1.printStackTrace();
-							JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-							break;
+							case "Invalid phone number":
+								JOptionPane.showMessageDialog(thisWindow, "Numero de telefono invalido, por favor cargue XXXX-XXXX", "ERROR", 1);
+								break;
+							case "Invalid email":
+								JOptionPane.showMessageDialog(thisWindow, "La direccion de email es invalida", "ERROR", 1);
+								break;
+							case "Invalid cuit":
+								JOptionPane.showMessageDialog(thisWindow, "El cuit es invalido, por favor cargue XX-XXXXXXXX-X", "ERROR", 1);
+								break;
+							case "Existing CUIT":
+								JOptionPane.showMessageDialog(thisWindow, "El cuit ya esta asociado a otro cliente", "ERROR", 1);
+								break;				
+							default:
+								JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
+								break;
 						}
 					} catch (ConnectionException  e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
+						e1.printStackTrace();
 					} catch (AccessException e1) {
+						e1.printStackTrace();
 						JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
 					}
+				} else {
+					JOptionPane.showMessageDialog(thisWindow, "Complete todos los campos antes de finalizar", "GG", 1);					
 				}
-				else
-					JOptionPane.showMessageDialog(thisWindow, "Complete todos los campos antes de finalizar", "GG", 1);
 
 			}
 		});

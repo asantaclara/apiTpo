@@ -71,7 +71,8 @@ public class LogsForQueryUser extends JFrame implements Observer{
 			Controller.getInstance().addObserverToWrongInvoicingClaimService(thisWindow);
 			Controller.getInstance().addObserverToZoneService(thisWindow);
 		} catch (InvalidObserverException e1) {
-			//			e1.printStackTrace();
+			JOptionPane.showMessageDialog(thisWindow, "Error de observer", "ERROR", 1);
+			e1.printStackTrace();
 		}
 		
 		
@@ -127,13 +128,13 @@ public class LogsForQueryUser extends JFrame implements Observer{
 					}
 				} catch (InvalidZoneException | InvalidClientException e) {
 					JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-					//			e.printStackTrace();
+					e.printStackTrace();
 				} catch (ConnectionException e1) {
 					JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-					//			e1.printStackTrace();
+					e1.printStackTrace();
 				} catch (AccessException e1) {
 					JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-					//			e1.printStackTrace();
+					e1.printStackTrace();
 				}
 				
 			comboBoxReclamos.setSelectedIndex(-1);
@@ -169,17 +170,16 @@ public class LogsForQueryUser extends JFrame implements Observer{
 							comboBoxReclamos.addItem(claim);
 						}
 					
-					} catch ( InvalidClaimException | InvalidClientException
-							| InvalidInvoiceException | InvalidProductException | InvalidZoneException
-							| InvalidProductItemException | InvalidUserException | InvalidRoleException
-							| InvalidTransitionException | InvalidInvoiceItemException e1) {
+					} catch ( InvalidClaimException | InvalidClientException | InvalidInvoiceException | InvalidProductException | InvalidZoneException	| InvalidProductItemException 
+							| InvalidUserException | InvalidRoleException | InvalidTransitionException | InvalidInvoiceItemException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-						//			e1.printStackTrace();
+						e1.printStackTrace();
 					} catch (ConnectionException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-						//			e1.printStackTrace();
+						e1.printStackTrace();
 					} catch (AccessException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
+						e1.printStackTrace();
 					} 
 				}
 			}
@@ -197,18 +197,16 @@ public class LogsForQueryUser extends JFrame implements Observer{
 							dtmLog.addRow(t.toDataRow());
 						}
 					
-					} catch ( InvalidClaimException | InvalidClientException
-							| InvalidInvoiceException | InvalidProductException | InvalidZoneException
-							| InvalidProductItemException | InvalidUserException | InvalidRoleException
-							| InvalidTransitionException e1) {
+					} catch ( InvalidClaimException | InvalidClientException | InvalidInvoiceException | InvalidProductException | InvalidZoneException	| InvalidProductItemException 
+							| InvalidUserException | InvalidRoleException | InvalidTransitionException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-						//			e1.printStackTrace();
+						e1.printStackTrace();
 					}catch (ConnectionException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-						//			e1.printStackTrace();
+						e1.printStackTrace();
 					} catch (AccessException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-						//			e1.printStackTrace();
+						e1.printStackTrace();
 					}
 				}
 				
@@ -229,7 +227,7 @@ public class LogsForQueryUser extends JFrame implements Observer{
 						Controller.getInstance().removeObserverToZoneService(thisWindow);
 					} catch (InvalidObserverException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Error de Observer", "ERROR", 1);
-						//			e1.printStackTrace();
+						e1.printStackTrace();
 					}
 				}
 		});
@@ -261,43 +259,22 @@ public class LogsForQueryUser extends JFrame implements Observer{
 				actualClaim = comboBoxReclamos.getItemAt(0);
 			}
 			comboBoxReclamos.setSelectedItem(actualClaim);
-		} catch ( InvalidClientException | InvalidZoneException e) {
+			
+			comboBoxClientes.setSelectedItem(actualClient);
+			if(actualClaim != null) {
+				comboBoxReclamos.setSelectedItem(actualClaim);
+			}
+		} catch ( InvalidClientException | InvalidZoneException | InvalidClaimException | InvalidProductItemException | InvalidInvoiceException | InvalidProductException | InvalidUserException 
+				| InvalidRoleException | InvalidTransitionException | InvalidInvoiceItemException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-			//			e.printStackTrace();
+			e.printStackTrace();
 		}catch (ConnectionException e1) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-			//			e1.printStackTrace();
+			e1.printStackTrace();
 		} catch (AccessException e1) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-			//			e1.printStackTrace();
-		} catch (InvalidClaimException e) {
-			// TODO Auto-generated catch block
-			//			e.printStackTrace();
-		} catch (InvalidInvoiceException e) {
-			// TODO Auto-generated catch block
-			//			e.printStackTrace();
-		} catch (InvalidProductException e) {
-			// TODO Auto-generated catch block
-			//			e.printStackTrace();
-		} catch (InvalidProductItemException e) {
-			// TODO Auto-generated catch block
-			//			e.printStackTrace();
-		} catch (InvalidUserException e) {
-			// TODO Auto-generated catch block
-			//			e.printStackTrace();
-		} catch (InvalidRoleException e) {
-			// TODO Auto-generated catch block
-			//			e.printStackTrace();
-		} catch (InvalidTransitionException e) {
-			// TODO Auto-generated catch block
-			//			e.printStackTrace();
-		} catch (InvalidInvoiceItemException e) {
-			// TODO Auto-generated catch block
-			//			e.printStackTrace();
+			e1.printStackTrace();
 		}
-		comboBoxClientes.setSelectedItem(actualClient);
-		if(actualClaim != null) {
-			comboBoxReclamos.setSelectedItem(actualClaim);
-		}
+		
 	}
 }

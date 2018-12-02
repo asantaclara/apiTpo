@@ -25,7 +25,7 @@ import exceptions.InvalidZoneException;
 
 public class TransitionDAO {
 
-	public void save(Transition transition) throws ConnectionException, InvalidTransitionException, AccessException, SQLException {
+	public void save(Transition transition) throws ConnectionException, InvalidTransitionException, AccessException {
 		Connection con = SqlUtils.getConnection();
 		try {
 			PreparedStatement prepStm1;
@@ -55,7 +55,11 @@ public class TransitionDAO {
 				prepStm1.execute();
 				con.commit();
 			} catch (SQLException e) {
-				con.rollback();
+				try {
+					con.rollback();
+				} catch (SQLException e1) {
+					throw new AccessException("DB Error");
+				}
 				throw new AccessException("Save error");
 			}
 			

@@ -4,16 +4,11 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.LinkedList;
-import java.util.List;
 
-import backEnd.Role;
 import backEnd.Roles;
-import backEnd.User;
 import exceptions.AccessException;
 import exceptions.ConnectionException;
 import exceptions.InvalidRoleException;
-import exceptions.InvalidUserException;
 
 public class RoleDAO {
 //'DISTRIBUTION_RESPONSABLE',

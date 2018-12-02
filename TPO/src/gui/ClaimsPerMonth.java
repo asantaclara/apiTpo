@@ -43,10 +43,10 @@ public class ClaimsPerMonth extends JFrame implements Observer{
 			loadTable();
 		} catch (ConnectionException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-//			e.printStackTrace();
+			e.printStackTrace();
 		} catch (AccessException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-//			e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 	
@@ -62,7 +62,7 @@ public class ClaimsPerMonth extends JFrame implements Observer{
 			Controller.getInstance().addObserverToZoneService(thisWindow);
 		} catch (InvalidObserverException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Error de Observer", "ERROR", 1);
-//			e.printStackTrace();
+			e.printStackTrace();
 		}
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -121,7 +121,7 @@ public class ClaimsPerMonth extends JFrame implements Observer{
 						super.windowClosed(e);
 					} catch (InvalidObserverException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Error de Observer", "ERROR", 1);
-						//			e1.printStackTrace();
+						e1.printStackTrace();
 					}
 				}
 		});
@@ -141,10 +141,10 @@ public class ClaimsPerMonth extends JFrame implements Observer{
 			loadTable();
 		} catch (ConnectionException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-			//			e.printStackTrace();
+			e.printStackTrace();
 		} catch (AccessException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-			//			e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 

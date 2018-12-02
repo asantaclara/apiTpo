@@ -47,7 +47,7 @@ public abstract class IndividualClaim extends Claim {
 		return transitions;
 	}
 
-	public void treatClaim(User responsable, State newState, String description) throws InvalidTransitionException, ConnectionException, AccessException, SQLException {
+	public void treatClaim(User responsable, State newState, String description) throws InvalidTransitionException, ConnectionException, AccessException {
 		
 		Transition newTran = new Transition(claimId, actualState, newState, date, description, responsable);
 		newTran.save();

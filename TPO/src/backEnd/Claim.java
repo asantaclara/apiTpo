@@ -36,7 +36,7 @@ public abstract class Claim {
 	}
 	
 	public abstract State getActualState();
-	public abstract void treatClaim(User responsable, State newState, String description) throws InvalidClaimException, InvalidTransitionException, ConnectionException, AccessException, SQLException;
+	public abstract void treatClaim(User responsable, State newState, String description) throws InvalidClaimException, InvalidTransitionException, ConnectionException, AccessException;
 	public abstract ClaimDTO toDTO();
 	public abstract void save() throws ConnectionException, AccessException, InvalidClaimException, InvalidProductException, InvalidInvoiceItemException, SQLException;
 	

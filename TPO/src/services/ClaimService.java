@@ -1,6 +1,5 @@
 package services;
 
-import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class ClaimService extends Observable{
 		return claim.getActualState().name();
 	}
 	
-	public void treatClaim(TransitionDTO dto) throws InvalidTransitionException, ConnectionException, AccessException, SQLException, InvalidUserException, InvalidRoleException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidInvoiceItemException {
+	public void treatClaim(TransitionDTO dto) throws InvalidTransitionException, ConnectionException, AccessException, InvalidUserException, InvalidRoleException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidInvoiceItemException {
 		//Este metodo me esta devolviendo una List<ClaimDTO> con todas las claims que se vieron modificadas en el proceso.
 		
 		if(dto.getResponsableId() == 0 || dto.getNewState() == null || dto.getClaimId() == 0 || dto.getDescription() == null) {

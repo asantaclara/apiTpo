@@ -129,7 +129,7 @@ public class Controller {
 		// claimId
 		return ClaimService.getIntance().getClaimState(claimNumber);
 	}
-	public void treatClaim(TransitionDTO dto) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidTransitionException, InvalidUserException, InvalidRoleException, SQLException, InvalidInvoiceItemException {
+	public void treatClaim(TransitionDTO dto) throws ConnectionException, AccessException, InvalidClaimException, InvalidClientException, InvalidInvoiceException, InvalidProductException, InvalidZoneException, InvalidProductItemException, InvalidTransitionException, InvalidUserException, InvalidRoleException, InvalidInvoiceItemException {
 	// responsable / newState / description / claimId
 		ClaimService.getIntance().treatClaim(dto);	//Este metodo me esta devolviendo una List<ClaimDTO> con todas las claims que se vieron modificadas en el proceso.
 	}

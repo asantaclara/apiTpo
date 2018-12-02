@@ -12,7 +12,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -103,8 +102,7 @@ public class DistributionResponsableMenu extends JFrame implements Observer {
 			Controller.getInstance().addObserverToProductService(thisWindow);
 		} catch (InvalidObserverException e1) {
 			JOptionPane.showMessageDialog(thisWindow, "Error de Observer", "ERROR", 1);
-
-			//			e1.printStackTrace();
+			e1.printStackTrace();
 		}
 
 		//
@@ -137,13 +135,13 @@ public class DistributionResponsableMenu extends JFrame implements Observer {
 			}
 		} catch (ConnectionException  e) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-			//			e.printStackTrace();
+			e.printStackTrace();
 		} catch (AccessException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-			//			e.printStackTrace();
+			e.printStackTrace();
 		} catch (InvalidZoneException | InvalidClientException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-			//			e.printStackTrace();
+			e.printStackTrace();
 		} 
 		contentPane.add(clientesComboBox);
 		clientesComboBox.setSelectedIndex(-1);
@@ -313,17 +311,16 @@ public class DistributionResponsableMenu extends JFrame implements Observer {
 						
 					}
 						
-					} catch ( InvalidClaimException | InvalidClientException | InvalidInvoiceException 
-							| InvalidProductException | InvalidZoneException | InvalidProductItemException 
+					} catch ( InvalidClaimException | InvalidClientException | InvalidInvoiceException | InvalidProductException | InvalidZoneException | InvalidProductItemException 
 							| InvalidUserException | InvalidRoleException | InvalidTransitionException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-						//			e1.printStackTrace();
+						e1.printStackTrace();
 					} catch (ConnectionException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-						//			e1.printStackTrace();
+						e1.printStackTrace();
 					} catch (AccessException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-						//			e1.printStackTrace();
+						e1.printStackTrace();
 					} 
 
 				}
@@ -359,18 +356,16 @@ public class DistributionResponsableMenu extends JFrame implements Observer {
 								}
 							}
 						}
-					} catch (NumberFormatException | InvalidClaimException
-							| InvalidClientException | InvalidInvoiceException | InvalidProductException
-							| InvalidZoneException | InvalidProductItemException | InvalidUserException
-							| InvalidRoleException | InvalidTransitionException e) {
+					} catch (NumberFormatException | InvalidClaimException | InvalidClientException | InvalidInvoiceException | InvalidProductException	| InvalidZoneException 
+							| InvalidProductItemException | InvalidUserException | InvalidRoleException | InvalidTransitionException e) {
 						JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-						//			e.printStackTrace();
+						e.printStackTrace();
 					}catch (ConnectionException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-						//			e1.printStackTrace();
+						e1.printStackTrace();
 					} catch (AccessException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-						//			e1.printStackTrace();
+						e1.printStackTrace();
 					} 
 		        	
 		        }
@@ -403,10 +398,9 @@ public class DistributionResponsableMenu extends JFrame implements Observer {
 				txtDescripcion.setText("");
 				stateComboBox.setSelectedIndex(-1);
 				
-			} catch ( InvalidClaimException | InvalidClientException
-					| InvalidInvoiceException | InvalidProductException | InvalidZoneException
-					| InvalidProductItemException | InvalidTransitionException | InvalidUserException
-					| InvalidRoleException | SQLException | InvalidInvoiceItemException e1) {
+			} catch ( InvalidClaimException | InvalidClientException | InvalidInvoiceException | InvalidProductException | InvalidZoneException	| InvalidProductItemException 
+					| InvalidTransitionException | InvalidUserException | InvalidRoleException | InvalidInvoiceItemException e1) {
+				e1.printStackTrace();
 				if(e1.getMessage() == "Missing parameters") {
 					JOptionPane.showMessageDialog(thisWindow, "Parametros cargados incorrectamente", "ERROR", 1);
 				} else if (e1.getMessage().contains("Invalid transition from")){ 
@@ -414,13 +408,14 @@ public class DistributionResponsableMenu extends JFrame implements Observer {
 				} else if(e1.getMessage().contains("Invalid description")){
 					JOptionPane.showMessageDialog(thisWindow, "Debe cargar la descripcion", "ERROR", 1);
 				} else {
-					//			e1.printStackTrace();
+					JOptionPane.showMessageDialog(thisWindow, "Problemas con la base de datos, comuniquese con el administrador", "ERROR", 1);
 				}
 			} catch (ConnectionException e1) {
 				JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-				//			e1.printStackTrace();
+				e1.printStackTrace();
 			} catch (AccessException e1) {
 				JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
+				e1.printStackTrace();
 			}
 		
 			}
@@ -435,7 +430,8 @@ public class DistributionResponsableMenu extends JFrame implements Observer {
 						removeObservers();
 						super.windowClosed(e);
 					} catch (InvalidObserverException e1) {
-						//			e1.printStackTrace();
+						JOptionPane.showMessageDialog(thisWindow, "Error de observer", "ERROR", 1);
+						e1.printStackTrace();
 					}
 				}
 		});
@@ -448,7 +444,8 @@ public class DistributionResponsableMenu extends JFrame implements Observer {
 					removeObservers();
 					thisWindow.dispose();
 				} catch (InvalidObserverException e1) {
-					//			e1.printStackTrace();
+					e1.printStackTrace();
+					JOptionPane.showMessageDialog(thisWindow, "Error de observer", "ERROR", 1);
 				}
 			}
 		});
@@ -476,17 +473,16 @@ public class DistributionResponsableMenu extends JFrame implements Observer {
 			}
 			
 			
-		} catch ( InvalidClientException | InvalidZoneException
-				| InvalidUserException | InvalidRoleException | InvalidTransitionException
-				| InvalidClaimException | InvalidInvoiceException | InvalidProductException
-				| InvalidProductItemException e1) {
+		} catch ( InvalidClientException | InvalidZoneException	| InvalidUserException | InvalidRoleException | InvalidTransitionException | InvalidClaimException | InvalidInvoiceException 
+				| InvalidProductException | InvalidProductItemException e1) {
 			JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-			//			e1.printStackTrace();
+			e1.printStackTrace();
 		} catch (ConnectionException e1) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-			//			e1.printStackTrace();
+			e1.printStackTrace();
 		} catch (AccessException e1) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
+			e1.printStackTrace();
 		}
 		
 		
@@ -509,12 +505,14 @@ public class DistributionResponsableMenu extends JFrame implements Observer {
 				}
 				clientesComboBox.setSelectedItem(client);
 			} catch (InvalidZoneException | InvalidClientException e) {
-				//			e.printStackTrace();
+				JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
+				e.printStackTrace();
 			} catch (ConnectionException e1) {
 				JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-				//			e1.printStackTrace();
+				e1.printStackTrace();
 			} catch (AccessException e1) {
 				JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
+				e1.printStackTrace();
 			} 
 		
 

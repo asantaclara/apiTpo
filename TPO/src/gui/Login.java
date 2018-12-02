@@ -39,6 +39,7 @@ public class Login extends JFrame {
 	private Button button;
 	private JPanel panel;
 	int xx,xy;
+	private Login thisWindow = this;
 
 	public Login() {
 		setResizable(false);
@@ -157,17 +158,20 @@ public class Login extends JFrame {
 					try {
 						interfaceRedirectByRol( Controller.getInstance().getUserByUsernameAndPassword(actualUsr));	
 					} catch ( ConnectionException | AccessException | InvalidRoleException e) {
-						//			e.printStackTrace();
+						JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
+						e.printStackTrace();
 					} catch (InvalidUserException e) {
-						JOptionPane.showMessageDialog(Login.this,"La combinacion de usuario y contrasena es incorrecta, por favor reintente");
+						JOptionPane.showMessageDialog(thisWindow,"La combinacion de usuario y contrasena es incorrecta, por favor reintente");
+						e.printStackTrace();
+					} finally {
 						txtUserName.setText("");
 						password1.setText("");
-						password2.setText("");
+						password2.setText("");						
 					}
 					
 				}
 				else {
-					JOptionPane.showMessageDialog(Login.this,"Las contrasenas no coinciden, intente nuevamente");
+					JOptionPane.showMessageDialog(thisWindow,"Las contrasenas no coinciden, intente nuevamente");
 					password1.setText("");
 					password2.setText("");
 				}
@@ -188,7 +192,7 @@ public class Login extends JFrame {
 				
 				int x = arg0.getXOnScreen();
 	            int y = arg0.getYOnScreen();
-	            Login.this.setLocation(x - xx, y - xy);  
+	            thisWindow.setLocation(x - xx, y - xy);  
 			}
 		});
 	}

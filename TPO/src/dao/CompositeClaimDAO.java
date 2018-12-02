@@ -68,7 +68,6 @@ public class CompositeClaimDAO {
 				try {
 					con.rollback();
 				} catch (SQLException e1) {
-					e1.printStackTrace();
 					throw new AccessException("DB Error");
 				}
 				throw new AccessException("Save error");

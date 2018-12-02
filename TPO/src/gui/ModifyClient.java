@@ -6,8 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
@@ -86,13 +84,13 @@ public class ModifyClient extends JFrame implements Observer{
 			}
 		} catch ( InvalidClientException | InvalidZoneException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-			//			e.printStackTrace();
+			e.printStackTrace();
 		}catch (ConnectionException e1) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-			//			e1.printStackTrace();
+			e1.printStackTrace();
 		} catch (AccessException e1) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-			//			e1.printStackTrace();
+			e1.printStackTrace();
 		}
 		contentPane.add(boxClientes);
 		boxClientes.setSelectedIndex(-1);
@@ -185,13 +183,13 @@ public class ModifyClient extends JFrame implements Observer{
 				boxZonas.addItem(z);
 		} catch ( InvalidZoneException e) {
 			JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-			//			e.printStackTrace();
+			e.printStackTrace();
 		}catch (ConnectionException e1) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-			//			e1.printStackTrace();
+			e1.printStackTrace();
 		} catch (AccessException e1) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-			//			e1.printStackTrace();
+			e1.printStackTrace();
 		}
 		boxZonas.setSelectedIndex(-1);
 	}
@@ -214,6 +212,7 @@ public class ModifyClient extends JFrame implements Observer{
 							Controller.getInstance().modifyClient(client);
 							JOptionPane.showMessageDialog(thisWindow, "CLIENTE MODIFICADO EXITOSAMENTE", "GG", 1);
 						} catch (InvalidClientException  | InvalidZoneException e1) {
+							e1.printStackTrace();
 							switch (e1.getMessage()) {
 							case "Invalid phone number":
 								JOptionPane.showMessageDialog(thisWindow, "Numero de telefono invalido, por favor cargue XXXX-XXXX", "ERROR", 1);
@@ -227,26 +226,25 @@ public class ModifyClient extends JFrame implements Observer{
 							case "Existing cuit":
 								JOptionPane.showMessageDialog(thisWindow, "El cuit ya esta asociado a otro cliente", "ERROR", 1);
 								break;
-								
 							default:
-								//			e1.printStackTrace();
 								JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
 								break;
 							}
 						}catch (ConnectionException e1) {
 							JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-							//			e1.printStackTrace();
+							e1.printStackTrace();
 						} catch (AccessException e1) {
 							JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-							//			e1.printStackTrace();
+							e1.printStackTrace();
 						}
 					}
-					else
-						JOptionPane.showMessageDialog(thisWindow, "Complete todos los campos antes de continuar", "GG", 1);
+					else {
+						JOptionPane.showMessageDialog(thisWindow, "Complete todos los campos antes de continuar", "GG", 1);						
+					}
 
-				}
+			}
 				
-			});
+		});
 		
 		btnSalir.addActionListener(new ActionListener() {
 			
@@ -257,8 +255,7 @@ public class ModifyClient extends JFrame implements Observer{
 					thisWindow.dispose();
 				} catch (InvalidObserverException e1) {
 					JOptionPane.showMessageDialog(thisWindow, "Error de Observer", "ERROR", 1);
-
-					//			e1.printStackTrace();
+					e1.printStackTrace();
 				}
 			}
 		});
@@ -272,7 +269,7 @@ public class ModifyClient extends JFrame implements Observer{
 						super.windowClosed(e);
 					} catch (InvalidObserverException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Error de Observer","ERROR",1);
-						//			e1.printStackTrace();
+						e1.printStackTrace();
 					}
 				}
 		});
@@ -291,69 +288,18 @@ public class ModifyClient extends JFrame implements Observer{
 						JOptionPane.showMessageDialog(null, "CLIENTE ELIMINADO CON EXITO");
 					} catch (InvalidClientException | InvalidZoneException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-						//			e1.printStackTrace();
+						e1.printStackTrace();
 					}catch (ConnectionException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-						//			e1.printStackTrace();
+						e1.printStackTrace();
 					} catch (AccessException e1) {
 						JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-						//			e1.printStackTrace();
+						e1.printStackTrace();
 					}
 			        }
 				}
 			}
 		});
-		
-//		txtCuit.addKeyListener(new KeyAdapter() {
-//			@Override
-//			public void keyTyped(KeyEvent arg0) {
-//				char vChar = arg0.getKeyChar();
-//				if (!(Character.isDigit(vChar)
-//                        || (vChar == KeyEvent.VK_BACK_SPACE)
-//                        || (vChar == KeyEvent.VK_DELETE))) {
-//                    arg0.consume();
-//                }		
-//			}
-//		});
-//		
-//		txtNombre.addKeyListener(new KeyAdapter() {
-//			@Override
-//			public void keyTyped(KeyEvent arg0) {
-//				char vChar = arg0.getKeyChar();
-//				if (!(Character.isAlphabetic(vChar)
-//                        || (vChar == KeyEvent.VK_BACK_SPACE)
-//                        || (vChar == KeyEvent.VK_DELETE))) {
-//                    arg0.consume();
-//                }
-//						
-//			}
-//		});
-//		
-//		txtNombre.addKeyListener(new KeyAdapter() {
-//			@Override
-//			public void keyTyped(KeyEvent arg0) {
-//				char vChar = arg0.getKeyChar();
-//				if (!(Character.isAlphabetic(vChar)
-//                        || (vChar == KeyEvent.VK_BACK_SPACE)
-//                        || (vChar == KeyEvent.VK_DELETE))) {
-//                    arg0.consume();
-//                }
-//						
-//			}
-//		});
-//		
-//		txtTelefono.addKeyListener(new KeyAdapter() {
-//			@Override
-//			public void keyTyped(KeyEvent arg0) {
-//				char vChar = arg0.getKeyChar();
-//				if (!(Character.isDigit(vChar)
-//                        || (vChar == KeyEvent.VK_BACK_SPACE)
-//                        || (vChar == KeyEvent.VK_DELETE))) {
-//                    arg0.consume();
-//                }
-//						
-//			}
-//		});
 
 		boxClientes.addItemListener(new ItemListener() {
 			
@@ -415,13 +361,13 @@ public class ModifyClient extends JFrame implements Observer{
 			boxClientes.setSelectedItem(client);
 		} catch ( InvalidClientException | InvalidZoneException   e) {
 			JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
-			//			e.printStackTrace();
+			e.printStackTrace();
 		}catch (ConnectionException e1) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de conexion", "ERROR", 1);
-			//			e1.printStackTrace();
+			e1.printStackTrace();
 		} catch (AccessException e1) {
 			JOptionPane.showMessageDialog(thisWindow, "Problemas de acceso a la base de datos", "ERROR", 1);
-			//			e1.printStackTrace();
+			e1.printStackTrace();
 		}
 		
 	}
