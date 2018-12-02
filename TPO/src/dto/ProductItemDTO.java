@@ -20,7 +20,7 @@ public class ProductItemDTO {
 	public String[] toDataRow() {
 		String[] aux = new String[2];
 		
-		aux[0] = String.valueOf(product.getTitle());
+		aux[0] = product.getProductId() + "-" + String.valueOf(product.getTitle());
 		aux[1] = String.valueOf(quantity);
 		
 		return aux;
