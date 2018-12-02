@@ -203,6 +203,7 @@ public class ProductsLoad extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
 				thisWindow.dispose();
 				
 			}

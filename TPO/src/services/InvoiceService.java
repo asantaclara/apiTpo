@@ -70,6 +70,6 @@ public class InvoiceService extends Observable{
 		
 	}
 	public Invoice getInvoiceById(int invoiceId) throws AccessException, InvalidInvoiceException, ConnectionException, InvalidClientException, InvalidProductException, InvalidZoneException, InvalidProductItemException {
-		return new InvoiceDAO().getActiveInvoice(invoiceId);
+		return new InvoiceDAO().getInvoice(invoiceId);
 	}
 }

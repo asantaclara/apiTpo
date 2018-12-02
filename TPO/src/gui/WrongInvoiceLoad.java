@@ -341,7 +341,11 @@ public class WrongInvoiceLoad extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				thisWindow.dispose();
+				if(finalInconsistencys.isEmpty()) {
+					JOptionPane.showMessageDialog(WrongInvoiceLoad.this, "La lista esta vacia, por favor cargue alguna factura o presione cancelar para salir", "GG", 1);
+				} else {					
+					thisWindow.dispose();
+				}
 			}
 		});
 	

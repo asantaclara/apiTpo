@@ -98,7 +98,7 @@ public class MoreQuantityClaimDAO {
 				if(rs.next()){
 					Client client = ClientService.getIntance().getClientById(rs.getInt(6));
 					MoreQuantityClaim newClaim = new MoreQuantityClaim(client, new Date(rs.getDate(8).getTime()), rs.getString(7), 
-							ClaimType.valueOf(rs.getString(2)), new InvoiceDAO().getActiveInvoice(rs.getInt(3)));
+							ClaimType.valueOf(rs.getString(2)), new InvoiceDAO().getInvoice(rs.getInt(3)));
 					newClaim.setClaimId(rs.getInt(1));
 					newClaim.setActualState(State.valueOf(rs.getString(5)));
 					for (ProductItem pi : ProductItemDAO.getProductItemsOfMoreQuantityClaim(newClaim)) {
@@ -146,7 +146,7 @@ public class MoreQuantityClaimDAO {
 				while(rs.next()){	
 					client = ClientService.getIntance().getClientById(rs.getInt(6));
 					newClaim = new MoreQuantityClaim(client, new Date(rs.getDate(8).getTime()), rs.getString(7), 
-							ClaimType.valueOf(rs.getString(2)), new InvoiceDAO().getActiveInvoice(rs.getInt(3)));
+							ClaimType.valueOf(rs.getString(2)), new InvoiceDAO().getInvoice(rs.getInt(3)));
 					newClaim.setClaimId(rs.getInt(1));
 					newClaim.setActualState(State.valueOf(rs.getString(5)));
 					for (ProductItem pi : ProductItemDAO.getProductItemsOfMoreQuantityClaim(newClaim)) {
