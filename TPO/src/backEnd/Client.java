@@ -106,7 +106,6 @@ public class Client {
 	
 	private void parameterChecker(String cuit, String name, String address, String phoneNumber, String email, Zone zone) throws InvalidClientException {
 		String[] addressAux = address.split(" ");
-		System.out.println(addressAux[addressAux.length -1]);
 		
 		if(name == null || name.length() < 1 || !name.matches("[a-zA-Zñ ]+$")) {
 			throw new InvalidClientException("Invalid name");
