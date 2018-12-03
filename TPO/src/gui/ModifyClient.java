@@ -226,6 +226,9 @@ public class ModifyClient extends JFrame implements Observer{
 							case "Existing cuit":
 								JOptionPane.showMessageDialog(thisWindow, "El cuit ya esta asociado a otro cliente", "ERROR", 1);
 								break;
+							case "Invalid address":
+								JOptionPane.showMessageDialog(thisWindow, "La direccion es incorrecta", "ERROR", 1);
+								break;	
 							default:
 								JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
 								break;

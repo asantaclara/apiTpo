@@ -1,9 +1,2 @@
-/gui/
-/images/
-/observer/
-/services/
-/test/
-/controller/
-/dao/
-/dto/
 /backEnd/
+/gui/

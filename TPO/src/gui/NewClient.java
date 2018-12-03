@@ -183,7 +183,10 @@ public class NewClient extends JFrame {
 								break;
 							case "Existing CUIT":
 								JOptionPane.showMessageDialog(thisWindow, "El cuit ya esta asociado a otro cliente", "ERROR", 1);
-								break;				
+								break;	
+							case "Invalid address":
+								JOptionPane.showMessageDialog(thisWindow, "La direccion es incorrecta", "ERROR", 1);
+								break;	
 							default:
 								JOptionPane.showMessageDialog(thisWindow, "Base de datos corrompida! Comuniquese con el administrador de sistema", "ERROR", 1);
 								break;
